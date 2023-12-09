@@ -68,7 +68,7 @@ function App() {
                                     ))}
                                     {/* Дополнительный маршрут для отлавливания несуществующих путей */}
                                     <Route path="*">
-                                        <Redirect to="/"/>
+                                        <Redirect to="/main"/>
                                     </Route>
                                 </Switch>
                             </div>
