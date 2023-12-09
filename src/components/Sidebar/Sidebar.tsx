@@ -1,31 +1,24 @@
-import {Button} from "@/components/ui/button"
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
-// interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
-// }
+interface SidebarProps {
+    navUnits: { text: string; path: string }[];
+}
 
-// export function Sidebar({className}: SidebarProps) {
-export function Sidebar() {
+export function Sidebar({ navUnits }: SidebarProps) {
     return (
         <div className="space-y-4 py-4">
             <div className="px-3 py-2">
-                <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-                    Library
-                </h2>
                 <div className="space-y-1">
-                    <Button variant="default" className="w-full justify-start">
-                        Бронирование аудиторий
-                    </Button>
-                    <Button variant="default" className="w-full justify-start">
-                        Инвентаризация
-                    </Button>
-                    <Button variant="default" className="w-full justify-start">
-                        Администрирование
-                    </Button>
-                    <Button variant="default" className="w-full justify-start">
-                        Расписание
-                    </Button>
+                    {navUnits.map((button, index) => (
+                        <Link key={index} to={button.path}>
+                            <Button variant="default" className="w-full justify-start mb-2">
+                                {button.text}
+                            </Button>
+                        </Link>
+                    ))}
                 </div>
             </div>
         </div>
-    )
+    );
 }
