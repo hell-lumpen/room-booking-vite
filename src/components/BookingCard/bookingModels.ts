@@ -20,7 +20,7 @@ export interface BookingDetail {
 }
 
 export interface BookingRoom {
-    roomName: string;
+    roomvalue: string;
     bookings: Booking_[];
 }
 
@@ -30,33 +30,34 @@ export interface BookingsByRoom {
 }
 
 export interface Booking {
-    startTime: Date;
-    endTime: Date;
+    startTime: string;
+    endTime: string;
     title: string;
     descriptions?: string;
     owner: User;
     participants?: (User | Group)[];
+    tag: Tag;
     tags: Tag[];
 }
 
 export interface User {
     id: number;
-    fullName: string;
+    value: string;
 }
 
 export interface Room {
     id: number;
-    name: string;
+    value: string;
 }
 
 export interface Group {
     id: number;
-    name: string;
+    value: string;
 }
 
 export interface Tag {
     id: number
-    label: string;
+    fullName: string;
     color: string;
-    shortLabel?: string
+    shortName?: string
 }
