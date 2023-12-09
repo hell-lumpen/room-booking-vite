@@ -6,24 +6,22 @@ import React from "react";
 
 export const StarBookingWidget = () => {
     // const dot = <CircleDashed/>;
-    const dot = <CircleDashed  className={'icon'}/>;
+    const dot = <CircleDot strokeWidth={2.9} className={'icon'}/>
+    // const dot = <CircleDashed  className={'icon'}/>;
     const timeline_data = [
         {
             label: <div className='time-star-booking'>09:00 - 10:00</div>,
-            children: <div className='bg-rose-500'>Криптография</div>,
+            children: <div className='time-star-title'>Криптография</div>,
             dot:dot
         },
         {
             label: <div className='time-star-booking'>10:30 - 10:45</div>,
-            children: <div className='bg-rose-500'>Фундоментальная информатика</div>,
-
+            children: <div className='time-star-title'>Фундоментальная информатика</div>,
             dot:dot
         },
         {
             label: <div className='time-star-booking'>12:00 - 12:15</div>,
-            children: <div className='bg-rose-500'>Совещание</div>,
-
-
+            children: <div className='time-star-title'>Совещание</div>,
             dot:dot
         }
 
@@ -33,8 +31,7 @@ export const StarBookingWidget = () => {
 
 
     return(
-        <>
-
+        <div className='time-star-major-con rounded-lg border  shadow-sm'>
             <ConfigProvider
                 theme={{
                     components:{
@@ -42,12 +39,11 @@ export const StarBookingWidget = () => {
                             // tailColor:'white'
                             // tailWidth:3,
                             tailColor: 'grey',
-
                         },
                     },
-
                 }}
             >
+
             <Timeline
                 mode={'left'}
                 items={timeline_data}
@@ -56,7 +52,7 @@ export const StarBookingWidget = () => {
 
             </Timeline>
             </ConfigProvider>
-        </>
+        </div>
 
     );
 

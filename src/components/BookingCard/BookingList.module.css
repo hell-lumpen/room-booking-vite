@@ -1,0 +1,13 @@
+.booking-list-container {
+    display: block;
+}
+
+.booking-room-container{
+    width: 100%;
+}
+
+.bookings-room-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

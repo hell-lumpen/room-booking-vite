@@ -1,0 +1,80 @@
+/*@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500&display=swap');*/
+/*@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');*/
+
+.booking-card-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    /*border: 1px solid #e0e0e0;*/
+    border-radius: 12px;
+    background-color: #fff;
+    margin-bottom: 10px;
+    width: 90%;
+    /*background: red;*/
+    /*max-width: 600px;*/
+    /*font-family: 'Open Sans', sans-serif;*/
+    /*font-family: 'Roboto', sans-serif;*/
+}
+
+.time-block {
+    min-width: 60px;
+    text-align: center;
+    font-size: 18px;
+    color: #333;
+}
+
+.content-block {
+    min-width: 250px;
+    flex-grow: 1;
+    margin-left: 16px;
+}
+
+.booking-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.booking-room {
+    font-size: 16px;
+    justify-items: center;
+    display: flex;
+}
+
+.booking-room .icon {
+    font-size: 20px;
+}
+
+.booking-owner {
+    font-size: 14px;
+    color: #777;
+    display: flex;
+    justify-items: center;
+}
+
+.booking-owner .icon {
+    font-size: 16px;
+}
+
+.booking-tags {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.icon {
+    margin-right: 5px;
+}
+
+.booking-tag {
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-right: 8px;
+    margin-bottom: 4px;
+    font-size: 12px;
+    font-weight: 300;
+    color: #222;
+}

@@ -1,0 +1,28 @@
+.booking-participants{
+    color: #777;
+    display: flex;
+    justify-items: center;
+    /*animation: asd ease 30s;*/
+    /*font-size: 0;*/
+    /*opacity: 0;*/
+    /*height: max-content;*/
+    max-height: 0;
+    border-top: 0 solid #C7C7C7;
+
+    transition: all 0.125s ;
+    /*transition: max-height 0.25s ease-out;*/
+    /*height: 0;*/
+    overflow: hidden;
+    /*background: red;*/
+    margin-top: 15px;
+    flex-wrap: wrap;
+
+}
+.booking-participants.state{
+    /*background: red;*/
+    max-height: 500px;
+    /*transition: max-height 0.25s ease-in;*/
+    border-top: 1px solid #C7C7C7;
+
+    transition: all 0.8s ease-in;
+}
