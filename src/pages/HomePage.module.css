@@ -6,14 +6,17 @@
 
 .booking-card-container {
     height: 100%;
-    width: 70%;
+    width: 100%;
     border-left: 1px solid #000;
+    flex-shrink: 10;
+
 }
 
 .homepage-right-menu {
     height: 100%;
-    width: 30%;
+    min-width:30%;
     border-left: 1px solid #000;
+    flex-shrink: 0;
 }
 
 @media only screen and (max-width: 768px) {
