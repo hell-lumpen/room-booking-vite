@@ -1,7 +1,59 @@
+
+@media (max-width: 868px) {
+    .horTimelineMain {
+        max-width: 90vw;
+
+    }
+}
+@media (min-width: 869px) {
+    .horTimelineMain {
+        max-width: 50vw;
+        /*min-width: 5vw;*/
+    }
+}
+@media (min-width: 1150px) {
+    .horTimelineMain {
+        max-width: 40vw;
+    }
+}
+@media (min-width: 1400px) {
+    .horTimelineMain {
+        max-width: 52vw;
+    }
+}
+
+
+
+
+.horTimelineMain::-webkit-scrollbar {
+    width:  10px;
+    height: 10px;
+    /*border-radius: 10px;*/
+}
+
+
+.horTimelineMain::-webkit-scrollbar{
+    border: 8px solid transparent;
+    border-radius: 10px;
+    background-clip: content-box;
+    /*background-color:  none;*/
+
+}
+
+.horTimelineMain::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    width: 1px;
+    border-radius: 15px;
+}
+
+
 .horTimelineMain {
-    min-width: 30vw;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.8) rgba(2, 142, 74, 1) ;
+
+    min-width: 20vw;
     width: auto;
-    max-width: 80vw;
     /*width: 1000px;*/
     height: 700px;
     overflow: scroll;
@@ -13,6 +65,23 @@
     margin-right: auto;
 
 }
+
+
+
+.horTimelineTimeContainer::-webkit-scrollbar {
+    width: 16px;
+}
+
+.horTimelineTimeContainer::-webkit-scrollbar-track {
+    background-color: #e4e4e4;
+    border-radius: 100px;
+}
+
+.horTimelineTimeContainer::-webkit-scrollbar-thumb {
+    background-color: #d4aa70;
+    border-radius: 100px;
+}
+
 
 .horTimelineTimeContainer {
     display: flex;

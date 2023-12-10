@@ -21,6 +21,8 @@
     }
 
     .sidebar-container {
+        margin-top: 0;
+
         width: 100%;
     }
 }
@@ -31,6 +33,8 @@
         flex-direction: column;
     }
     .sidebar-container, .content-container {
+        margin-top: 0;
+
         width: 100%;
     }
 }

@@ -10,7 +10,7 @@ export const  SettingDatePanel: React.FC<{ date: Date, setDate: (date: Date) => 
     }, []);
 
     return (
-        <div className='flex flex-row items-center justify-between align-bottom'>
+        <div className='flex flex-row items-center justify-between align-bottom w-[80%] mx-auto'>
             <div className='flex flex-row items-center h-max '>
                 <ChevronLeft size={20} strokeWidth={2.25}
                              onClick={() => {

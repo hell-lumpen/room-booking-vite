@@ -46,7 +46,7 @@ const HomePage = () => {
     const [dateForAxios, setDateAxios] = useState(new Date((new Date()).setHours(3, 0, 0)))
 
     const [dataForCard, setDataForCard] = useState<BookingsByRoom[]>([]);
-    const token = "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU5JU1RSQVRPUiIsImZ1bGxuYW1lIjoiSFVJMTIzIiwic3ViIjoiMTIzIiwiaWF0IjoxNzAyMTU5NzY5LCJleHAiOjE3MDI3NjQ1Njl9.vsspmEUysZQjvTvQ_v4fWEZM-xXgpjTvx9fz1iUrsy8";
+    const token = "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU5JU1RSQVRPUiIsImZ1bGxuYW1lIjoiSFVJMTIwMDMiLCJzdWIiOiJhMjMiLCJpYXQiOjE3MDIxOTI3NTksImV4cCI6MTcwMjc5NzU1OX0.8u0adrMnpgkyzH2tWkQV07cVZT3Hg4Pt5_4bdGiYaPM";
 
     const setNewDateAxios = (newDate: Date) => {
         setDateAxios(newDate);
@@ -55,7 +55,7 @@ const HomePage = () => {
 
     useEffect(() => {
         console.log('as', dateForAxios.toISOString())
-        axios.get(`http://localhost:8080/api/bookings?startTime=${dateForAxios.toISOString()}&endTime=${
+        axios.get(`http://10.10.50.88:8080/api/bookings?startTime=${dateForAxios.toISOString()}&endTime=${
                 getNextDate(dateForAxios).toISOString()
             }`,
             {headers: {Authorization: 'Bearer ' + token}})
@@ -118,14 +118,14 @@ const HomePage = () => {
         },
     ]
 
-    const [date, setDate] = React.useState<Date>()
+    const [date, setDate] = useState<Date>()
 
     return (
         <div className={styles['homepage-container']}>
             <div className={styles['booking-card-container']}>
                 <Tabs defaultValue="password">
                     <SettingDatePanel date={dateForAxios} setDate={setNewDateAxios}></SettingDatePanel>
-                    <div className='w-max ml-auto mr-0 mt-[15px]'>
+                    <div className='w-max ml-auto mr-[10%] mt-[15px]'>
                         <Sheet>
                             <SheetTrigger>
                                 <Button>Забронировать</Button>

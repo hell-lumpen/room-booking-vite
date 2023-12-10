@@ -30,7 +30,8 @@ export const StarBookingWidget = () => {
 
 
     return(
-        <div className='time-star-major-con rounded-lg border  shadow-sm'>
+        <div className='time-star-major'>
+            <div className='time-star-major-con '>
             <ConfigProvider
                 theme={{
                     components:{
@@ -52,7 +53,7 @@ export const StarBookingWidget = () => {
             </Timeline>
             </ConfigProvider>
         </div>
-
+        </div>
     );
 
 }
