@@ -12,7 +12,7 @@ export function Sidebar({ navUnits }: SidebarProps) {
                 <div className="space-y-1">
                     {navUnits.map((button, index) => (
                         <Link key={index} to={button.path}>
-                            <Button variant="default" className="w-full justify-start mb-2">
+                            <Button variant="default" className="min-w-[200px] w-full justify-start mb-2">
                                 {button.text}
                             </Button>
                         </Link>

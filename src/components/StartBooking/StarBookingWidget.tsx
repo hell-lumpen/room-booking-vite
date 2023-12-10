@@ -2,7 +2,6 @@ import './StarBooking.css'
 import '@/styles/global.css'
 import {ConfigProvider, Timeline} from "antd";
 import {CircleDashed, CircleDot} from "lucide-react";
-import React from "react";
 
 export const StarBookingWidget = () => {
     // const dot = <CircleDashed/>;

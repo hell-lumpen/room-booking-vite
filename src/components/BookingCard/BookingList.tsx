@@ -9,12 +9,13 @@ interface BookingListProps {
 }
 
 const BookingList: React.FC<BookingListProps> = ({bookingsGropedByRoom}) => {
-    console.log(bookingsGropedByRoom)
     return (
         <div className={styles['booking-list-container']}>
             {bookingsGropedByRoom && bookingsGropedByRoom.map((room, index) => (
                 <div className={styles['booking-room-container']} key={index}>
-                    <h2>{room.room.value}</h2>
+                    <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+                        {room.room.value}
+                    </h2>
                     <div className={styles['bookings-room-data']}>
                         {room.bookings.map((booking, bookingIndex) => (
                             <BookingCard key={bookingIndex} {...booking} />

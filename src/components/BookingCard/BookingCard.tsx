@@ -11,7 +11,6 @@ const getFormatTime=(str:string):string=>{
 }
 
 const BookingCard: React.FC<Booking> = (booking) => {
-    console.log(booking.tag)
     return (
         <div className='booking-card-wrapper1 rounded-lg border  shadow-sm'>
             <div className={styles['time-block']}>
