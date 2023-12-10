@@ -45,7 +45,7 @@ const BookingDetailCard: React.FC<BookingDetail> = (bookingDetail) => {
                             className={styles['booking-tag']}
                             style={{backgroundColor: tag.color}}
                         >
-                            {tag.label}
+                            {tag.fullName}
                         </div>
                     ))}
                 </div>

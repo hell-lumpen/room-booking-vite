@@ -1,7 +1,7 @@
 import styles from './HomePage.module.css'
 import BookingList from "@/components/BookingCard/BookingList.tsx";
 import {BookingsByRoom} from "@/components/BookingCard/bookingModels.ts";
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import { format } from "date-fns"
 import { Calendar } from "@/components/ui/calendar"
@@ -10,6 +10,9 @@ import {NewsBlock} from "@/components/NewsBlock/NewsBlock.tsx";
 import {SettingDatePanel} from "@/components/SettingDatePanel/SettingDatePanel.tsx";
 import {Tabs, TabsContent} from "@/components/ui/tabs.tsx";
 import {Button} from "@/components/ui/button.tsx";
+import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet.tsx";
+import {NewBookingForm} from "@/components/NewBookingForm/NewBookingForm.tsx";
+import {HorizontalTimelineElement} from "@/components/HorizontalTimelineElement/HorizontalTimelineElement.tsx";
 import {
     Sheet,
     SheetClose,
@@ -122,7 +125,7 @@ const HomePage = () => {
     return (
         <div className={styles['homepage-container']}>
             <div className={styles['booking-card-container']}>
-                <Tabs defaultValue="account">
+                <Tabs defaultValue="password">
                     <SettingDatePanel date={dateForAxios} setDate={setNewDateAxios}></SettingDatePanel>
                     <div className='w-max ml-auto mr-0 mt-[15px]'>
                         <Sheet>
@@ -203,7 +206,10 @@ const HomePage = () => {
                         </Sheet>
                     </div>
                     <TabsContent value="account"><BookingList bookingsGropedByRoom={dataForCard}/></TabsContent>
-                    <TabsContent value="password">Таймлайна пока нет. Находится в разработке</TabsContent>
+                    <TabsContent value="password">
+                        <HorizontalTimelineElement booking={dataForCard}/>
+                    </TabsContent>
+
                 </Tabs>
             </div>
             <div className={styles['homepage-right-menu']}>
