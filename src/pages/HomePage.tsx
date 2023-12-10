@@ -1,7 +1,7 @@
 import styles from './HomePage.module.css'
 import BookingList from "@/components/BookingCard/BookingList.tsx";
 import {BookingsByRoom} from "@/components/BookingCard/bookingModels.ts";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import { format } from "date-fns"
 import { Calendar } from "@/components/ui/calendar"
@@ -10,8 +10,6 @@ import {NewsBlock} from "@/components/NewsBlock/NewsBlock.tsx";
 import {SettingDatePanel} from "@/components/SettingDatePanel/SettingDatePanel.tsx";
 import {Tabs, TabsContent} from "@/components/ui/tabs.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet.tsx";
-import {NewBookingForm} from "@/components/NewBookingForm/NewBookingForm.tsx";
 import {HorizontalTimelineElement} from "@/components/HorizontalTimelineElement/HorizontalTimelineElement.tsx";
 import {
     Sheet,

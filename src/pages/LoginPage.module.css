@@ -1,0 +1,67 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
+
+.image-container {
+    height: 100vh;
+    width: 48vw;
+    flex-shrink: 0;
+    display: flex; /* Добавлено свойство для использования flex-контейнера */
+    align-items: center;
+}
+
+.login-form-container {
+    height: 100vh;
+    width: 50vw;
+    display: flex;
+    flex-shrink: 10;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 768px) {
+
+
+    img {
+        height: 100%;
+        width: auto;
+    }
+
+    .container {
+        flex-direction: column;
+    }
+
+    .image-container,
+    .login-form-container {
+        width: 100%;
+    }
+
+    .image-container {
+        height: 40vh;
+        justify-content: center
+    }
+
+    .login-form-container {
+        height: 60vh;
+    }
+
+    .form-container {
+        padding-top: 10px;
+        justify-content: flex-start;
+        width: 320px;
+    }
+}
