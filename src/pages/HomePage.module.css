@@ -1,0 +1,30 @@
+.homepage-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.booking-card-container {
+    height: 100%;
+    width: 70%;
+    border-left: 1px solid #000;
+}
+
+.homepage-right-menu {
+    height: 100%;
+    width: 30%;
+    border-left: 1px solid #000;
+}
+
+@media only screen and (max-width: 768px) {
+    .sidebar-container {
+        width: 100%;
+    }
+}
+
+/* Media query for phones */
+@media only screen and (max-width: 480px) {
+    .sidebar-container, .content-container {
+        width: 100%;
+    }
+}
