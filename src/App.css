@@ -1,0 +1,29 @@
+.app-container {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    width: 100%;
+}
+
+.sidebar-container {
+    transition: transform 0.3s ease;
+    width: 250px;
+}
+
+.content-container {
+    flex: 1;
+    box-sizing: border-box;
+}
+
+@media only screen and (max-width: 768px) {
+    .sidebar-container {
+        width: 100%;
+    }
+}
+
+/* Media query for phones */
+@media only screen and (max-width: 480px) {
+    .sidebar-container, .content-container {
+        width: 100%;
+    }
+}
