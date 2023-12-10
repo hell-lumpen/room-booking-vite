@@ -17,14 +17,26 @@
 }
 
 @media only screen and (max-width: 768px) {
-    .sidebar-container {
+    .homepage-container {
+        flex-direction: column;
+    }
+
+    .homepage-right-menu,
+    .booking-card-container {
+        border: none;
         width: 100%;
     }
 }
 
 /* Media query for phones */
 @media only screen and (max-width: 480px) {
-    .sidebar-container, .content-container {
+    .homepage-container {
+        flex-direction: column;
+    }
+
+    .homepage-right-menu,
+    .booking-card-container {
+        border: none;
         width: 100%;
     }
 }
