@@ -15,7 +15,11 @@
     box-sizing: border-box;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1150px) {
+    .app-container {
+        flex-direction: column;
+    }
+
     .sidebar-container {
         width: 100%;
     }
@@ -23,6 +27,9 @@
 
 /* Media query for phones */
 @media only screen and (max-width: 480px) {
+    .app-container {
+        flex-direction: column;
+    }
     .sidebar-container, .content-container {
         width: 100%;
     }
