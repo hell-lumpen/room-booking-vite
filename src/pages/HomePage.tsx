@@ -1,10 +1,9 @@
 import styles from './HomePage.module.css'
 import BookingList from "@/components/BookingCard/BookingList.tsx";
 import {BookingsByRoom} from "@/components/BookingCard/bookingModels.ts";
-import React, {useEffect, useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import axios from "axios";
-import { format } from "date-fns"
-import { Calendar } from "@/components/ui/calendar"
+// import {format} from "date-fns"
 import {StarBookingWidget} from "@/components/StartBooking/StarBookingWidget.tsx";
 import {NewsBlock} from "@/components/NewsBlock/NewsBlock.tsx";
 import {SettingDatePanel} from "@/components/SettingDatePanel/SettingDatePanel.tsx";
@@ -22,21 +21,127 @@ import {
     SheetTrigger
 } from "@/components/ui/sheet.tsx";
 // import {NewBookingForm} from "@/components/NewBookingForm/NewBookingForm.tsx";
-import {Input} from "@/components/ui/input.tsx";
-import {Label} from "@/components/ui/label.tsx";
-import PopupSelector from "@/components/PopupSelector.tsx";
-import {
-    CalendarIcon,
-    CheckCircledIcon,
-    CircleIcon,
-    CrossCircledIcon,
-    QuestionMarkCircledIcon,
-    StopwatchIcon
-} from "@radix-ui/react-icons";
+// import {Input} from "@/components/ui/input.tsx";
+// import {Label} from "@/components/ui/label.tsx";
+// import PopupSelector from "@/components/PopupSelector.tsx";
+// import {
+//     CalendarIcon,
+//     CheckCircledIcon,
+//     CircleIcon,
+//     CrossCircledIcon,
+//     QuestionMarkCircledIcon,
+//     StopwatchIcon
+// } from "@radix-ui/react-icons";
+// import {Textarea} from "@/components/ui/textarea.tsx";
+// import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.tsx";
+// import {cn} from "@/lib/utils.ts";
+// import {ru} from 'date-fns/locale';
+// import {DayPicker} from 'react-day-picker';
+import 'react-day-picker/dist/style.css'
 import {Textarea} from "@/components/ui/textarea.tsx";
-import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.tsx";
+import {Label} from "@/components/ui/label.tsx";
+import {Input} from "@/components/ui/input.tsx";
+import {toast} from "@/components/ui/use-toast.ts";
+import {Popover, PopoverContent, PopoverTrigger} from '@/components/ui/popover';
+import {DayPicker} from "react-day-picker";
+import {ru} from "date-fns/locale";
+import {CalendarIcon} from "lucide-react";
+import {format} from "date-fns";
 import {cn} from "@/lib/utils.ts";
+import {initialRoomBookingFormData, RoomBookingFormData} from "@/models/bookingTypes.ts";
 
+
+// function OldFormComponent(props: {
+//     date: Date | undefined,
+//     selectedDate: Date | undefined,
+//     onSelect: (e: React.SetStateAction<Date | undefined>) => void,
+//     options: ({
+//         icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>;
+//         id: number;
+//         label: string;
+//         value: string
+//     } | {
+//         icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>;
+//         id: number;
+//         label: string;
+//         value: string
+//     } | {
+//         icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>;
+//         id: number;
+//         label: string;
+//         value: string
+//     } | {
+//         icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>;
+//         id: number;
+//         label: string;
+//         value: string
+//     } | {
+//         icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>;
+//         id: number;
+//         label: string;
+//         value: string
+//     })[]
+// }) {
+//     return <div className="grid gap-4 py-4">
+//         <div className="items-center gap-4">
+//             <Label htmlFor="name" className="text-right">
+//                 Название
+//             </Label>
+//             <Input id="name" type="text" placeholder="Type your message here."
+//                    className="col-span-3"/>
+//         </div>
+//         <div className="items-center gap-4">
+//             <div className="w-full">
+//                 <Label htmlFor="description">Описание</Label>
+//                 <Textarea placeholder="Type your message here." id="description"/>
+//                 {/*<p className="text-sm text-muted-foreground">*/}
+//                 {/*    Введите подробности бронирования*/}
+//                 {/*</p>*/}
+//             </div>
+//         </div>
+//         <div className="items-center gap-4">
+//             <Popover>
+//                 <PopoverTrigger asChild>
+//                     <Button
+//                         variant={"outline"}
+//                         className={cn(
+//                             "w-[100%] justify-start text-left text-muted-foreground font-normal",
+//                             !props.date && "text-sm"
+//                         )}
+//                     >
+//                         <CalendarIcon className="mr-2 h-4 w-4"/>
+//                         {props.selectedDate ? format(props.selectedDate, "PPP") :
+//                             <span>Выберите дату бронирования</span>}
+//                     </Button>
+//                 </PopoverTrigger>
+//                 <PopoverContent className="w-auto p-0">
+//                     <DayPicker mode="single"
+//                                locale={ru}
+//                                weekStartsOn={1}
+//                                selected={props.selectedDate}
+//                                onSelect={props.onSelect}/>
+//                 </PopoverContent>
+//             </Popover>
+//         </div>
+//         <div className="items-center gap-4">
+//             <Label htmlFor="name" className="text-right">
+//                 Время начала
+//             </Label>
+//             <Input id="name" type="time" className="col-span-3"/>
+//         </div>
+//         <div className="items-center gap-4">
+//             <Label htmlFor="name" className="text-right">
+//                 Время окончания
+//             </Label>
+//             <Input id="name" type="time" className="col-span-3"/>
+//         </div>
+//         <div className="grid grid-cols-4 items-center gap-4">
+//             <PopupSelector options={props.options}/>
+//         </div>
+//
+//
+//     </div>;
+// }
 
 const HomePage = () => {
     const getNextDate = (date: Date): Date => {
@@ -85,47 +190,73 @@ const HomePage = () => {
         };
     }, []);
 
-    const statuses = [
-        {
-            id: 1,
-            value: "backlog",
-            label: "Backlog",
-            icon: QuestionMarkCircledIcon,
-        },
-        {
-            id: 2,
-            value: "todo",
-            label: "Todo",
-            icon: CircleIcon,
-        },
-        {
-            id: 3,
-            value: "in progress",
-            label: "In Progress",
-            icon: StopwatchIcon,
-        },
-        {
-            id: 4,
-            value: "done",
-            label: "Done",
-            icon: CheckCircledIcon,
-        },
-        {
-            id: 5,
-            value: "canceled",
-            label: "Canceled",
-            icon: CrossCircledIcon,
-        },
-    ]
+    // const statuses = [
+    //     {
+    //         id: 1,
+    //         value: "backlog",
+    //         label: "Backlog",
+    //         icon: QuestionMarkCircledIcon,
+    //     },
+    //     {
+    //         id: 2,
+    //         value: "todo",
+    //         label: "Todo",
+    //         icon: CircleIcon,
+    //     },
+    //     {
+    //         id: 3,
+    //         value: "in progress",
+    //         label: "In Progress",
+    //         icon: StopwatchIcon,
+    //     },
+    //     {
+    //         id: 4,
+    //         value: "done",
+    //         label: "Done",
+    //         icon: CheckCircledIcon,
+    //     },
+    //     {
+    //         id: 5,
+    //         value: "canceled",
+    //         label: "Canceled",
+    //         icon: CrossCircledIcon,
+    //     },
+    // ]
 
-    const [date, setDate] = useState<Date>()
+    // ======================
 
+    const [formData, setFormData] = useState<RoomBookingFormData>(
+        initialRoomBookingFormData
+    );
+
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
+        const {id, value} = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [id]: value,
+        }));
+    };
+
+    // Обработчик сохранения изменений
+    const handleSaveChanges = () => {
+        toast({
+            title: "Бронирование сохранено!",
+            description: (
+                <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{JSON.stringify(formData, null, 2)}</code>
+        </pre>
+            ),
+            duration: 5000,
+        })
+    };
+
+    // =====================================
     return (
         <div className={styles['homepage-container']}>
             <div className={styles['booking-card-container']}>
                 <Tabs defaultValue="password">
                     <SettingDatePanel date={dateForAxios} setDate={setNewDateAxios}></SettingDatePanel>
-                    <div className='w-max ml-auto mr-[10%] mt-[15px]'>
+                    <div>
                         <Sheet>
                             <SheetTrigger>
                                 <Button>Забронировать</Button>
@@ -134,70 +265,103 @@ const HomePage = () => {
                                 <SheetHeader>
                                     <SheetTitle>Создание бронирования</SheetTitle>
                                     <SheetDescription>
-                                        {/*Make changes to your profile here. Click save when you're done.*/}
+                                        Здесь вы можете забронировать необходимую аудиторию. Для успешного сохранения,
+                                        убедитесь, что вы заполнили все поля в форме.
                                     </SheetDescription>
                                 </SheetHeader>
+                                {/*<RoomBookingForm />*/}
+
                                 <div className="grid gap-4 py-4">
                                     <div className="items-center gap-4">
                                         <Label htmlFor="name" className="text-right">
                                             Название
                                         </Label>
-                                        <Input id="name" type='text' placeholder="Type your message here." className="col-span-3"/>
+                                        <Input id="title" type="text" placeholder="Type your message here."
+                                               className="col-span-3" value={formData.title}
+                                               onChange={handleInputChange}/>
                                     </div>
                                     <div className="items-center gap-4">
                                         <div className="w-full">
-                                            <Label htmlFor="description">Описание</Label>
-                                            <Textarea placeholder="Type your message here." id="description"/>
-                                            <p className="text-sm text-muted-foreground">
-                                                Введите подробности бронирования
-                                            </p>
+                                            <Label id='description' className="text-right">
+                                                Описание
+                                            </Label>
+                                            <Textarea id="description" placeholder="Type your message here."
+                                                      className="col-span-3" value={formData.description}
+                                                      onChange={handleInputChange}/>
                                         </div>
                                     </div>
                                     <div className="items-center gap-4">
-                                        <Popover>
-                                            <PopoverTrigger asChild>
-                                                <Button
-                                                    variant={"outline"}
-                                                    className={cn(
-                                                        "w-fill justify-start text-left font-normal",
-                                                        !date && "text-muted-foreground"
-                                                    )}
-                                                >
-                                                    <CalendarIcon className="mr-2 h-4 w-4" />
-                                                    {date ? format(date, "PPP") : <span>Выбери дату</span>}
-                                                </Button>
-                                            </PopoverTrigger>
-                                            <PopoverContent className="w-auto p-0">
-                                                <Calendar
-                                                    mode="single"
-                                                    selected={date}
-                                                    onSelect={setDate}
-                                                    initialFocus
+                                        <div className="w-full">
+                                            <Label id='description' className="text-right">
+                                                Дата бронирования
+                                            </Label>
+                                            <Popover>
+                                                <PopoverTrigger asChild>
+                                                    <Button
+                                                        variant={"outline"}
+                                                        className={cn(
+                                                            "w-[100%] justify-start text-left text-foreground font-normal",
+                                                            !formData.date && "text-sm"
+                                                        )}
+                                                    >
+                                                        <CalendarIcon className="mr-2 h-4 w-4"/>
+                                                        {formData.date ? format(formData.date, "PPP", {locale: ru}) :
+                                                            <span>Выберите дату бронирования</span>}
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-auto p-0">
+                                                    <DayPicker mode="single"
+                                                               locale={ru}
+                                                               weekStartsOn={1}
+                                                               fromDate={new Date()}
+                                                               selected={formData.date}
+                                                               onSelect={(value) => {
+                                                                   setFormData((prevData) => ({
+                                                                       ...prevData,
+                                                                       date: value,
+                                                                   }))
+                                                               }}/>
+                                                </PopoverContent>
+                                            </Popover>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col md:flex-row gap-4">
+                                        <div className="flex items-center gap-4">
+                                            <Label htmlFor="startTime" className="text-right">
+                                                Начало
+                                            </Label>
+                                            <div className='w-[100px]'>
+                                                <Input
+                                                    id="startTime"
+                                                    type="time"
+                                                    className="block text-center"
+                                                    value={formData.startTime}
+                                                    onChange={handleInputChange}
                                                 />
-                                            </PopoverContent>
-                                        </Popover>
-                                    </div>
-                                    <div className="items-center gap-4">
-                                        <Label htmlFor="name" className="text-right">
-                                            Время начала
-                                        </Label>
-                                        <Input id="name" type='time' className="col-span-3"/>
-                                    </div>
-                                    <div className="items-center gap-4">
-                                        <Label htmlFor="name" className="text-right">
-                                            Время окончания
-                                        </Label>
-                                        <Input id="name" type='time' className="col-span-3"/>
-                                    </div>
-                                    <div className="grid grid-cols-4 items-center gap-4">
-                                        <PopupSelector options={statuses}/>
-                                    </div>
+                                            </div>
+                                        </div>
 
+                                        <div className="flex items-center gap-4">
+                                            <Label htmlFor="endTime" className="text-right">
+                                                Окончание
+                                            </Label>
+                                            <div className='w-[100px]'>
+                                                <Input
+                                                    id="endTime"
+                                                    type="time"
+                                                    className="block text-center"
+                                                    value={formData.endTime}
+                                                    onChange={handleInputChange}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
 
                                 </div>
+
                                 <SheetFooter className='mb-5'>
                                     <SheetClose asChild>
-                                        <Button type="submit">Создать бронирование</Button>
+                                        <Button type="submit" onClick={handleSaveChanges}>Создать бронирование</Button>
                                     </SheetClose>
                                 </SheetFooter>
                             </SheetContent>

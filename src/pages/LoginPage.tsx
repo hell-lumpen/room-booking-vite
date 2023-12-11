@@ -1,7 +1,7 @@
 import { UserAuthForm } from "@/components/AuthForm/AuthForm.tsx";
 import React from "react";
 import styles from "./LoginPage.module.css";
-import loginImage from '@/assets/images/Иллюстрация_без_названия 2.png'
+import loginImage from '@/assets/images/login-page-backgrounf-image.png'
 
 interface AuthenticationPageProps {}
 
