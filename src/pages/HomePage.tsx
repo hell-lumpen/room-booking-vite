@@ -177,7 +177,7 @@ const HomePage = () => {
         const handleResize = () => {
             const isSmallScreen = window.innerWidth <= 800;
             setAdjustedSide(isSmallScreen ? 'bottom' : 'right');
-            setSheetSize(isSmallScreen ? 'h-[500px] overflow-y-scroll' : 'min-w-[500px] ')
+            setSheetSize(isSmallScreen ? 'h-[500px] overflow-y-scroll' : 'min-w-[500px] overflow-y-scroll')
         };
 
         // Вызовите handleResize при монтировании и при изменении размера окна
@@ -325,12 +325,12 @@ const HomePage = () => {
                                             </Popover>
                                         </div>
                                     </div>
-                                    <div className="flex flex-col md:flex-row gap-4">
-                                        <div className="flex items-center gap-4">
+                                    <div className="flex flex-row gap-4">
+                                        <div className="flex items-center gap-1.5 md:gap-4">
                                             <Label htmlFor="startTime" className="text-right">
                                                 Начало
                                             </Label>
-                                            <div className='w-[100px]'>
+                                            <div className='w-[90px]'>
                                                 <Input
                                                     id="startTime"
                                                     type="time"
@@ -345,7 +345,7 @@ const HomePage = () => {
                                             <Label htmlFor="endTime" className="text-right">
                                                 Окончание
                                             </Label>
-                                            <div className='w-[100px]'>
+                                            <div className='w-[90px]'>
                                                 <Input
                                                     id="endTime"
                                                     type="time"
