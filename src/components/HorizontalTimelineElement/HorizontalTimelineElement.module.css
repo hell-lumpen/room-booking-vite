@@ -29,6 +29,8 @@
     width:  10px;
     height: 10px;
     /*border-radius: 10px;*/
+    z-index: 0;
+
 }
 
 
@@ -37,6 +39,8 @@
     border-radius: 10px;
     background-clip: content-box;
     /*background-color:  none;*/
+    z-index: 0;
+
 
 }
 
@@ -44,13 +48,14 @@
     background-color: #ccc;
     width: 1px;
     border-radius: 15px;
+    z-index: 0;
 }
 
 
 .horTimelineMain {
 
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.8) rgba(2, 142, 74, 1) ;
+    /*scrollbar-width: thin;*/
+    /*scrollbar-color: rgba(255, 255, 255, 0.8) rgba(2, 142, 74, 1) ;*/
 
     min-width: 20vw;
     width: auto;
