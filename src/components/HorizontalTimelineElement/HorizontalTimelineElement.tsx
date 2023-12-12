@@ -20,7 +20,7 @@ const getTimeFromDate = (datestr: string): string => {
     return (date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2, '0'));
 }
 
-export const HorizontalTimelineElement: React.FC<{ booking: BookingsByRoom[] }> = ({booking}) => {
+export const HorizontalTimelineElement: React.FC<{ booking: BookingsByRoom[], rooms:string[] }> = ({booking, rooms}) => {
 
     const getCoords = (time_start: string, time_end: string, roomName: string) => {
         let zone_start_time = document.getElementById('timeline_' + time_start);
@@ -46,22 +46,22 @@ export const HorizontalTimelineElement: React.FC<{ booking: BookingsByRoom[] }> 
     }
 
 
-    const rooms: string[] = [
-        'Лекторий IT-5',
-        'Лаборатория IT-6',
-        'Видеостудия IT-7',
-        'Лаборатория IT-8',
-        'Лаборатория IT-9',
-        'Переговорная IT-10',
-        'Шахматный клуб IT-11',
-        'ИТ-центр (IT-12)',
-        'ИТ-центр (IT-13)',
-        'Компьютерный класс IT-15',
-        'Учебная аудитория IT-16',
-        'Компьютерный класс IT-17',
-        'IT-18',
-        'IT-19',
-    ];
+    // const rooms: string[] = [
+    //     'Лекторий IT-5',
+    //     'Лаборатория IT-6',
+    //     'Видеостудия IT-7',
+    //     'Лаборатория IT-8',
+    //     'Лаборатория IT-9',
+    //     'Переговорная IT-10',
+    //     'Шахматный клуб IT-11',
+    //     'ИТ-центр (IT-12)',
+    //     'ИТ-центр (IT-13)',
+    //     'Компьютерный класс IT-15',
+    //     'Учебная аудитория IT-16',
+    //     'Компьютерный класс IT-17',
+    //     'IT-18',
+    //     'IT-19',
+    // ];
 
     // const [dataOfRoom, setDataOfRoom] = useState<{
     //     roomTitle: string,
@@ -77,6 +77,7 @@ export const HorizontalTimelineElement: React.FC<{ booking: BookingsByRoom[] }> 
     const [times1, setTimes] = useState<string[]>([])
     const [additionalCount, setAdditionalCount] = useState<number>(15);
     const [bb, setBB] = useState<BookingsByRoom[]>();
+    const [rr, setRR] = useState<string[]>();
 
     const getTimes = (): string[] => {
         let result: string[] = [];
@@ -106,6 +107,7 @@ export const HorizontalTimelineElement: React.FC<{ booking: BookingsByRoom[] }> 
         // console.log('log3', times1.length);
         if(booking.length>0){
             setBB(booking);
+            setRR(rooms);
         }
 
             let time_container = document.getElementsByClassName(style.horTimelineTimeContainer) as HTMLCollectionOf<HTMLElement>;
@@ -127,6 +129,8 @@ export const HorizontalTimelineElement: React.FC<{ booking: BookingsByRoom[] }> 
         // console.log('log4',booking.length)
         if(booking.length>0){
             setBB(booking);
+            setRR(rooms);
+
         }
 
     }, [booking]);

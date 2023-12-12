@@ -160,13 +160,14 @@ const HomePage = () => {
 
 
     useEffect(() => {
+        // document.documentElement.setAttribute('data-theme', 'dark');
+
         console.log('as', dateForAxios.toISOString())
         axios.get(`http://10.10.50.213:8080/api/bookings?startTime=${dateForAxios.toISOString()}&endTime=${
                 getNextDate(dateForAxios).toISOString()
             }`,
             {headers: {Authorization: 'Bearer ' + token}})
             .then((data) => {
-                // console.log(data.data);
                 setDataForCard(data.data);
             })
 
@@ -250,7 +251,7 @@ const HomePage = () => {
     return (
         <div className={styles['homepage-container']}>
             <div className={styles['booking-card-container']}>
-                <Tabs defaultValue="password">
+                <Tabs defaultValue="account">
                     <SettingDatePanel date={dateForAxios} setDate={setNewDateAxios}></SettingDatePanel>
                     <div>
                         <Sheet>
@@ -380,10 +381,25 @@ const HomePage = () => {
                                 </SheetFooter>
                             </SheetContent>
                         </Sheet>
+
+                        <Button onClick={
+                            ()=>{
+                                if (document.documentElement.hasAttribute('data-theme')) {
+                        document.documentElement.removeAttribute('data-theme')
+                                }
+                                else {
+document.documentElement.setAttribute('data-theme', 'dark');
+                                }
+                            }
+
+
+                        }>Смена темы</Button>
                     </div>
                     <TabsContent value="account"><BookingList bookingsGropedByRoom={dataForCard}/></TabsContent>
                     <TabsContent value="password">
-                        <HorizontalTimelineElement booking={dataForCard}/>
+                        <HorizontalTimelineElement booking={dataForCard} rooms={dataForCard.map((e)=>{
+                            return e.room.value;
+                        })}/>
                     </TabsContent>
 
                 </Tabs>
@@ -393,10 +409,10 @@ const HomePage = () => {
                     Ближайшие мероприятия
                 </h2>
                 <StarBookingWidget/>
-                <h2 className="mb-2 px-4 text-xl font-semibold tracking-tight">
-                    Новости
-                </h2>
-                <NewsBlock/>
+                {/*<h2 className="mb-2 px-4 text-xl font-semibold tracking-tight">*/}
+                {/*    Новости*/}
+                {/*</h2>*/}
+                {/*<NewsBlock/>*/}
             </div>
         </div>
 
