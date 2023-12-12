@@ -1,7 +1,5 @@
 import * as React from "react"
-import {PlusCircledIcon} from "@radix-ui/react-icons"
-
-import {cn} from "@/lib/utils"
+import {CheckIcon, PlusCircledIcon} from "@radix-ui/react-icons"
 import {Badge} from "@/components/ui/badge"
 import {Button} from "@/components/ui/button"
 import {
@@ -15,6 +13,8 @@ import {
 } from "@/components/ui/command"
 import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"
 import {Separator} from "@/components/ui/separator"
+import {useState} from "react";
+import {cn} from "@/lib/utils.ts";
 
 interface Tag {
     label: string;
@@ -34,11 +34,15 @@ export function PopupSelector({
                               }: DataTableFacetedFilterProps) {
     const selectedValues = new Set<Tag>();
 
+    const optionValues = options.map((option) => {
+        return {isSelected: false, option: option}
+    })
+
     return (
         <Popover>
             <PopoverTrigger asChild>
-                <Button variant="outline" size="sm" className="h-8 border-dashed">
-                    <PlusCircledIcon className="mr-2 h-4 w-4"/>
+                <Button variant="outline" size="sm" className="w-full h-8 border-solid">
+                    <PlusCircledIcon className="mr-2 h-4 w-4 text-muted-foreground"/>
                     {title}
                     {selectedValues?.size > 0 && (
                         <>
@@ -55,7 +59,7 @@ export function PopupSelector({
                                         variant="secondary"
                                         className="rounded-sm px-1 font-normal"
                                     >
-                                        {selectedValues.size} selected
+                                        {selectedValues.size} выбрано
                                     </Badge>
                                 ) : (
                                     options
@@ -75,28 +79,31 @@ export function PopupSelector({
                     )}
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0" align="start">
+            <PopoverContent className="w-[320px] md:w-[350px] p-0" align="center">
                 <Command>
-                    <CommandInput placeholder={title}/>
+                    <CommandInput placeholder={title || 'placeholder'}/>
                     <CommandList>
                         <CommandEmpty>Ничего не найдено</CommandEmpty>
                         <CommandGroup>
                             {options.map((option) => {
-                                const isSelected = selectedValues.has(option);
+                                const isSelected = selectedValues.has(option)
+                                console.log(isSelected)
                                 return (
                                     <CommandItem
                                         key={option.id}
                                         onSelect={(e) => {
-                                            const isPresent = Array.from(selectedValues).some(o => o.value === e);
-                                            console.log(isPresent + ' ' + e)
-                                            if (isPresent) {
-                                                selectedValues.delete(option);
+                                            console.log(e)
+                                            // const isPresent = !Array.from(selectedValues).some(o => o.value === e);
+
+                                            if (isSelected) {
+                                                selectedValues.delete(option)
                                             } else {
-                                                selectedValues.add(option);
+                                                selectedValues.add(option)
                                             }
 
                                             const filterValues = Array.from(selectedValues);
                                             console.log(filterValues);
+                                            console.log(optionValues);
                                         }}
                                     >
                                         <div
@@ -107,12 +114,9 @@ export function PopupSelector({
                                                     : "opacity-50 [&_svg]:invisible"
                                             )}
                                         >
-                                            {/*<CheckIcon className={cn("h-4 w-4")}/>*/}
+                                            <CheckIcon className={cn("h-4 w-4")} />
                                         </div>
-                                        {option.icon && (
-                                            <option.icon className="mr-2 h-4 w-4 text-muted-foreground"/>
-                                        )}
-                                        <span>{option.label}</span>
+                                        <span className={isSelected ? 'bg-red-700' : ''}>{option.label}</span>
                                     </CommandItem>
                                 )
                             })}

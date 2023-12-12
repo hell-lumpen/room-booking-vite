@@ -49,6 +49,7 @@ import {CalendarIcon} from "lucide-react";
 import {format} from "date-fns";
 import {cn} from "@/lib/utils.ts";
 import {initialRoomBookingFormData, RoomBookingFormData} from "@/models/bookingTypes.ts";
+import PopupSelector from "@/components/PopupSelector.tsx";
 
 
 // function OldFormComponent(props: {
@@ -151,7 +152,7 @@ const HomePage = () => {
     const [dateForAxios, setDateAxios] = useState(new Date((new Date()).setHours(3, 0, 0)))
 
     const [dataForCard, setDataForCard] = useState<BookingsByRoom[]>([]);
-    const token = "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU5JU1RSQVRPUiIsImZ1bGxuYW1lIjoiSFVJMTIwMDMiLCJzdWIiOiJhMjMiLCJpYXQiOjE3MDIxOTI3NTksImV4cCI6MTcwMjc5NzU1OX0.8u0adrMnpgkyzH2tWkQV07cVZT3Hg4Pt5_4bdGiYaPM";
+    const token = "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU5JU1RSQVRPUiIsImZ1bGxuYW1lIjoiSFVJIiwic3ViIjoiYWRtaW4iLCJpYXQiOjE3MDI0MDExNDUsImV4cCI6MTcwMzAwNTk0NX0.6rdI4GGnX4Fu8EjOxy5Rjl1lBR_s_-XDbR3wkL7JXNQ";
 
     const setNewDateAxios = (newDate: Date) => {
         setDateAxios(newDate);
@@ -160,7 +161,7 @@ const HomePage = () => {
 
     useEffect(() => {
         console.log('as', dateForAxios.toISOString())
-        axios.get(`http://10.10.50.88:8080/api/bookings?startTime=${dateForAxios.toISOString()}&endTime=${
+        axios.get(`http://10.10.50.213:8080/api/bookings?startTime=${dateForAxios.toISOString()}&endTime=${
                 getNextDate(dateForAxios).toISOString()
             }`,
             {headers: {Authorization: 'Bearer ' + token}})
@@ -177,7 +178,7 @@ const HomePage = () => {
         const handleResize = () => {
             const isSmallScreen = window.innerWidth <= 800;
             setAdjustedSide(isSmallScreen ? 'bottom' : 'right');
-            setSheetSize(isSmallScreen ? 'h-[500px] overflow-y-scroll' : 'min-w-[500px] overflow-y-scroll')
+            setSheetSize(isSmallScreen ? 'h-[75vh] overflow-y-scroll' : 'min-w-[500px] overflow-y-scroll')
         };
 
         // Вызовите handleResize при монтировании и при изменении размера окна
@@ -190,38 +191,33 @@ const HomePage = () => {
         };
     }, []);
 
-    // const statuses = [
-    //     {
-    //         id: 1,
-    //         value: "backlog",
-    //         label: "Backlog",
-    //         icon: QuestionMarkCircledIcon,
-    //     },
-    //     {
-    //         id: 2,
-    //         value: "todo",
-    //         label: "Todo",
-    //         icon: CircleIcon,
-    //     },
-    //     {
-    //         id: 3,
-    //         value: "in progress",
-    //         label: "In Progress",
-    //         icon: StopwatchIcon,
-    //     },
-    //     {
-    //         id: 4,
-    //         value: "done",
-    //         label: "Done",
-    //         icon: CheckCircledIcon,
-    //     },
-    //     {
-    //         id: 5,
-    //         value: "canceled",
-    //         label: "Canceled",
-    //         icon: CrossCircledIcon,
-    //     },
-    // ]
+    const statuses = [
+        {
+            id: 1,
+            value: "backlog",
+            label: "Backlog",
+        },
+        {
+            id: 2,
+            value: "todo",
+            label: "Todo",
+        },
+        {
+            id: 3,
+            value: "in progress",
+            label: "In Progress",
+        },
+        {
+            id: 4,
+            value: "done",
+            label: "Done",
+        },
+        {
+            id: 5,
+            value: "canceled",
+            label: "Canceled",
+        },
+    ]
 
     // ======================
 
@@ -258,8 +254,8 @@ const HomePage = () => {
                     <SettingDatePanel date={dateForAxios} setDate={setNewDateAxios}></SettingDatePanel>
                     <div>
                         <Sheet>
-                            <SheetTrigger>
-                                <Button>Забронировать</Button>
+                            <SheetTrigger className='p-0 border-none'>
+                                <Button variant='default'>Забронировать</Button>
                             </SheetTrigger>
                             <SheetContent side={adjustedSide} className={sheetSize}>
                                 <SheetHeader>
@@ -304,9 +300,9 @@ const HomePage = () => {
                                                             !formData.date && "text-sm"
                                                         )}
                                                     >
-                                                        <CalendarIcon className="mr-2 h-4 w-4"/>
+                                                        <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground"/>
                                                         {formData.date ? format(formData.date, "PPP", {locale: ru}) :
-                                                            <span>Выберите дату бронирования</span>}
+                                                            <span className='text-muted-foreground'>Выберите дату бронирования</span>}
                                                     </Button>
                                                 </PopoverTrigger>
                                                 <PopoverContent className="w-auto p-0">
@@ -325,7 +321,7 @@ const HomePage = () => {
                                             </Popover>
                                         </div>
                                     </div>
-                                    <div className="flex flex-row gap-4">
+                                    <div className="flex flex-row justify-between gap-4">
                                         <div className="flex items-center gap-1.5 md:gap-4">
                                             <Label htmlFor="startTime" className="text-right">
                                                 Начало
@@ -334,14 +330,14 @@ const HomePage = () => {
                                                 <Input
                                                     id="startTime"
                                                     type="time"
-                                                    className="block text-center"
+                                                    className="block text-center before:text-muted-foreground"
                                                     value={formData.startTime}
                                                     onChange={handleInputChange}
                                                 />
                                             </div>
                                         </div>
 
-                                        <div className="flex items-center gap-4">
+                                        <div className="flex items-center gap-1.5 md:gap-4">
                                             <Label htmlFor="endTime" className="text-right">
                                                 Окончание
                                             </Label>
@@ -354,6 +350,24 @@ const HomePage = () => {
                                                     onChange={handleInputChange}
                                                 />
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div className="items-center gap-4">
+                                        <div className="w-full">
+                                            <Label id='description' className="text-right">
+                                                Тип бронирования
+                                            </Label>
+                                            <div className="w-full">
+                                                <PopupSelector options={statuses}/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="items-center gap-4">
+                                        <div className="w-full">
+                                            <Label id='description' className="text-right">
+                                                Участники
+                                            </Label>
+                                            <PopupSelector options={statuses}/>
                                         </div>
                                     </div>
 
