@@ -1,5 +1,5 @@
 import style from "./HorizontalTimelineElement.module.css";
-import React, {useEffect, useState} from "react";
+import React from "react";
 
 const getTimes = (): string[] => {
     let result: string[] = [];
@@ -13,7 +13,7 @@ const getTimes = (): string[] => {
     return result;
 }
 
-export const HorizontalTimelineTimeCont:React.FC<{times:string[]}> = ({times}) => {
+export const HorizontalTimelineTimeCont: React.FC<{ times: string[] }> = ({times}) => {
 
     // const times = getTimes();
     // const [times1, setTimes] = useState<string[]>([]);
@@ -23,7 +23,7 @@ export const HorizontalTimelineTimeCont:React.FC<{times:string[]}> = ({times}) =
     // }, []);
 
 
-    return(
+    return (
         <div className={style.horTimelineTimeContainer}>
             <div className={style.horTimelineTimeEmptyDiv}></div>
             {times.map((time, index) => {

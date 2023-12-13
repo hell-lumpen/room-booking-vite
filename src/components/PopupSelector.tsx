@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/command"
 import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"
 import {Separator} from "@/components/ui/separator"
-import {useState} from "react";
 import {cn} from "@/lib/utils.ts";
 
 interface Tag {
@@ -79,7 +78,7 @@ export function PopupSelector({
                     )}
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[320px] md:w-[350px] p-0" align="center">
+            <PopoverContent className="w-[320px] md:w-[420px] p-0" align="center">
                 <Command>
                     <CommandInput placeholder={title || 'placeholder'}/>
                     <CommandList>

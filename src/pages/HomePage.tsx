@@ -5,7 +5,6 @@ import {ChangeEvent, useEffect, useState} from "react";
 import axios from "axios";
 // import {format} from "date-fns"
 import {StarBookingWidget} from "@/components/StartBooking/StarBookingWidget.tsx";
-import {NewsBlock} from "@/components/NewsBlock/NewsBlock.tsx";
 import {SettingDatePanel} from "@/components/SettingDatePanel/SettingDatePanel.tsx";
 import {Tabs, TabsContent} from "@/components/ui/tabs.tsx";
 import {Button} from "@/components/ui/button.tsx";
@@ -45,7 +44,7 @@ import {toast} from "@/components/ui/use-toast.ts";
 import {Popover, PopoverContent, PopoverTrigger} from '@/components/ui/popover';
 import {DayPicker} from "react-day-picker";
 import {ru} from "date-fns/locale";
-import {CalendarIcon} from "lucide-react";
+import {CalendarIcon, Moon, Sun} from "lucide-react";
 import {format} from "date-fns";
 import {cn} from "@/lib/utils.ts";
 import {initialRoomBookingFormData, RoomBookingFormData} from "@/models/bookingTypes.ts";
@@ -247,13 +246,15 @@ const HomePage = () => {
         })
     };
 
+    const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+
     // =====================================
     return (
         <div className={styles['homepage-container']}>
             <div className={styles['booking-card-container']}>
-                <Tabs defaultValue="account">
+                <Tabs defaultValue="card">
                     <SettingDatePanel date={dateForAxios} setDate={setNewDateAxios}></SettingDatePanel>
-                    <div>
+                    <div className='flex justify-around flex-row-reverse p-4'>
                         <Sheet>
                             <SheetTrigger className='p-0 border-none'>
                                 <Button variant='default'>Забронировать</Button>
@@ -382,23 +383,12 @@ const HomePage = () => {
                             </SheetContent>
                         </Sheet>
 
-                        <Button onClick={
-                            ()=>{
-                                if (document.documentElement.hasAttribute('data-theme')) {
-                        document.documentElement.removeAttribute('data-theme')
-                                }
-                                else {
-document.documentElement.setAttribute('data-theme', 'dark');
-                                }
-                            }
 
-
-                        }>Смена темы</Button>
                     </div>
-                    <TabsContent value="account"><BookingList bookingsGropedByRoom={dataForCard}/></TabsContent>
-                    <TabsContent value="password">
-                        <HorizontalTimelineElement booking={dataForCard} rooms={dataForCard.map((e)=>{
-                            return e.room.value;
+                    <TabsContent value="card"><BookingList bookingsGropedByRoom={dataForCard}/></TabsContent>
+                    <TabsContent value="timeline">
+                        <HorizontalTimelineElement booking={dataForCard} rooms={dataForCard.map((e) => {
+                            return e.name.value;
                         })}/>
                     </TabsContent>
 

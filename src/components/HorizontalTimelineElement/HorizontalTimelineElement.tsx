@@ -189,16 +189,16 @@ export const HorizontalTimelineElement: React.FC<{ booking: BookingsByRoom[], ro
                         <div className={style.horTimelineRoomData}>
                             {bb && bb.length>0 && bb.map((roomD) => {
                                 //                                 // return null;
-                                if (roomD.room.value === room) {
+                                if (roomD.name.value === room) {
                                     return (roomD.bookings.map((element) => {
 
-                                            let coord = getCoords(getTimeFromDate(element.startTime), getTimeFromDate(element.endTime), roomD.room.value);
+                                            let coord = getCoords(getTimeFromDate(element.startTime), getTimeFromDate(element.endTime), roomD.name.value);
                                             let d:bookingData = {
                                                 bookingTitle: element.title,
                                                 bookingOwner: element.owner.value,
                                                 tags: [{
-                                                    label: element.tag.fullName,
-                                                    color: element.tag.color,
+                                                    label: element.tags[0].fullName,
+                                                    color: element.tags[0].color,
                                                 }],
                                             }
                                             return (

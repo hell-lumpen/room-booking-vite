@@ -1,22 +1,8 @@
-.icon {
-    color:orange;
-    /*background: red;*/
-
-}
-
-/*.time-star-booking{*/
-/*    background: red;*/
-/*}*/
-
-/*.time-star-title {*/
-/*    background: red;*/
-/*}*/
-
-.time-star-major{
+.time-star-major {
     border-radius: 0.5rem;
-    border:1px solid hsl(var(--border)) ;
-    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    padding:15px;
+    /*border: 1px solid hsl(var(--border));*/
+    /*box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);*/
+    padding: 15px;
     margin-left: auto;
     margin-right: auto;
 
@@ -24,8 +10,7 @@
 
 }
 
-.time-star-major-con{
-
+.time-star-major-con {
     width: 315px;
     height: max-content;
     display: flex;
@@ -39,51 +24,50 @@
 }
 
 
-.icon{
+.icon {
     font-size: 16px;
     height: 16px;
     width: 16px;
-    /*margin-top: 8px;*/
+    background-color: rgba(var(--background));
+    color: rgba(var(--foreground));
 }
 
 @media (max-width: 870px) {
-    .time-star-major{
+    .time-star-major {
         padding: 15px 0;
         width: inherit;
     }
 }
 
-.ant-timeline-item-label{
-    /*background: blue;*/
+.ant-timeline-item-label {
+    background-color: rgba(var(--background));
+    color: rgba(var(--foreground));
     width: inherit;
 }
 
-.time-star-booking{
+.time-star-booking {
     /*width: max-content;*/
     text-align: center;
     position: relative;
-    font-size: 16px;
     line-height: 22px;
     height: 22px;
-    /*width: max-content;*/
-    /*background: red;*/
-    /*width: max-content;*/
-
-
+    background-color: rgba(var(--background));
+    color: rgba(var(--foreground));
 }
-.time-star-title{
-    width:140px;
-    margin-left: 15px;
 
-    font-size: 16px;
+.time-star-title {
+    width: 140px;
+    margin-left: 15px;
+    background-color: rgba(var(--background));
+    color: rgba(var(--foreground));
     line-height: 22px;
 }
 
-.ant-timeline-item-last{
+.ant-timeline-item-last {
     height: 0;
 }
 
 
-.ant-timeline-time-content{
+.ant-timeline-time-content {
     background: red;
 }

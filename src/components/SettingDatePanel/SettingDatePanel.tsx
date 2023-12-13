@@ -80,10 +80,10 @@ export const SettingDatePanel: React.FC<{ date: Date, setDate: (date: Date) => v
             </div>
 
             <TabsList>
-                <TabsTrigger value="account">
+                <TabsTrigger value="card">
                     <List/>
                 </TabsTrigger>
-                <TabsTrigger value="password">
+                <TabsTrigger value="timeline">
                     <GanttChartSquare/>
 
                 </TabsTrigger>

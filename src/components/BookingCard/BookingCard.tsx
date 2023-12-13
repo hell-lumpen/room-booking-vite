@@ -5,10 +5,50 @@ import {Booking} from "./bookingModels";
 import {User} from "lucide-react";
 import '@/styles/global.css'
 
-const getFormatTime=(str:string):string=>{
+const getFormatTime = (str: string): string => {
     const date = new Date(str);
-    return(date.getHours().toString().padStart(2,'0')+':'+date.getMinutes().toString().padStart(2,'0'));
+    return (date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0'));
 }
+
+function getRandomElement<T>(array: T[]): T {
+    const randomIndex = Math.floor(Math.random() * array.length);
+    return array[randomIndex];
+}
+
+// Пример использования:
+const смешныеЖивотные: string[] = [
+    'Непознанный Суслик',
+    'Шутливый Шимпанзе-Чехол',
+    'Ржавый Ракетный Ракун',
+    'Смеющийся Слон в Шляпе',
+    'Комедийный Крокодил-Шутник',
+    'Веселый Вампирский Варан',
+    'Гигантский Гусь-Гипнотизер',
+    'Клоунский Кенгуру-Колобок',
+    'Улыбающийся Утконос в Ушанке',
+    'Фантастический Фламинго-Фокусник',
+    'Зажигательная Зебра-Закуска',
+    'Летучий Лама',
+    'Смешной Сом',
+    'Чудной Чихуахуа',
+    'Грозный Гепард',
+    'Танцующий Тукан',
+    'Веселый Вепрь',
+    'Спящий Скунс',
+    'Прыгающий Пингвин',
+    'Уютный Уж',
+    'Колючий Коала',
+    'Коварный Котенок',
+    'Лукавый Лев',
+    'Задорный Змей',
+    'Чарующий Черепаха',
+    'Храбрый Хомячок',
+    'Свирепый Сорока',
+    'Быстрый Бобр',
+    'Танцующий Тигр',
+    'Замшелый Зебу',
+    'Летающий Лось',
+];
 
 const BookingCard: React.FC<Booking> = (booking) => {
     return (
@@ -41,7 +81,7 @@ const BookingCard: React.FC<Booking> = (booking) => {
                 }
 
                 {
-                    booking.tag&&(
+                    booking.tag && (
                         <div
                             key={booking.tag.id}
                             className={styles['booking-tag']}
@@ -54,8 +94,8 @@ const BookingCard: React.FC<Booking> = (booking) => {
                 }
                 <div className={styles['booking-owner']}>
                     {/*<span className={`material-icons ${styles['icon']}`}>person</span>*/}
-                    <User strokeWidth={2} height={20} />
-                    <span >{booking.owner.value}</span>
+                    <span className='w-[20px] mr-2'><User strokeWidth={2} width={20}/></span>
+                    <span>{booking.owner.value || getRandomElement(смешныеЖивотные) + ' (Неизвестный)'}</span>
                 </div>
 
                 {booking.participants && (
@@ -73,13 +113,13 @@ const BookingCard: React.FC<Booking> = (booking) => {
                             }
 
                             return (
-                                <div key={index} className={styles['booking-tag']} style={{ backgroundColor }}>
+                                <div key={index} className={styles['booking-tag']} style={{backgroundColor}}>
                                     {('name' in participant) ? participant.value : participant.value}
                                 </div>
-                                );
+                            );
                         })}
                     </div>
-                    )}
+                )}
             </div>
         </div>
     );

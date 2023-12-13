@@ -5,12 +5,14 @@ import {Icons} from "@/components/icons"
 import {Button} from "@/components/ui/button"
 import {Input} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
+import {Link, useHistory} from "react-router-dom";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function UserAuthForm({className, ...props}: UserAuthFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
+    const history = useHistory();
 
     async function onSubmit(event: React.SyntheticEvent) {
         event.preventDefault()
@@ -18,7 +20,12 @@ export function UserAuthForm({className, ...props}: UserAuthFormProps) {
 
         setTimeout(() => {
             setIsLoading(false)
-        }, 3000)
+            handleClick()
+        }, 500)
+    }
+
+    function handleClick() {
+        history.push('/main')
     }
 
     return (

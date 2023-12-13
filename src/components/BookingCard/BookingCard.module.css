@@ -8,7 +8,6 @@
     padding: 10px;
     /*border: 1px solid #e0e0e0;*/
     border-radius: 12px;
-    background-color: #fff;
     margin-bottom: 10px;
     width: 90%;
     /*background: red;*/
@@ -21,20 +20,20 @@
     min-width: 60px;
     text-align: center;
     font-size: 18px;
-    color: #333;
+    color: rgba(var(--foreground));
 }
 
 .content-block {
     min-width: 250px;
     flex-grow: 1;
     margin-left: 16px;
+    color: rgba(var(--foreground));
 }
 
 .booking-title {
     font-size: 18px;
     font-weight: 600;
     margin-bottom: 8px;
-    color: #333;
 }
 
 .booking-room {
@@ -49,9 +48,9 @@
 
 .booking-owner {
     font-size: 14px;
-    color: #777;
     display: flex;
     justify-items: center;
+    align-items: center;
 }
 
 .booking-owner .icon {
@@ -75,7 +74,7 @@
     margin-right: 8px;
     margin-bottom: 4px;
     font-size: 12px;
-    font-weight: 300;
+    font-weight: 400;
     color: #222;
     width: max-content;
 }

@@ -25,7 +25,7 @@ export interface BookingRoom {
 }
 
 export interface BookingsByRoom {
-    room: Room;
+    name: Room;
     bookings: Booking[];
 }
 
