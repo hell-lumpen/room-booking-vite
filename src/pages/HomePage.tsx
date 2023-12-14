@@ -44,7 +44,7 @@ import {toast} from "@/components/ui/use-toast.ts";
 import {Popover, PopoverContent, PopoverTrigger} from '@/components/ui/popover';
 import {DayPicker} from "react-day-picker";
 import {ru} from "date-fns/locale";
-import {CalendarIcon, Moon, Sun} from "lucide-react";
+import {CalendarIcon} from "lucide-react";
 import {format} from "date-fns";
 import {cn} from "@/lib/utils.ts";
 import {initialRoomBookingFormData, RoomBookingFormData} from "@/models/bookingTypes.ts";
@@ -194,28 +194,66 @@ const HomePage = () => {
     const statuses = [
         {
             id: 1,
-            value: "backlog",
-            label: "Backlog",
+            value: "lk",
+            label: "Лекция",
         },
         {
             id: 2,
-            value: "todo",
-            label: "Todo",
+            value: "pz",
+            label: "Практическое занятие",
         },
         {
             id: 3,
-            value: "in progress",
-            label: "In Progress",
+            value: "sov",
+            label: "Совещание",
         },
         {
             id: 4,
             value: "done",
-            label: "Done",
+            label: "Мероприятие",
         },
         {
             id: 5,
             value: "canceled",
-            label: "Canceled",
+            label: "Экзамен",
+        },
+    ]
+
+    const statuses_ = [
+        {
+            id: 1,
+            value: "lk",
+            label: "Пантелеев Андрей Владимирович",
+        },
+        {
+            id: 2,
+            value: "pz",
+            label: "Формалев Владимир Федорович",
+        },
+        {
+            id: 3,
+            value: "sov",
+            label: "Танцующий Тукан (Неизвестный)",
+        },
+        {
+            id: 4,
+            value: "done",
+            label: "Крылов Сергей Сергеевич",
+        },
+        {
+            id: 5,
+            value: "canceled",
+            label: "Булакина Мария Борисовна",
+        },
+        {
+            id: 6,
+            value: "canceled",
+            label: "М8О-410Б-20",
+        },
+        {
+            id: 7,
+            value: "canceled",
+            label: "М8О-410Б-20",
         },
     ]
 
@@ -246,8 +284,6 @@ const HomePage = () => {
         })
     };
 
-    const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-
     // =====================================
     return (
         <div className={styles['homepage-container']}>
@@ -271,26 +307,26 @@ const HomePage = () => {
 
                                 <div className="grid gap-4 py-4">
                                     <div className="items-center gap-4">
-                                        <Label htmlFor="name" className="text-right">
+                                        <Label htmlFor="name" className="text-right text-foreground">
                                             Название
                                         </Label>
-                                        <Input id="title" type="text" placeholder="Type your message here."
+                                        <Input id="title" type="text" placeholder="Введите название."
                                                className="col-span-3" value={formData.title}
                                                onChange={handleInputChange}/>
                                     </div>
                                     <div className="items-center gap-4">
                                         <div className="w-full">
-                                            <Label id='description' className="text-right">
+                                            <Label id='description' className="text-right text-foreground">
                                                 Описание
                                             </Label>
-                                            <Textarea id="description" placeholder="Type your message here."
+                                            <Textarea id="description" placeholder="Напишите описание бронирования."
                                                       className="col-span-3" value={formData.description}
                                                       onChange={handleInputChange}/>
                                         </div>
                                     </div>
                                     <div className="items-center gap-4">
                                         <div className="w-full">
-                                            <Label id='description' className="text-right">
+                                            <Label id='description' className="text-right text-foreground">
                                                 Дата бронирования
                                             </Label>
                                             <Popover>
@@ -325,7 +361,7 @@ const HomePage = () => {
                                     </div>
                                     <div className="flex flex-row justify-between gap-4">
                                         <div className="flex items-center gap-1.5 md:gap-4">
-                                            <Label htmlFor="startTime" className="text-right">
+                                            <Label htmlFor="startTime" className="text-right text-foreground">
                                                 Начало
                                             </Label>
                                             <div className='w-[90px]'>
@@ -340,7 +376,7 @@ const HomePage = () => {
                                         </div>
 
                                         <div className="flex items-center gap-1.5 md:gap-4">
-                                            <Label htmlFor="endTime" className="text-right">
+                                            <Label htmlFor="endTime" className="text-right text-foreground">
                                                 Окончание
                                             </Label>
                                             <div className='w-[90px]'>
@@ -356,20 +392,24 @@ const HomePage = () => {
                                     </div>
                                     <div className="items-center gap-4">
                                         <div className="w-full">
-                                            <Label id='description' className="text-right">
-                                                Тип бронирования
+                                            <Label id='description' className="text-right text-foreground">
+                                                Метки бронирования
                                             </Label>
                                             <div className="w-full">
-                                                <PopupSelector options={statuses}/>
+                                                <PopupSelector title='Выберите метку бронирования'
+                                                               buttonTitle='Добавьте метки'
+                                                               options={statuses}/>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="items-center gap-4">
                                         <div className="w-full">
-                                            <Label id='description' className="text-right">
+                                            <Label id='description' className="text-right text-foreground">
                                                 Участники
                                             </Label>
-                                            <PopupSelector options={statuses}/>
+                                            <PopupSelector title='Начните вводить имя или номер группы'
+                                                           buttonTitle='Добавьте участников'
+                                                           options={statuses_}/>
                                         </div>
                                     </div>
 

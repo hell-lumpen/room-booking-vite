@@ -24,11 +24,13 @@ interface Tag {
 
 interface DataTableFacetedFilterProps {
     title?: string
+    buttonTitle?: string
     options: Tag[]
 }
 
 export function PopupSelector({
                                   title,
+                                  buttonTitle,
                                   options,
                               }: DataTableFacetedFilterProps) {
     const selectedValues = new Set<Tag>();
@@ -40,9 +42,10 @@ export function PopupSelector({
     return (
         <Popover>
             <PopoverTrigger asChild>
-                <Button variant="outline" size="sm" className="w-full h-8 border-solid">
-                    <PlusCircledIcon className="mr-2 h-4 w-4 text-muted-foreground"/>
-                    {title}
+                <Button variant="outline" size="sm"
+                        className="w-full h-8 border-solid hover:text-muted-foreground text-muted-foreground">
+                    <PlusCircledIcon className="mr-2 h-4 w-4 text-muted-foreground font-normal"/>
+                    {buttonTitle}
                     {selectedValues?.size > 0 && (
                         <>
                             <Separator orientation="vertical" className="mx-2 h-4"/>
@@ -113,7 +116,7 @@ export function PopupSelector({
                                                     : "opacity-50 [&_svg]:invisible"
                                             )}
                                         >
-                                            <CheckIcon className={cn("h-4 w-4")} />
+                                            <CheckIcon className={cn("h-4 w-4")}/>
                                         </div>
                                         <span className={isSelected ? 'bg-red-700' : ''}>{option.label}</span>
                                     </CommandItem>

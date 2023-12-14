@@ -10,7 +10,7 @@ const Header: FunctionComponent = () => {
     return (
         <div className='p-3 flex justify-between flex-row items-center'>
             <BrandHeader/>
-            <Button className='p-1 h-[30px] w-[30px]' onClick={
+            <Button className='rounded-full border-foreground hover:bg-background focus:none bg-background p-2.5 h-[40px] w-[40px]' onClick={
                 () => {
                     if (document.documentElement.getAttribute('data-theme') === 'dark') {
                         // document.documentElement.removeAttribute('data-theme')
@@ -23,7 +23,8 @@ const Header: FunctionComponent = () => {
                 }
 
 
-            }>{theme === 'dark' ? <Moon/> : <Sun/>}</Button>
+            }>{theme === 'dark' ? <Moon className='text-foreground bg-none'/> :
+                <Sun className='text-foreground bg-none'/>}</Button>
         </div>
     );
 };

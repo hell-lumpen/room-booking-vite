@@ -110,11 +110,35 @@
     border-bottom: 1px #767877 solid;
     background-color: rgba(var(--background));
     color: rgba(var(--foreground));
-    width: 150px;
+
     height: inherit;
     position: sticky;
     left: 0;
 }
+
+.horTimelineTimeEmptyDiv, .horTimelineRoomTitle{
+    min-width: 100px;
+    max-width: 100px;
+    overflow: hidden;
+    /*width: 110px*/
+}
+
+.horTimelineRoomTitle {
+    background-color: rgba(var(--background));
+    color: rgba(var(--foreground));
+    height: max-content;
+    padding: 19px 0;
+    text-align: center;
+    border-right: 1px solid #767877;
+    font-weight: 500;
+    font-size: 14px;
+    min-height: 25px;
+    position: sticky;
+    left: 0;
+    z-index: 1;
+}
+
+
 
 .horTimelineTimeElement {
     text-align: center;
@@ -149,18 +173,3 @@
 }
 
 
-.horTimelineRoomTitle {
-    background-color: rgba(var(--background));
-    color: rgba(var(--foreground));
-    width: 150px;
-    height: max-content;
-    padding: 19px 0;
-    text-align: center;
-    border-right: 1px solid #767877;
-    font-weight: 500;
-    font-size: 14px;
-    min-height: 25px;
-    position: sticky;
-    left: 0;
-    z-index: 1;
-}

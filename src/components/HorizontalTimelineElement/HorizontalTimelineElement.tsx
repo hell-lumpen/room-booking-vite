@@ -20,7 +20,7 @@ const getTimeFromDate = (datestr: string): string => {
     return (date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2, '0'));
 }
 
-export const HorizontalTimelineElement: React.FC<{ booking: BookingsByRoom[], rooms:string[] }> = ({booking, rooms}) => {
+export const HorizontalTimelineElement: React.FC<{ booking: BookingsByRoom[], rooms: string[] }> = ({booking, rooms}) => {
 
     const getCoords = (time_start: string, time_end: string, roomName: string) => {
         let zone_start_time = document.getElementById('timeline_' + time_start);
@@ -105,29 +105,45 @@ export const HorizontalTimelineElement: React.FC<{ booking: BookingsByRoom[], ro
 
     useEffect(() => {
         // console.log('log3', times1.length);
-        if(booking.length>0){
+        if (booking.length > 0) {
             setBB(booking);
             setRR(rooms);
         }
 
-            let time_container = document.getElementsByClassName(style.horTimelineTimeContainer) as HTMLCollectionOf<HTMLElement>;
-            if (time_container[0] !== null) {
-                time_container[0].style.width = `${time_container[0].scrollWidth}px`;
-            }
+        const time_container = document.getElementsByClassName(style.horTimelineTimeContainer) as HTMLCollectionOf<HTMLElement>;
+        if (time_container[0] !== null) {
+            time_container[0].style.width = `${time_container[0].scrollWidth}px`;
+        }
 
-            let elements = document.getElementsByClassName(style.horTimelineRoomRow) as HTMLCollectionOf<HTMLElement>
-            let timeCont = document.getElementsByClassName(style.horTimelineTimeContainer) as HTMLCollectionOf<HTMLElement>;
-            if (timeCont[0] !== null) {
-                for (let i = 0; i < elements.length; i++) {
+        const elements = document.getElementsByClassName(style.horTimelineRoomRow) as HTMLCollectionOf<HTMLElement>
+        const timeCont = document.getElementsByClassName(style.horTimelineTimeContainer) as HTMLCollectionOf<HTMLElement>;
+        if (timeCont[0] !== null) {
+            for (let i = 0; i < elements.length; i++) {
 
-                    elements[i].style.width = `${timeCont[0].scrollWidth}px`;
-                }
+                elements[i].style.width = `${timeCont[0].scrollWidth}px`;
+
             }
-        },[times1]);
+            console.log('change width', elements.length)
+
+        }
+    }, [times1]);
 
     useEffect(() => {
-        // console.log('log4',booking.length)
-        if(booking.length>0){
+        console.log('log4',booking.length)
+        const elements = document.getElementsByClassName(style.horTimelineRoomRow) as HTMLCollectionOf<HTMLElement>
+        const timeCont = document.getElementsByClassName(style.horTimelineTimeContainer) as HTMLCollectionOf<HTMLElement>;
+        if (timeCont[0] !== null) {
+            for (let i = 0; i < elements.length; i++) {
+
+                elements[i].style.width = `${timeCont[0].scrollWidth}px`;
+
+            }
+            console.log('change width', elements.length)
+
+        }
+
+
+        if (booking.length > 0) {
             setBB(booking);
             setRR(rooms);
 
@@ -187,13 +203,13 @@ export const HorizontalTimelineElement: React.FC<{ booking: BookingsByRoom[], ro
 
 
                         <div className={style.horTimelineRoomData}>
-                            {bb && bb.length>0 && bb.map((roomD) => {
+                            {bb && bb.length > 0 && bb.map((roomD) => {
                                 //                                 // return null;
                                 if (roomD.name.value === room) {
                                     return (roomD.bookings.map((element) => {
 
                                             let coord = getCoords(getTimeFromDate(element.startTime), getTimeFromDate(element.endTime), roomD.name.value);
-                                            let d:bookingData = {
+                                            let d: bookingData = {
                                                 bookingTitle: element.title,
                                                 bookingOwner: element.owner.value,
                                                 tags: [{
