@@ -1,9 +1,8 @@
 import styles from './HomePage.module.css'
 import BookingList from "@/components/BookingCard/BookingList.tsx";
-import {BookingsByRoom} from "@/components/BookingCard/bookingModels.ts";
-import {ChangeEvent, useEffect, useState} from "react";
+import {BookingsByRoom, Tag} from "@/components/BookingCard/bookingModels.ts";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import axios from "axios";
-// import {format} from "date-fns"
 import {StarBookingWidget} from "@/components/StartBooking/StarBookingWidget.tsx";
 import {SettingDatePanel} from "@/components/SettingDatePanel/SettingDatePanel.tsx";
 import {Tabs, TabsContent} from "@/components/ui/tabs.tsx";
@@ -19,23 +18,6 @@ import {
     SheetTitle,
     SheetTrigger
 } from "@/components/ui/sheet.tsx";
-// import {NewBookingForm} from "@/components/NewBookingForm/NewBookingForm.tsx";
-// import {Input} from "@/components/ui/input.tsx";
-// import {Label} from "@/components/ui/label.tsx";
-// import PopupSelector from "@/components/PopupSelector.tsx";
-// import {
-//     CalendarIcon,
-//     CheckCircledIcon,
-//     CircleIcon,
-//     CrossCircledIcon,
-//     QuestionMarkCircledIcon,
-//     StopwatchIcon
-// } from "@radix-ui/react-icons";
-// import {Textarea} from "@/components/ui/textarea.tsx";
-// import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.tsx";
-// import {cn} from "@/lib/utils.ts";
-// import {ru} from 'date-fns/locale';
-// import {DayPicker} from 'react-day-picker';
 import 'react-day-picker/dist/style.css'
 import {Textarea} from "@/components/ui/textarea.tsx";
 import {Label} from "@/components/ui/label.tsx";
@@ -51,98 +33,6 @@ import {initialRoomBookingFormData, RoomBookingFormData} from "@/models/bookingT
 import PopupSelector from "@/components/PopupSelector.tsx";
 
 
-// function OldFormComponent(props: {
-//     date: Date | undefined,
-//     selectedDate: Date | undefined,
-//     onSelect: (e: React.SetStateAction<Date | undefined>) => void,
-//     options: ({
-//         icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>;
-//         id: number;
-//         label: string;
-//         value: string
-//     } | {
-//         icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>;
-//         id: number;
-//         label: string;
-//         value: string
-//     } | {
-//         icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>;
-//         id: number;
-//         label: string;
-//         value: string
-//     } | {
-//         icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>;
-//         id: number;
-//         label: string;
-//         value: string
-//     } | {
-//         icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>;
-//         id: number;
-//         label: string;
-//         value: string
-//     })[]
-// }) {
-//     return <div className="grid gap-4 py-4">
-//         <div className="items-center gap-4">
-//             <Label htmlFor="name" className="text-right">
-//                 Название
-//             </Label>
-//             <Input id="name" type="text" placeholder="Type your message here."
-//                    className="col-span-3"/>
-//         </div>
-//         <div className="items-center gap-4">
-//             <div className="w-full">
-//                 <Label htmlFor="description">Описание</Label>
-//                 <Textarea placeholder="Type your message here." id="description"/>
-//                 {/*<p className="text-sm text-muted-foreground">*/}
-//                 {/*    Введите подробности бронирования*/}
-//                 {/*</p>*/}
-//             </div>
-//         </div>
-//         <div className="items-center gap-4">
-//             <Popover>
-//                 <PopoverTrigger asChild>
-//                     <Button
-//                         variant={"outline"}
-//                         className={cn(
-//                             "w-[100%] justify-start text-left text-muted-foreground font-normal",
-//                             !props.date && "text-sm"
-//                         )}
-//                     >
-//                         <CalendarIcon className="mr-2 h-4 w-4"/>
-//                         {props.selectedDate ? format(props.selectedDate, "PPP") :
-//                             <span>Выберите дату бронирования</span>}
-//                     </Button>
-//                 </PopoverTrigger>
-//                 <PopoverContent className="w-auto p-0">
-//                     <DayPicker mode="single"
-//                                locale={ru}
-//                                weekStartsOn={1}
-//                                selected={props.selectedDate}
-//                                onSelect={props.onSelect}/>
-//                 </PopoverContent>
-//             </Popover>
-//         </div>
-//         <div className="items-center gap-4">
-//             <Label htmlFor="name" className="text-right">
-//                 Время начала
-//             </Label>
-//             <Input id="name" type="time" className="col-span-3"/>
-//         </div>
-//         <div className="items-center gap-4">
-//             <Label htmlFor="name" className="text-right">
-//                 Время окончания
-//             </Label>
-//             <Input id="name" type="time" className="col-span-3"/>
-//         </div>
-//         <div className="grid grid-cols-4 items-center gap-4">
-//             <PopupSelector options={props.options}/>
-//         </div>
-//
-//
-//     </div>;
-// }
-
 const HomePage = () => {
     const getNextDate = (date: Date): Date => {
         return new Date(date.getTime() + 1000 * 60 * 60 * 24);
@@ -151,7 +41,7 @@ const HomePage = () => {
     const [dateForAxios, setDateAxios] = useState(new Date((new Date()).setHours(3, 0, 0)))
 
     const [dataForCard, setDataForCard] = useState<BookingsByRoom[]>([]);
-    const token = "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU5JU1RSQVRPUiIsImZ1bGxuYW1lIjoiSFVJIiwic3ViIjoiYWRtaW4iLCJpYXQiOjE3MDI0MDExNDUsImV4cCI6MTcwMzAwNTk0NX0.6rdI4GGnX4Fu8EjOxy5Rjl1lBR_s_-XDbR3wkL7JXNQ";
+    const token = "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU5JU1RSQVRPUiIsImZ1bGxOYW1lIjoi0J3QtdC90LDRhdC-0LIg0JXQstCz0LXQvdC40Lkg0JLQsNC70LXQvdGC0LjQvdC-0LLQuNGHIiwic3ViIjoidXNlcm5hbWUiLCJpYXQiOjE3MDQyOTM5NjUsImV4cCI6MTcxMjkzMzk2NX0.cyhtonQk6F8DHiHdjTCjTnD3pQyUnvdJtHJa3TwQa3I";
 
     const setNewDateAxios = (newDate: Date) => {
         setDateAxios(newDate);
@@ -162,7 +52,7 @@ const HomePage = () => {
         // document.documentElement.setAttribute('data-theme', 'dark');
 
         console.log('as', dateForAxios.toISOString())
-        axios.get(`http://10.10.50.213:8080/api/bookings?startTime=${dateForAxios.toISOString()}&endTime=${
+        axios.get(`http://192.168.3.3:8080/api/bookings?startTime=${dateForAxios.toISOString()}&endTime=${
                 getNextDate(dateForAxios).toISOString()
             }`,
             {headers: {Authorization: 'Bearer ' + token}})
@@ -253,7 +143,7 @@ const HomePage = () => {
         {
             id: 7,
             value: "canceled",
-            label: "М8О-410Б-20",
+            label: "М8О-411Б-20",
         },
     ]
 
@@ -271,10 +161,17 @@ const HomePage = () => {
         }));
     };
 
+    // const handlePopupSelectorChange = (id: string, value: number[]) => {
+    //     setFormData((prevData) => ({
+    //         ...prevData,
+    //         [id]: value,
+    //     }))
+    // }
+
     // Обработчик сохранения изменений
     const handleSaveChanges = () => {
         toast({
-            title: "Бронирование сохранено!",
+            title: "Резервирование сохранено!",
             description: (
                 <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">{JSON.stringify(formData, null, 2)}</code>
@@ -283,6 +180,15 @@ const HomePage = () => {
             duration: 5000,
         })
     };
+
+    const onChangeHandler = React.useCallback((selectedItems: Tag[]) => {
+        console.log("Selected items:", selectedItems);
+        const items = JSON.parse(JSON.stringify(selectedItems));
+        setFormData(prevData => ({
+            ...prevData,
+            tagsId: items.map((obj: { id: number; }) => obj.id),
+        }));
+    }, [setFormData]);
 
     // =====================================
     return (
@@ -293,18 +199,16 @@ const HomePage = () => {
                     <div className='flex justify-around flex-row-reverse p-4'>
                         <Sheet>
                             <SheetTrigger className='p-0 border-none'>
-                                <Button variant='default'>Забронировать</Button>
+                                <Button variant='default'>Зарезервировать</Button>
                             </SheetTrigger>
                             <SheetContent side={adjustedSide} className={sheetSize}>
                                 <SheetHeader>
-                                    <SheetTitle>Создание бронирования</SheetTitle>
+                                    <SheetTitle>Создание резервирования</SheetTitle>
                                     <SheetDescription>
-                                        Здесь вы можете забронировать необходимую аудиторию. Для успешного сохранения,
+                                        Здесь вы можете зарезервировать необходимую аудиторию. Для успешного сохранения,
                                         убедитесь, что вы заполнили все поля в форме.
                                     </SheetDescription>
                                 </SheetHeader>
-                                {/*<RoomBookingForm />*/}
-
                                 <div className="grid gap-4 py-4">
                                     <div className="items-center gap-4">
                                         <Label htmlFor="name" className="text-right text-foreground">
@@ -396,9 +300,11 @@ const HomePage = () => {
                                                 Метки бронирования
                                             </Label>
                                             <div className="w-full">
-                                                <PopupSelector title='Выберите метку бронирования'
-                                                               buttonTitle='Добавьте метки'
-                                                               options={statuses}/>
+                                                <PopupSelector<Tag> title='Выберите метку бронирования'
+                                                                    buttonTitle='Добавьте метки'
+                                                                    options={statuses}
+                                                                    onChange={onChangeHandler}
+                                                />
                                             </div>
                                         </div>
                                     </div>

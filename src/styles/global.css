@@ -81,3 +81,11 @@
 .ant-timeline-item-head {
     padding: 0 !important;
 }
+
+.truncate-multiline {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2; /* Указывает на количество строк, после которых текст будет обрезан */
+}
