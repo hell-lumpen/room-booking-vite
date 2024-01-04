@@ -1,4 +1,5 @@
 import * as React from "react";
+import {useEffect} from "react";
 import {CheckIcon, PlusCircledIcon} from "@radix-ui/react-icons";
 import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
@@ -15,6 +16,7 @@ import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"
 import {cn} from "@/lib/utils.ts";
 import {Separator} from "@radix-ui/react-separator";
 import {HoverCard, HoverCardContent, HoverCardTrigger,} from "@/components/ui/hover-card"
+import {RoomBookingFormData} from "@/models/bookingTypes.ts";
 
 interface Tag {
     label: string;
@@ -31,12 +33,13 @@ interface DataTableFacetedFilterProps<T> {
 }
 
 export function PopupSelector<T>({
-                                  title,
-                                  buttonTitle,
-                                  options,
-                                  onChange,
-                              }: DataTableFacetedFilterProps<T>) {
-    const [selectedValues, setSelectedValues] = React.useState(new Set<Tag>());
+                                     title,
+                                     buttonTitle,
+                                     options,
+                                     onChange
+                                 }: DataTableFacetedFilterProps<T>): React.ReactElement {
+    const [selectedValues, setSelectedValues] = React.useState(new Set(null));
+
 
     const toggleSelection = (option: Tag) => {
         setSelectedValues(prevSelectedValues => {
@@ -48,16 +51,18 @@ export function PopupSelector<T>({
             }
             return newSelectedValues;
         });
+
     };
 
 // Сравнение предыдущего и текущего состояний
     const prevSelectedValuesRef = React.useRef(selectedValues);
     React.useEffect(() => {
+
         if (prevSelectedValuesRef.current !== selectedValues) {
             onChange && onChange(Array.from(selectedValues) as T[]);
             prevSelectedValuesRef.current = selectedValues;
         }
-    }, [onChange, selectedValues]); // Убираем onChange из зависимостей
+    }, [selectedValues]); // Убираем onChange из зависимостей
 
     return (
         <HoverCard>

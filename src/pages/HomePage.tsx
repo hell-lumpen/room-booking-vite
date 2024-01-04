@@ -52,7 +52,7 @@ const HomePage = () => {
         // document.documentElement.setAttribute('data-theme', 'dark');
 
         console.log('as', dateForAxios.toISOString())
-        axios.get(`http://192.168.3.3:8080/api/bookings?startTime=${dateForAxios.toISOString()}&endTime=${
+        axios.get(`http://localhost:8080/api/bookings?startTime=${dateForAxios.toISOString()}&endTime=${
                 getNextDate(dateForAxios).toISOString()
             }`,
             {headers: {Authorization: 'Bearer ' + token}})
@@ -181,6 +181,16 @@ const HomePage = () => {
         })
     };
 
+    const onChangeHandlerTest = (selectedItems: Tag[]) => {
+        console.log("Selected items:", selectedItems);
+        const items = JSON.parse(JSON.stringify(selectedItems));
+        console.log('form data', formData);
+        setFormData(prevData => ({
+            ...prevData,
+            tagsId: items.map((obj: { id: number; }) => obj.id),
+        }));
+    }
+
     const onChangeHandler = React.useCallback((selectedItems: Tag[]) => {
         console.log("Selected items:", selectedItems);
         const items = JSON.parse(JSON.stringify(selectedItems));
@@ -188,7 +198,9 @@ const HomePage = () => {
             ...prevData,
             tagsId: items.map((obj: { id: number; }) => obj.id),
         }));
-    }, [setFormData]);
+    }, []);
+
+    const [n, setNN] = useState(3)
 
     // =====================================
     return (
@@ -303,7 +315,15 @@ const HomePage = () => {
                                                 <PopupSelector<Tag> title='Выберите метку бронирования'
                                                                     buttonTitle='Добавьте метки'
                                                                     options={statuses}
-                                                                    onChange={onChangeHandler}
+                                                                    onChange={(selectedItems: Tag[]) => {
+                                                                        console.log("Selected items:", selectedItems);
+                                                                        const items = JSON.parse(JSON.stringify(selectedItems));
+                                                                        console.log('form data', formData);
+                                                                        setFormData((prevData) => {
+                                                                            prevData.tagsId = (items.map((obj: { id: number; }) => obj.id))
+                                                                            return  prevData;
+                                                                        });
+                                                                    }}
                                                 />
                                             </div>
                                         </div>
@@ -313,9 +333,25 @@ const HomePage = () => {
                                             <Label id='description' className="text-right text-foreground">
                                                 Участники
                                             </Label>
-                                            <PopupSelector title='Начните вводить имя или номер группы'
-                                                           buttonTitle='Добавьте участников'
-                                                           options={statuses_}/>
+                                            <PopupSelector
+
+                                                title='Начните вводить имя или номер группы'
+                                                buttonTitle='Добавьте участников'
+                                                options={statuses_}
+                                                onChange={(selectedItems: Tag[]) => {
+                                                    console.log("Selected items:", selectedItems);
+                                                    const items = JSON.parse(JSON.stringify(selectedItems));
+                                                    setFormData((prevData) => {
+                                                        prevData.participantsId = (items.map((obj: { id: number, type:undefined }) => obj.id))
+                                                        return  prevData;
+                                                    });
+
+                                                    // setFormData(prevData => ({
+                                                    //     ...prevData,
+                                                    //     tagsId: items.map((obj: { id: number; }) => obj.id),
+                                                    // }));
+                                                }}
+                                            />
                                         </div>
                                     </div>
 

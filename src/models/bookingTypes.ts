@@ -6,7 +6,7 @@ export interface RoomBookingFormData {
     endTime: string | undefined,
     roomId: number | undefined,
     ownerId: number | undefined,
-    participantsId: { id: number; type: number }[] | undefined,
+    participantsId: { id: number; type?: number }[] | undefined,
     tagsId: number[] | undefined,
 }
 

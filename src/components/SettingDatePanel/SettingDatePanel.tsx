@@ -1,11 +1,8 @@
-import React, { useEffect} from "react";
+import React, {useEffect} from "react";
 import {TabsList, TabsTrigger} from "@/components/ui/tabs.tsx";
-import {CalendarIcon, ChevronLeft, ChevronRight, GanttChartSquare, List} from "lucide-react";
+import {ChevronLeft, ChevronRight, GanttChartSquare, List} from "lucide-react";
 import '@/styles/global.css'
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.tsx";
-import {Button} from "@/components/ui/button.tsx";
-import {cn} from "@/lib/utils.ts";
-import {format} from "date-fns";
 import {ru} from "date-fns/locale";
 import {DayPicker} from "react-day-picker";
 
@@ -42,33 +39,40 @@ export const SettingDatePanel: React.FC<{ date: Date, setDate: (date: Date) => v
                              }/>
 
                 <Popover>
-                <PopoverTrigger asChild>
+                    <PopoverTrigger asChild>
                     <span className='w-[128px]'
 
 
                     >{props.date && getFormatDate(props.date)}</span>
 
 
-                    {/*<Button*/}
-                    {/*    variant={"outline"}*/}
-                    {/*    className={cn(*/}
-                    {/*        "w-[100%] justify-start text-left text-foreground font-normal",*/}
-                    {/*        !props.date && "text-sm"*/}
-                    {/*    )}*/}
-                    {/*>*/}
-                    {/*    {props.date ? format(props.date, "PPP", {locale: ru}) :*/}
-                    {/*        <span>Выберите дату бронирования</span>}*/}
-                    {/*</Button>*/}
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                    <DayPicker mode="single"
-                               locale={ru}
-                               weekStartsOn={1}
-                               selected={props.date}
-                               onSelect={(value) => {
-                                   value&&props.setDate(value)
-                               }}/>
-                </PopoverContent>
+                        {/*<Button*/}
+                        {/*    variant={"outline"}*/}
+                        {/*    className={cn(*/}
+                        {/*        "w-[100%] justify-start text-left text-foreground font-normal",*/}
+                        {/*        !props.date && "text-sm"*/}
+                        {/*    )}*/}
+                        {/*>*/}
+                        {/*    {props.date ? format(props.date, "PPP", {locale: ru}) :*/}
+                        {/*        <span>Выберите дату бронирования</span>}*/}
+                        {/*</Button>*/}
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                        <DayPicker mode="single"
+                                   locale={ru}
+                                   weekStartsOn={1}
+                                   selected={props.date}
+                                   onSelect={(value) => {
+
+                                       if (value) {
+                                           console.log('set day');
+                                           // value.setSeconds(0);
+                                           // value.setMinutes(0);
+                                           // value.setHours(3);
+                                           props.setDate(value);
+                                       }
+                                   }}/>
+                    </PopoverContent>
                 </Popover>
 
 
