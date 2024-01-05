@@ -1,3 +1,5 @@
+import * as React from "react";
+
 export interface RoomBookingFormData {
     title: string | undefined,
     description: string | undefined,
@@ -6,7 +8,7 @@ export interface RoomBookingFormData {
     endTime: string | undefined,
     roomId: number | undefined,
     ownerId: number | undefined,
-    participantsId: { id: number; type?: number }[] | undefined,
+    participantsId: { id: number; type: number }[] | undefined,
     tagsId: number[] | undefined,
 }
 
@@ -32,4 +34,17 @@ export interface RequestBookingData {
     groupsId: number[],
     staffId: number[],
     tagsId: number[]
+}
+
+export interface Option {
+    id: number;
+    label: string;
+}
+
+export interface OptionTag extends Option {
+    icon?: React.ComponentType<{ className?: string }>;
+}
+
+export interface OptionParticipant extends Option {
+    type: number;
 }

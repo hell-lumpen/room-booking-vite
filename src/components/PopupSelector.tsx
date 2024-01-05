@@ -1,5 +1,4 @@
 import * as React from "react";
-import {useEffect} from "react";
 import {CheckIcon, PlusCircledIcon} from "@radix-ui/react-icons";
 import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
@@ -16,32 +15,25 @@ import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"
 import {cn} from "@/lib/utils.ts";
 import {Separator} from "@radix-ui/react-separator";
 import {HoverCard, HoverCardContent, HoverCardTrigger,} from "@/components/ui/hover-card"
-import {RoomBookingFormData} from "@/models/bookingTypes.ts";
+import {Option} from '@/models/bookingTypes.ts'
 
-interface Tag {
-    label: string;
-    value: string;
-    id: number;
-    icon?: React.ComponentType<{ className?: string }>;
-}
-
-interface DataTableFacetedFilterProps<T> {
+interface DataTableFacetedFilterProps<T extends Option> {
     title?: string;
     buttonTitle?: string;
-    options: Tag[];
+    options: T[];
     onChange?: (selectedItems: T[]) => void;
 }
 
-export function PopupSelector<T>({
-                                     title,
-                                     buttonTitle,
-                                     options,
-                                     onChange
-                                 }: DataTableFacetedFilterProps<T>): React.ReactElement {
-    const [selectedValues, setSelectedValues] = React.useState(new Set(null));
+export function PopupSelector<T extends Option>({
+                                                    title,
+                                                    buttonTitle,
+                                                    options,
+                                                    onChange
+                                                }: DataTableFacetedFilterProps<T>): React.ReactElement {
+    const [selectedValues, setSelectedValues] = React.useState(new Set<T>(null));
 
 
-    const toggleSelection = (option: Tag) => {
+    const toggleSelection = (option: T) => {
         setSelectedValues(prevSelectedValues => {
             const newSelectedValues = new Set(prevSelectedValues);
             if (newSelectedValues.has(option)) {
@@ -54,7 +46,6 @@ export function PopupSelector<T>({
 
     };
 
-// Сравнение предыдущего и текущего состояний
     const prevSelectedValuesRef = React.useRef(selectedValues);
     React.useEffect(() => {
 
@@ -62,7 +53,7 @@ export function PopupSelector<T>({
             onChange && onChange(Array.from(selectedValues) as T[]);
             prevSelectedValuesRef.current = selectedValues;
         }
-    }, [selectedValues]); // Убираем onChange из зависимостей
+    }, [selectedValues]);
 
     return (
         <HoverCard>
@@ -92,7 +83,6 @@ export function PopupSelector<T>({
                                                     {Array.from(selectedValues).map((option) => (
                                                         <Badge
                                                             variant="secondary"
-                                                            key={option.value}
                                                             className="rounded-sm px-1 ml-1 mb-1 font-normal max-w-xs"
                                                         >
                                                             {option.label}
@@ -159,7 +149,6 @@ export function PopupSelector<T>({
                             {Array.from(selectedValues).map((option) => (
                                 <Badge
                                     variant="secondary"
-                                    key={option.value}
                                     className="rounded-sm px-1 m-1 font-normal max-w-xs"
                                 >
                                     {option.label}

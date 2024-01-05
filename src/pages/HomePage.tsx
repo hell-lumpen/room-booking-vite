@@ -1,7 +1,7 @@
 import styles from './HomePage.module.css'
 import BookingList from "@/components/BookingCard/BookingList.tsx";
-import {BookingsByRoom, Tag} from "@/components/BookingCard/bookingModels.ts";
-import React, {ChangeEvent, useEffect, useState} from "react";
+import {BookingsByRoom} from "@/components/BookingCard/bookingModels.ts";
+import {ChangeEvent, useEffect, useState} from "react";
 import axios from "axios";
 import {StarBookingWidget} from "@/components/StartBooking/StarBookingWidget.tsx";
 import {SettingDatePanel} from "@/components/SettingDatePanel/SettingDatePanel.tsx";
@@ -29,7 +29,7 @@ import {ru} from "date-fns/locale";
 import {CalendarIcon} from "lucide-react";
 import {format} from "date-fns";
 import {cn} from "@/lib/utils.ts";
-import {initialRoomBookingFormData, RoomBookingFormData} from "@/models/bookingTypes.ts";
+import {OptionTag, initialRoomBookingFormData, OptionParticipant, RoomBookingFormData} from "@/models/bookingTypes.ts";
 import PopupSelector from "@/components/PopupSelector.tsx";
 
 
@@ -81,73 +81,35 @@ const HomePage = () => {
         };
     }, []);
 
-    const statuses = [
-        {
-            id: 1,
-            value: "lk",
-            label: "Лекция",
-        },
-        {
-            id: 2,
-            value: "pz",
-            label: "Практическое занятие",
-        },
-        {
-            id: 3,
-            value: "sov",
-            label: "Совещание",
-        },
-        {
-            id: 4,
-            value: "done",
-            label: "Мероприятие",
-        },
-        {
-            id: 5,
-            value: "canceled",
-            label: "Экзамен",
-        },
-    ]
+    const tags: OptionTag[] = [
+        {id: 1, label: "Лекция"},
+        {id: 2, label: "Семинар"},
+        {id: 3, label: "Практическое занятие"},
+        {id: 4, label: "Лабораторная работа"},
+        {id: 5, label: "Консультация"},
+        {id: 6, label: "Экзамен"}
+    ];
 
-    const statuses_ = [
-        {
-            id: 1,
-            value: "lk",
-            label: "Пантелеев Андрей Владимирович",
-        },
-        {
-            id: 2,
-            value: "pz",
-            label: "Формалев Владимир Федорович",
-        },
-        {
-            id: 3,
-            value: "sov",
-            label: "Танцующий Тукан (Неизвестный)",
-        },
-        {
-            id: 4,
-            value: "done",
-            label: "Крылов Сергей Сергеевич",
-        },
-        {
-            id: 5,
-            value: "canceled",
-            label: "Булакина Мария Борисовна",
-        },
-        {
-            id: 6,
-            value: "canceled",
-            label: "М8О-410Б-20",
-        },
-        {
-            id: 7,
-            value: "canceled",
-            label: "М8О-411Б-20",
-        },
-    ]
+    const participants: OptionParticipant[] = [
+        // Студенты
+        {id: 101, label: "Иван Иванов", type: 1},
+        {id: 102, label: "Мария Петрова", type: 1},
+        {id: 103, label: "Алексей Сидоров", type: 1},
+        {id: 104, label: "Елена Васильева", type: 1},
+        {id: 105, label: "Дмитрий Николаев", type: 1},
+        {id: 106, label: "Ольга Михайлова", type: 1},
+        {id: 107, label: "Никита Горбунов", type: 1},
+        {id: 108, label: "Анна Кузнецова", type: 1},
+        {id: 109, label: "Павел Егоров", type: 1},
+        {id: 110, label: "Ирина Андреева", type: 1},
 
-    // ======================
+        {id: 201, label: "Сергей Павлов", type: 2},
+        {id: 202, label: "Татьяна Романова", type: 2},
+        {id: 203, label: "Владимир Козлов", type: 2},
+
+        {id: 301, label: "Группа Физики-2024", type: 3},
+        {id: 302, label: "Группа Истории-2023", type: 3}
+    ];
 
     const [formData, setFormData] = useState<RoomBookingFormData>(
         initialRoomBookingFormData
@@ -181,26 +143,24 @@ const HomePage = () => {
         })
     };
 
-    const onChangeHandlerTest = (selectedItems: Tag[]) => {
-        console.log("Selected items:", selectedItems);
-        const items = JSON.parse(JSON.stringify(selectedItems));
-        console.log('form data', formData);
-        setFormData(prevData => ({
-            ...prevData,
-            tagsId: items.map((obj: { id: number; }) => obj.id),
-        }));
-    }
-
-    const onChangeHandler = React.useCallback((selectedItems: Tag[]) => {
-        console.log("Selected items:", selectedItems);
-        const items = JSON.parse(JSON.stringify(selectedItems));
-        setFormData(prevData => ({
-            ...prevData,
-            tagsId: items.map((obj: { id: number; }) => obj.id),
-        }));
-    }, []);
-
-    const [n, setNN] = useState(3)
+    // const onChangeHandlerTest = (selectedItems: Tag[]) => {
+    //     console.log("Selected items:", selectedItems);
+    //     const items = JSON.parse(JSON.stringify(selectedItems));
+    //     console.log('form data', formData);
+    //     setFormData(prevData => ({
+    //         ...prevData,
+    //         tagsId: items.map((obj: { id: number; }) => obj.id),
+    //     }));
+    // }
+    //
+    // const onChangeHandler = React.useCallback((selectedItems: Tag[]) => {
+    //     console.log("Selected items:", selectedItems);
+    //     const items = JSON.parse(JSON.stringify(selectedItems));
+    //     setFormData(prevData => ({
+    //         ...prevData,
+    //         tagsId: items.map((obj: { id: number; }) => obj.id),
+    //     }));
+    // }, []);
 
     // =====================================
     return (
@@ -312,18 +272,19 @@ const HomePage = () => {
                                                 Метки бронирования
                                             </Label>
                                             <div className="w-full">
-                                                <PopupSelector<Tag> title='Выберите метку бронирования'
-                                                                    buttonTitle='Добавьте метки'
-                                                                    options={statuses}
-                                                                    onChange={(selectedItems: Tag[]) => {
-                                                                        console.log("Selected items:", selectedItems);
-                                                                        const items = JSON.parse(JSON.stringify(selectedItems));
-                                                                        console.log('form data', formData);
-                                                                        setFormData((prevData) => {
-                                                                            prevData.tagsId = (items.map((obj: { id: number; }) => obj.id))
-                                                                            return  prevData;
-                                                                        });
-                                                                    }}
+                                                <PopupSelector<OptionTag>
+                                                    title='Выберите метку бронирования'
+                                                    buttonTitle='Добавьте метки'
+                                                    options={tags}
+                                                    onChange={(selectedItems: OptionTag[]) => {
+                                                        console.log('form data', formData);
+                                                        setFormData((prevData) => {
+                                                            prevData.tagsId = (selectedItems.map((obj: {
+                                                                id: number;
+                                                            }) => obj.id))
+                                                            return prevData;
+                                                        });
+                                                    }}
                                                 />
                                             </div>
                                         </div>
@@ -333,23 +294,21 @@ const HomePage = () => {
                                             <Label id='description' className="text-right text-foreground">
                                                 Участники
                                             </Label>
-                                            <PopupSelector
-
+                                            <PopupSelector<OptionParticipant>
                                                 title='Начните вводить имя или номер группы'
                                                 buttonTitle='Добавьте участников'
-                                                options={statuses_}
-                                                onChange={(selectedItems: Tag[]) => {
-                                                    console.log("Selected items:", selectedItems);
-                                                    const items = JSON.parse(JSON.stringify(selectedItems));
-                                                    setFormData((prevData) => {
-                                                        prevData.participantsId = (items.map((obj: { id: number, type:undefined }) => obj.id))
-                                                        return  prevData;
+                                                options={participants}
+                                                onChange={(selectedItems: OptionParticipant[]) => {
+                                                    console.log('form data', formData);
+                                                    setFormData(prevData => {
+                                                        return {
+                                                            ...prevData,
+                                                            participantsId: selectedItems.map(({id, type}) => ({
+                                                                id,
+                                                                type
+                                                            }))
+                                                        };
                                                     });
-
-                                                    // setFormData(prevData => ({
-                                                    //     ...prevData,
-                                                    //     tagsId: items.map((obj: { id: number; }) => obj.id),
-                                                    // }));
                                                 }}
                                             />
                                         </div>
