@@ -301,13 +301,11 @@ const HomePage = () => {
                                                 onChange={(selectedItems: OptionParticipant[]) => {
                                                     console.log('form data', formData);
                                                     setFormData(prevData => {
-                                                        return {
-                                                            ...prevData,
-                                                            participantsId: selectedItems.map(({id, type}) => ({
-                                                                id,
-                                                                type
-                                                            }))
-                                                        };
+                                                        prevData.participantsId = selectedItems.map(obj => ({
+                                                            id: obj.id,
+                                                            type: obj.type
+                                                        }));
+                                                        return prevData;
                                                     });
                                                 }}
                                             />
