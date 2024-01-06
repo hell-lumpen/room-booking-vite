@@ -1,4 +1,5 @@
 import * as React from "react";
+import {useEffect} from "react";
 import {CheckIcon, PlusCircledIcon} from "@radix-ui/react-icons";
 import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
@@ -7,14 +8,15 @@ import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"
 import {cn} from "@/lib/utils.ts";
 import {Separator} from "@radix-ui/react-separator";
 import {HoverCard, HoverCardContent, HoverCardTrigger,} from "@/components/ui/hover-card"
-import {Option} from '@/models/bookingTypes.ts'
+import {Option, OptionParticipant, OptionTag, RoomBookingFormData} from '@/models/bookingTypes.ts'
 import {ScrollArea} from "@/components/ui/scroll-area.tsx";
 
 interface DataTableFacetedFilterProps<T extends Option> {
     title?: string;
     buttonTitle?: string;
     options: T[];
-    value?: T[];
+    fullData?: RoomBookingFormData;
+    type?: 'tag' | 'participant'
     onChange?: (selectedItems: T[]) => void;
 }
 
@@ -22,10 +24,20 @@ export function PopupSelector<T extends Option>({
                                                     title,
                                                     buttonTitle,
                                                     options,
-                                                    value,
+                                                    fullData,
+                                                    type,
                                                     onChange
                                                 }: DataTableFacetedFilterProps<T>): React.ReactElement {
-    const [selectedValues, setSelectedValues] = React.useState(new Set<T>(value));
+
+    let tt = new Set() ;
+    if (fullData ) {
+        if (type === 'participant'&&fullData.participants)
+            tt = new Set(fullData.participants);
+        else if (type === 'tag'&&fullData.tags)
+            tt = new Set(fullData.tags);
+    }
+
+    const [selectedValues, setSelectedValues] = React.useState(tt);
 
 
     const toggleSelection = (option: T) => {

@@ -66,6 +66,8 @@ const HomePage = () => {
     const [adjustedSide, setAdjustedSide] = useState<"bottom" | "right" | "top" | "left" | null | undefined>(undefined);
     const [sheetSize, setSheetSize] = useState<string>('');
     useEffect(() => {
+        console.log('form1', formData)
+
         const handleResize = () => {
             const isSmallScreen = window.innerWidth <= 800;
             setAdjustedSide(isSmallScreen ? 'bottom' : 'right');
@@ -115,6 +117,10 @@ const HomePage = () => {
     const [formData, setFormData] = useState<RoomBookingFormData>(
         initialRoomBookingFormData
     );
+
+    useEffect(() => {
+        console.log('form', formData)
+    }, [setFormData]);
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
         console.log('form data', formData);
@@ -280,7 +286,8 @@ const HomePage = () => {
                                                     title='Выберите метку бронирования'
                                                     buttonTitle='Добавьте метки'
                                                     options={tags}
-                                                    value={formData.tags}
+                                                    fullData={formData}
+                                                    type='tag'
                                                     onChange={(selectedItems: OptionTag[]) => {
                                                         console.log('form data', formData);
                                                         setFormData((prevData) => {
@@ -304,7 +311,8 @@ const HomePage = () => {
                                                 title='Начните вводить имя или номер группы'
                                                 buttonTitle='Добавьте участников'
                                                 options={participants}
-                                                value={formData.participants}
+                                                fullData={formData}
+                                                type='participant'
                                                 onChange={(selectedItems: OptionParticipant[]) => {
                                                     console.log('form data', formData);
                                                     setFormData(prevData => {
