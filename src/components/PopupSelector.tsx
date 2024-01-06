@@ -2,25 +2,19 @@ import * as React from "react";
 import {CheckIcon, PlusCircledIcon} from "@radix-ui/react-icons";
 import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
-import {
-    Command,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
-    CommandSeparator,
-} from "@/components/ui/command";
+import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList,} from "@/components/ui/command";
 import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover";
 import {cn} from "@/lib/utils.ts";
 import {Separator} from "@radix-ui/react-separator";
 import {HoverCard, HoverCardContent, HoverCardTrigger,} from "@/components/ui/hover-card"
 import {Option} from '@/models/bookingTypes.ts'
+import {ScrollArea} from "@/components/ui/scroll-area.tsx";
 
 interface DataTableFacetedFilterProps<T extends Option> {
     title?: string;
     buttonTitle?: string;
     options: T[];
+    value?: T[];
     onChange?: (selectedItems: T[]) => void;
 }
 
@@ -28,9 +22,10 @@ export function PopupSelector<T extends Option>({
                                                     title,
                                                     buttonTitle,
                                                     options,
+                                                    value,
                                                     onChange
                                                 }: DataTableFacetedFilterProps<T>): React.ReactElement {
-    const [selectedValues, setSelectedValues] = React.useState(new Set<T>(null));
+    const [selectedValues, setSelectedValues] = React.useState(new Set<T>(value));
 
 
     const toggleSelection = (option: T) => {
@@ -82,6 +77,7 @@ export function PopupSelector<T extends Option>({
                                                 <div className="mt-1 flex flex-wrap">
                                                     {Array.from(selectedValues).map((option) => (
                                                         <Badge
+                                                            key={option.id}
                                                             variant="secondary"
                                                             className="rounded-sm px-1 ml-1 mb-1 font-normal max-w-xs"
                                                         >
@@ -102,43 +98,48 @@ export function PopupSelector<T extends Option>({
                     <Command>
                         <CommandInput placeholder={title || 'placeholder'}/>
                         <CommandList>
-                            <CommandEmpty>Ничего не найдено</CommandEmpty>
-                            <CommandGroup>
-                                {options.map((option) => {
-                                    const isSelected = selectedValues.has(option);
-                                    return (
-                                        <CommandItem
-                                            key={option.id}
-                                            onSelect={() => toggleSelection(option)}
-                                        >
-                                            <div
-                                                className={cn(
-                                                    "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                                                    isSelected
-                                                        ? "bg-primary text-primary-foreground"
-                                                        : "opacity-50 [&_svg]:invisible"
-                                                )}
+                            <CommandEmpty>
+                                <div role="img" aria-label="thinking">🤔</div>
+                                Ничего не найдено. Попробуйте изменить запрос!
+                            </CommandEmpty>
+                            <ScrollArea aria-orientation='vertical' className="h-max-[300px]">
+                                <CommandGroup>
+                                    {options.map((option) => {
+                                        const isSelected = selectedValues.has(option);
+                                        return (
+                                            <CommandItem
+                                                key={option.id}
+                                                onSelect={() => toggleSelection(option)}
                                             >
-                                                <CheckIcon className={cn("h-4 w-4")}/>
-                                            </div>
-                                            <span>{option.label}</span>
-                                        </CommandItem>
-                                    )
-                                })}
-                            </CommandGroup>
-                            {selectedValues.size > 0 && (
-                                <>
-                                    <CommandSeparator/>
-                                    <CommandGroup>
-                                        <CommandItem
-                                            onSelect={() => setSelectedValues(new Set())}
-                                            className="h-8 justify-center text-center"
-                                        >
-                                            Очистить выбор
-                                        </CommandItem>
-                                    </CommandGroup>
-                                </>
-                            )}
+                                                <div
+                                                    className={cn(
+                                                        "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                                                        isSelected
+                                                            ? "bg-primary text-primary-foreground"
+                                                            : "opacity-50 [&_svg]:invisible"
+                                                    )}
+                                                >
+                                                    <CheckIcon className={cn("h-4 w-4")}/>
+                                                </div>
+                                                <span>{option.label}</span>
+                                            </CommandItem>
+                                        )
+                                    })}
+                                </CommandGroup>
+                            </ScrollArea>
+                            {/*{selectedValues.size > 0 && (*/}
+                            {/*    <>*/}
+                            {/*        <CommandSeparator/>*/}
+                            {/*        <CommandGroup>*/}
+                            {/*            <CommandItem*/}
+                            {/*                onSelect={() => setSelectedValues(new Set())}*/}
+                            {/*                className="h-8 justify-center text-center"*/}
+                            {/*            >*/}
+                            {/*                Очистить выбор*/}
+                            {/*            </CommandItem>*/}
+                            {/*        </CommandGroup>*/}
+                            {/*    </>*/}
+                            {/*)}*/}
                         </CommandList>
                     </Command>
                 </PopoverContent>

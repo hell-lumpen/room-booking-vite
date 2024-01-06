@@ -8,20 +8,20 @@ export interface RoomBookingFormData {
     endTime: string | undefined,
     roomId: number | undefined,
     ownerId: number | undefined,
-    participantsId: { id: number; type: number }[] | undefined,
-    tagsId: number[] | undefined,
+    participants: OptionParticipant[] | undefined,
+    tags: OptionTag[] | undefined,
 }
 
 export const initialRoomBookingFormData: RoomBookingFormData = {
-    title: undefined,
-    description: undefined,
+    title: '',
+    description: '',
     date: undefined,
     startTime: undefined,
     endTime: undefined,
     roomId: undefined,
     ownerId: undefined,
-    participantsId: undefined,
-    tagsId: undefined,
+    participants: undefined,
+    tags: undefined,
 };
 
 export interface RequestBookingData {

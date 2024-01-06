@@ -29,8 +29,9 @@ import {ru} from "date-fns/locale";
 import {CalendarIcon} from "lucide-react";
 import {format} from "date-fns";
 import {cn} from "@/lib/utils.ts";
-import {OptionTag, initialRoomBookingFormData, OptionParticipant, RoomBookingFormData} from "@/models/bookingTypes.ts";
+import {initialRoomBookingFormData, OptionParticipant, OptionTag, RoomBookingFormData} from "@/models/bookingTypes.ts";
 import PopupSelector from "@/components/PopupSelector.tsx";
+import {ScrollArea} from "@/components/ui/scroll-area.tsx";
 
 
 const HomePage = () => {
@@ -116,6 +117,7 @@ const HomePage = () => {
     );
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
+        console.log('form data', formData);
         const {id, value} = e.target;
         setFormData((prevData) => ({
             ...prevData,
@@ -135,9 +137,11 @@ const HomePage = () => {
         toast({
             title: "Резервирование сохранено!",
             description: (
-                <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(formData, null, 2)}</code>
-        </pre>
+                <ScrollArea className="h-max-[300px]">
+                    <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                        <code className="text-white">{JSON.stringify(formData, null, 2)}</code>
+                    </pre>
+                </ScrollArea>
             ),
             duration: 5000,
         })
@@ -276,12 +280,14 @@ const HomePage = () => {
                                                     title='Выберите метку бронирования'
                                                     buttonTitle='Добавьте метки'
                                                     options={tags}
+                                                    value={formData.tags}
                                                     onChange={(selectedItems: OptionTag[]) => {
                                                         console.log('form data', formData);
                                                         setFormData((prevData) => {
-                                                            prevData.tagsId = (selectedItems.map((obj: {
-                                                                id: number;
-                                                            }) => obj.id))
+                                                            prevData.tags = selectedItems;
+                                                            // prevData.tagsId = (selectedItems.map((obj: {
+                                                            //     id: number;
+                                                            // }) => obj.id))
                                                             return prevData;
                                                         });
                                                     }}
@@ -298,13 +304,15 @@ const HomePage = () => {
                                                 title='Начните вводить имя или номер группы'
                                                 buttonTitle='Добавьте участников'
                                                 options={participants}
+                                                value={formData.participants}
                                                 onChange={(selectedItems: OptionParticipant[]) => {
                                                     console.log('form data', formData);
                                                     setFormData(prevData => {
-                                                        prevData.participantsId = selectedItems.map(obj => ({
-                                                            id: obj.id,
-                                                            type: obj.type
-                                                        }));
+                                                        prevData.participants = selectedItems;
+                                                        // prevData.participantsId = selectedItems.map(obj => ({
+                                                        //     id: obj.id,
+                                                        //     type: obj.type
+                                                        // }));
                                                         return prevData;
                                                     });
                                                 }}
