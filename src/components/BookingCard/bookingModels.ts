@@ -33,6 +33,7 @@ export interface Booking {
     startTime: string;
     endTime: string;
     title: string;
+    audience?: string;
     descriptions?: string;
     owner: User;
     participants?: (User | Group)[];

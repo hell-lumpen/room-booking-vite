@@ -66,8 +66,6 @@ const HomePage = () => {
     const [adjustedSide, setAdjustedSide] = useState<"bottom" | "right" | "top" | "left" | null | undefined>(undefined);
     const [sheetSize, setSheetSize] = useState<string>('');
     useEffect(() => {
-        console.log('form1', formData)
-
         const handleResize = () => {
             const isSmallScreen = window.innerWidth <= 800;
             setAdjustedSide(isSmallScreen ? 'bottom' : 'right');
@@ -118,9 +116,6 @@ const HomePage = () => {
         initialRoomBookingFormData
     );
 
-    useEffect(() => {
-        console.log('form', formData)
-    }, [setFormData]);
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
         console.log('form data', formData);
@@ -177,7 +172,7 @@ const HomePage = () => {
         <div className={styles['homepage-container']}>
             <div className={styles['booking-card-container']}>
                 <Tabs defaultValue="card">
-                    <SettingDatePanel date={dateForAxios} setDate={setNewDateAxios}></SettingDatePanel>
+                    <SettingDatePanel date={dateForAxios} setDate={setNewDateAxios}/>
                     <div className='flex justify-around flex-row-reverse p-4'>
                         <Sheet>
                             <SheetTrigger className='p-0 border-none'>
@@ -337,10 +332,10 @@ const HomePage = () => {
                                 </SheetFooter>
                             </SheetContent>
                         </Sheet>
-
-
                     </div>
-                    <TabsContent value="card"><BookingList bookingsGropedByRoom={dataForCard}/></TabsContent>
+                    <TabsContent value="card">
+                        <BookingList bookingsGropedByRoom={dataForCard}/>
+                    </TabsContent>
                     <TabsContent value="timeline">
                         <HorizontalTimelineElement booking={dataForCard} rooms={dataForCard.map((e) => {
                             return e.name.value;

@@ -8,6 +8,7 @@ import './App.css';
 // import BrandHeader from "@/components/BrandHeader.tsx";
 import Header from "@/components/Header.tsx";
 import {Toaster} from "@/components/ui/toaster.tsx";
+import { SchedulePage } from './pages/ShedulePage';
 
 const SidebarNavUnits = [
     {text: 'Главная', path: '/main', JSXContent: <HomePage/>},
@@ -48,16 +49,7 @@ const SidebarNavUnits = [
         </div>
     },
     {text: 'Расписание', path: '/schedule',
-        JSXContent: <div className="flex items-center justify-center">
-            <div className="text-center">
-                <h2 className="text-2xl font-semibold tracking-tight mb-4">
-                    Модуль "Расписание" находится в разработке 😅🛠️
-                </h2>
-                <p className="text-gray-500">
-                    Мы работаем над улучшениями. Пожалуйста, вернитесь позже.
-                </p>
-            </div>
-        </div>
+        JSXContent: <SchedulePage/>
     },
 ];
 
