@@ -21,15 +21,14 @@ const getFormatDate = (date: Date) => {
 }
 
 export const SettingDate: React.FC<{ date: Date, setDate: (date: Date) => void }> = (props) => {
-    console.log('date', props.date);
     return (
         <div className='flex flex-row items-center h-max '>
                 <ChevronLeft size={20} strokeWidth={2.25}
                              onClick={() => {
                                  props.setDate(new Date(props.date.getTime() - 1000 * 60 * 60 * 24))
                              }
-                             }/>
-
+                             }
+                             />
                 <Popover>
                     <PopoverTrigger asChild>
                     <span className='w-[128px]'
@@ -38,16 +37,6 @@ export const SettingDate: React.FC<{ date: Date, setDate: (date: Date) => void }
                     >{props.date && getFormatDate(props.date)}</span>
 
 
-                        {/*<Button*/}
-                        {/*    variant={"outline"}*/}
-                        {/*    className={cn(*/}
-                        {/*        "w-[100%] justify-start text-left text-foreground font-normal",*/}
-                        {/*        !props.date && "text-sm"*/}
-                        {/*    )}*/}
-                        {/*>*/}
-                        {/*    {props.date ? format(props.date, "PPP", {locale: ru}) :*/}
-                        {/*        <span>Выберите дату бронирования</span>}*/}
-                        {/*</Button>*/}
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0">
                         <DayPicker mode="single"
@@ -57,10 +46,6 @@ export const SettingDate: React.FC<{ date: Date, setDate: (date: Date) => void }
                                    onSelect={(value) => {
 
                                        if (value) {
-                                           console.log('set day');
-                                           // value.setSeconds(0);
-                                           // value.setMinutes(0);
-                                           // value.setHours(3);
                                            props.setDate(value);
                                        }
                                    }}/>
