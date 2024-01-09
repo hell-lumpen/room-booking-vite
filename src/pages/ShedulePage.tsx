@@ -13,7 +13,7 @@ export const SchedulePage = () => {
 
     const [dateForSchedule, setDateSchedule] = useState(new Date((new Date()).setHours(3, 0, 0)))
     const [groupForSchedule, setGroupSchedule] = useState<string>();
-    const [scheduleCardData, setCardData] = useState([]);
+    const [scheduleCardData, setCardData] = useState<Booking[]>([]);
 
 
     useEffect(() => {
@@ -23,7 +23,9 @@ export const SchedulePage = () => {
         if (groupForSchedule === '') {
             return;
         }
-        axios.get(`http://localhost:8080/api/bookings?startTime=${dateForSchedule.toISOString()}&endTime=${getNextDate(dateForSchedule).toISOString()
+
+        // return;
+        axios.get(`http://localhost:8080/api/bookings/group/${Number(groupForSchedule)}?startTime=${dateForSchedule.toISOString()}&endTime=${getNextDate(dateForSchedule).toISOString()
             }`,
             { headers: { Authorization: 'Bearer ' + token } })
             .then((data) => {
@@ -56,9 +58,19 @@ export const SchedulePage = () => {
     return (
         <div>
             <SettingSchedulePanel date={dateForSchedule} setDate={setDateSchedule} setGroup={setGroupSchedule} />
-            <BookingCard {...card_data} />
             <div className="mt-[2%]">
-                <BookingList bookingsGropedByRoom={scheduleCardData} />
+
+                {scheduleCardData.sort((a, b) => {
+                    const date_a = new Date(a.startTime);
+                    const date_b = new Date(b.startTime);
+                    return date_a.getTime() - date_b.getTime();
+                }
+                ).map(
+                    (data: Booking) => (
+                        <BookingCard {...data} />
+                    )
+                )}
+                {/* <BookingList bookingsGropedByRoom={scheduleCardData} /> */}
             </div>
 
         </div>

@@ -65,9 +65,9 @@ const BookingCard: React.FC<Booking> = (booking) => {
                     <span>{booking.title}</span>
                     {/* <span className={styles['booking-audience']}>{booking.audience && booking.audience}</span> */}
                 </div>
-                {booking.audience&&
+                {booking.room&&
                 <div className={styles['booking-audience']}>
-                    Аудитория: {booking.audience}
+                    Аудитория: {booking.room.value}
                 </div>
                 }
                 {booking.tags && booking.tags.length > 0 && (

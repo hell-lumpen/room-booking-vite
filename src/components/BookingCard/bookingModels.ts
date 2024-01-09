@@ -33,12 +33,12 @@ export interface Booking {
     startTime: string;
     endTime: string;
     title: string;
-    audience?: string;
+    room?: {id:number, value:string};
     descriptions?: string;
     owner: User;
     participants?: (User | Group)[];
-    tag: Tag;
-    tags: Tag[];
+    tag?: Tag;
+    tags?: Tag[];
 }
 
 export interface User {

@@ -22,7 +22,7 @@ export const CustomSelect: React.FC<{ hint: string, values: {id:number, name:str
             <SelectContent>
                 <SelectGroup>
                     {props.values.map((value) => (
-                        <SelectItem value={value.name}>{value.name}</SelectItem>
+                        <SelectItem value={String(value.id)}>{value.name}</SelectItem>
                     ))}
                 </SelectGroup>
             </SelectContent>
