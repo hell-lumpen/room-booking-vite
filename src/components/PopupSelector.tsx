@@ -1,5 +1,4 @@
 import * as React from "react";
-import {useEffect} from "react";
 import {CheckIcon, PlusCircledIcon} from "@radix-ui/react-icons";
 import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
@@ -9,7 +8,6 @@ import {cn} from "@/lib/utils.ts";
 import {Separator} from "@radix-ui/react-separator";
 import {HoverCard, HoverCardContent, HoverCardTrigger,} from "@/components/ui/hover-card"
 import {Option, OptionParticipant, OptionTag, RoomBookingFormData} from '@/models/bookingTypes.ts'
-import {ScrollArea} from "@/components/ui/scroll-area.tsx";
 
 interface DataTableFacetedFilterProps<T extends Option> {
     title?: string;
@@ -29,15 +27,15 @@ export function PopupSelector<T extends Option>({
                                                     onChange
                                                 }: DataTableFacetedFilterProps<T>): React.ReactElement {
 
-    let tt = new Set() ;
-    if (fullData ) {
-        if (type === 'participant'&&fullData.participants)
-            tt = new Set(fullData.participants);
-        else if (type === 'tag'&&fullData.tags)
-            tt = new Set(fullData.tags);
+    let initialState = new Set<OptionTag | OptionParticipant>(undefined);
+    if (fullData) {
+        if (type === 'participant' && fullData.participants)
+            initialState = new Set(fullData.participants as OptionParticipant[]);
+        else if (type === 'tag' && fullData.tags)
+            initialState = new Set(fullData.tags as OptionTag[]);
     }
 
-    const [selectedValues, setSelectedValues] = React.useState(tt);
+    const [selectedValues, setSelectedValues] = React.useState(initialState);
 
 
     const toggleSelection = (option: T) => {
@@ -107,38 +105,36 @@ export function PopupSelector<T extends Option>({
                 </HoverCardTrigger>
 
                 <PopoverContent className="w-[320px] md:w-[420px] p-0" align="center">
-                    <Command>
+                    <Command className="z-51">
                         <CommandInput placeholder={title || 'placeholder'}/>
                         <CommandList>
                             <CommandEmpty>
                                 <div role="img" aria-label="thinking">🤔</div>
                                 Ничего не найдено. Попробуйте изменить запрос!
                             </CommandEmpty>
-                            <ScrollArea aria-orientation='vertical' className="h-max-[300px]">
-                                <CommandGroup>
-                                    {options.map((option) => {
-                                        const isSelected = selectedValues.has(option);
-                                        return (
-                                            <CommandItem
-                                                key={option.id}
-                                                onSelect={() => toggleSelection(option)}
+                            <CommandGroup className='z-100'>
+                                {options.map((option) => {
+                                    const isSelected = selectedValues.has(option);
+                                    return (
+                                        <CommandItem
+                                            key={option.id}
+                                            onSelect={() => toggleSelection(option)}
+                                        >
+                                            <div
+                                                className={cn(
+                                                    "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                                                    isSelected
+                                                        ? "bg-primary text-primary-foreground"
+                                                        : "opacity-50 [&_svg]:invisible"
+                                                )}
                                             >
-                                                <div
-                                                    className={cn(
-                                                        "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                                                        isSelected
-                                                            ? "bg-primary text-primary-foreground"
-                                                            : "opacity-50 [&_svg]:invisible"
-                                                    )}
-                                                >
-                                                    <CheckIcon className={cn("h-4 w-4")}/>
-                                                </div>
-                                                <span>{option.label}</span>
-                                            </CommandItem>
-                                        )
-                                    })}
-                                </CommandGroup>
-                            </ScrollArea>
+                                                <CheckIcon className={cn("h-4 w-4")}/>
+                                            </div>
+                                            <span>{option.label}</span>
+                                        </CommandItem>
+                                    )
+                                })}
+                            </CommandGroup>
                             {/*{selectedValues.size > 0 && (*/}
                             {/*    <>*/}
                             {/*        <CommandSeparator/>*/}
