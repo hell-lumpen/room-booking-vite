@@ -1,9 +1,16 @@
 import * as React from "react";
-import {useEffect} from "react";
 import {CheckIcon, PlusCircledIcon} from "@radix-ui/react-icons";
 import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
-import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList,} from "@/components/ui/command";
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+    CommandSeparator,
+} from "@/components/ui/command";
 import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover";
 import {cn} from "@/lib/utils.ts";
 import {Separator} from "@radix-ui/react-separator";
@@ -29,15 +36,15 @@ export function PopupSelector<T extends Option>({
                                                     onChange
                                                 }: DataTableFacetedFilterProps<T>): React.ReactElement {
 
-    let tt = new Set() ;
-    if (fullData ) {
-        if (type === 'participant'&&fullData.participants)
-            tt = new Set(fullData.participants);
-        else if (type === 'tag'&&fullData.tags)
-            tt = new Set(fullData.tags);
+    let initialState = new Set<OptionTag | OptionParticipant>();
+    if (fullData) {
+        if (type === 'participant' && fullData.participants)
+            initialState = new Set(fullData.participants as OptionParticipant[]);
+        else if (type === 'tag' && fullData.tags)
+            initialState = new Set(fullData.tags as OptionTag[]);
     }
 
-    const [selectedValues, setSelectedValues] = React.useState(tt);
+    const [selectedValues, setSelectedValues] = React.useState(initialState);
 
 
     const toggleSelection = (option: T) => {
@@ -139,19 +146,19 @@ export function PopupSelector<T extends Option>({
                                     })}
                                 </CommandGroup>
                             </ScrollArea>
-                            {/*{selectedValues.size > 0 && (*/}
-                            {/*    <>*/}
-                            {/*        <CommandSeparator/>*/}
-                            {/*        <CommandGroup>*/}
-                            {/*            <CommandItem*/}
-                            {/*                onSelect={() => setSelectedValues(new Set())}*/}
-                            {/*                className="h-8 justify-center text-center"*/}
-                            {/*            >*/}
-                            {/*                Очистить выбор*/}
-                            {/*            </CommandItem>*/}
-                            {/*        </CommandGroup>*/}
-                            {/*    </>*/}
-                            {/*)}*/}
+                            {selectedValues.size > 0 && (
+                                <>
+                                    <CommandSeparator/>
+                                    <CommandGroup>
+                                        <CommandItem
+                                            onSelect={() => setSelectedValues(new Set())}
+                                            className="h-8 justify-center text-center"
+                                        >
+                                            Очистить выбор
+                                        </CommandItem>
+                                    </CommandGroup>
+                                </>
+                            )}
                         </CommandList>
                     </Command>
                 </PopoverContent>

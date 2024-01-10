@@ -10,7 +10,7 @@ const Header: FunctionComponent = () => {
     return (
         <div className='p-3 flex justify-between flex-row items-center'>
             <BrandHeader/>
-            <Button className='rounded-full border-foreground hover:bg-background focus:none bg-background p-2.5 h-[40px] w-[40px]' onClick={
+            <Button className='rounded-full border-none hover:bg-accent focus:none bg-background p-2.5 h-[40px] w-[40px]' onClick={
                 () => {
                     if (document.documentElement.getAttribute('data-theme') === 'dark') {
                         // document.documentElement.removeAttribute('data-theme')
