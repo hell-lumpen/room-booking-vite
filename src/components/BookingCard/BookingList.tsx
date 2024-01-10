@@ -13,7 +13,7 @@ const BookingList: React.FC<BookingListProps> = ({bookingsGropedByRoom}) => {
         <div className={styles['booking-list-container']}>
             {bookingsGropedByRoom && bookingsGropedByRoom.map((room, index) => (
                 <div className={styles['booking-room-container']} key={index}>
-                    <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+                    <h2 className="mb-2 px-4 text-xl tracking-tight" style={{fontWeight: 800}}>
                         {room.name.value}
                     </h2>
                     <div className={styles['bookings-room-data']}>

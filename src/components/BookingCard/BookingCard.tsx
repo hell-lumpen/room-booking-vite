@@ -52,7 +52,7 @@ const смешныеЖивотные: string[] = [
 
 const BookingCard: React.FC<Booking> = (booking) => {
     return (
-        <div className='booking-card-wrapper1 rounded-lg border  shadow-sm'>
+        <div className='booking-card-wrapper1 rounded-lg border shadow-sm'>
             <div className={styles['time-block']}>
                 <span> {getFormatTime(booking.startTime)} </span>
                 <br/>
