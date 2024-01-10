@@ -16,7 +16,7 @@ const BrandHeader = () => {
 
     return (
         <div
-            className="flex items-center max-w-screen p-2 pb-0 md:max-w-full cursor-pointer"
+            className="flex items-center max-w-screen p-2 pb-0 md:max-w-full"
         >
 
             <div>

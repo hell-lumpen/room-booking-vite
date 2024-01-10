@@ -22,7 +22,7 @@ export const SettingSchedulePanel: React.FC<{ date: Date, setDate: (date: Date) 
     return (
         <div className={styles['settingSchedule']}>
             <SettingDate date={props.date} setDate={props.setDate} />
-            <div className="ml-[5%]">
+            <div className="ml-[5%] max-sm:ml-0 max-sm:mt-[15px]">
                 <CustomSelect hint='Выберете группу' values={groups} callback={(value) => { props.setGroup(value) }} />
             </div>
         </div>

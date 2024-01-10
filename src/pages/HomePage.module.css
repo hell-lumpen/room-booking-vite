@@ -7,10 +7,10 @@
 .booking-card-container {
     height: 100%;
     width: 100%;
-    border-left: 1px solid #c3c3c3;
     flex-shrink: 10;
-
+    margin-left: 10%;
 }
+
 
 .homepage-right-menu {
     height: inherit;
@@ -29,6 +29,7 @@
     .booking-card-container {
         border: none;
         width: 100%;
+        margin-left: 0;
     }
 }
 

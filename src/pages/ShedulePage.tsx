@@ -40,7 +40,7 @@ export const SchedulePage = () => {
 
 
     return (
-        <div>
+        <div className=" w-[80%] mx-auto max-md:w-[100%]">
             <SettingSchedulePanel date={dateForSchedule} setDate={setDateSchedule} setGroup={setGroupSchedule} />
             <div className="mt-[2%]">
 

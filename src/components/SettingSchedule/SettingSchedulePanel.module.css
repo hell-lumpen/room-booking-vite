@@ -3,4 +3,12 @@
 .settingSchedule{
     display: flex;
     flex-direction: row;
+    width: max-content;
+}
+
+@media only screen and (max-width: 640px) {
+    .settingSchedule{
+        flex-direction: column;
+    }
+
 }
