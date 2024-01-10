@@ -17,9 +17,11 @@ const BookingList: React.FC<BookingListProps> = ({bookingsGropedByRoom}) => {
                         {room.name.value}
                     </h2>
                     <div className={styles['bookings-room-data']}>
-                        {room.bookings.map((booking, bookingIndex) => (
-                            <BookingCard key={bookingIndex} {...booking} />
-                        ))}
+                        {room.bookings.map((booking, bookingIndex) => {
+                            booking.room = undefined;
+                            return (<BookingCard key={bookingIndex} {...booking} />);
+
+                            })}
                     </div>
                 </div>
             ))}
