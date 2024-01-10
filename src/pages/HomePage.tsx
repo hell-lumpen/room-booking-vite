@@ -53,7 +53,7 @@ const HomePage = () => {
         // document.documentElement.setAttribute('data-theme', 'dark');
 
         console.log('as', dateForAxios.toISOString())
-        axios.get(`http://10.10.49.69:8080/api/bookings?startTime=${dateForAxios.toISOString()}&endTime=${
+        axios.get(`http://localhost:8080/api/bookings?startTime=${dateForAxios.toISOString()}&endTime=${
                 getNextDate(dateForAxios).toISOString()
             }`,
             {headers: {Authorization: 'Bearer ' + token}})

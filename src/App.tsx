@@ -1,18 +1,22 @@
-import {BrowserRouter as Router, Redirect, Route, RouteProps, Switch} from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Route, RouteProps, Switch } from 'react-router-dom';
 import '@/styles/global.css';
 import HomePage from "@/pages/HomePage.tsx";
 import LoginPage from "@/pages/LoginPage.tsx";
-import {Sidebar} from "@/components/Sidebar/Sidebar.tsx";
-import React, {ReactNode} from "react";
+import { Sidebar } from "@/components/Sidebar/Sidebar.tsx";
+import React, { ReactNode } from "react";
 import './App.css';
 // import BrandHeader from "@/components/BrandHeader.tsx";
 import Header from "@/components/Header.tsx";
-import {Toaster} from "@/components/ui/toaster.tsx";
+import { Toaster } from "@/components/ui/toaster.tsx";
 import { SchedulePage } from './pages/ShedulePage';
+import { Menu } from 'lucide-react';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from './components/ui/sheet';
+import { Button } from './components/ui/button';
 
-const SidebarNavUnits = [
-    {text: 'Главная', path: '/main', JSXContent: <HomePage/>},
-    {text: 'Все бронирования', path: '/booking',
+export const SidebarNavUnits = [
+    { text: 'Главная', path: '/main', JSXContent: <HomePage /> },
+    {
+        text: 'Все бронирования', path: '/booking',
         JSXContent: <div className="flex items-center justify-center">
             <div className="text-center">
                 <h2 className="text-2xl font-semibold tracking-tight mb-4">
@@ -24,7 +28,8 @@ const SidebarNavUnits = [
             </div>
         </div>
     },
-    {text: 'Инвентаризация', path: '/inventory',
+    {
+        text: 'Инвентаризация', path: '/inventory',
         JSXContent: <div className="flex items-center justify-center">
             <div className="text-center">
                 <h2 className="text-2xl font-semibold tracking-tight mb-4">
@@ -36,7 +41,8 @@ const SidebarNavUnits = [
             </div>
         </div>
     },
-    {text: 'Администрирование', path: '/admin',
+    {
+        text: 'Администрирование', path: '/admin',
         JSXContent: <div className="flex items-center justify-center">
             <div className="text-center">
                 <h2 className="text-2xl font-semibold tracking-tight mb-4">
@@ -48,8 +54,9 @@ const SidebarNavUnits = [
             </div>
         </div>
     },
-    {text: 'Расписание', path: '/schedule',
-        JSXContent: <SchedulePage/>
+    {
+        text: 'Расписание', path: '/schedule',
+        JSXContent: <SchedulePage />
     },
 ];
 
@@ -57,7 +64,7 @@ interface PrivateRouteProps extends RouteProps {
     jsxContent: ReactNode;
 }
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({jsxContent, ...rest}) => {
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ jsxContent, ...rest }) => {
     const user = "useAuth()";
 
     return (
@@ -68,9 +75,10 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({jsxContent, ...rest}) => {
                     <>
                         <Header />
                         <div className="app-container">
-                            <div className="sidebar-container">
-                                <Sidebar navUnits={SidebarNavUnits}/>
-                            </div>
+                            {/* <div className="sidebar-container">
+                                <Sidebar navUnits={SidebarNavUnits} />
+                            </div> */}
+                            
                             <div className="content-container">
                                 <div className="h-full px-4 py-6 lg:px-8">
                                     {jsxContent}
@@ -79,7 +87,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({jsxContent, ...rest}) => {
                         </div>
                     </>
                 ) : (
-                    <Redirect to="/login"/>
+                    <Redirect to="/login" />
                 )
             }
         />
@@ -94,7 +102,7 @@ function App() {
                 <Switch>
                     {/* Страница логина */}
                     <Route path="/login">
-                        <LoginPage/>
+                        <LoginPage />
                     </Route>
                     {/* Остальные страницы с Sidebar */}
                     <Route path="/">
@@ -108,7 +116,7 @@ function App() {
                             ))}
                             {/* Дополнительный маршрут для отлавливания несуществующих путей */}
                             <Route path="*">
-                                <Redirect to="/main"/>
+                                <Redirect to="/main" />
                             </Route>
                         </Switch>
                     </Route>

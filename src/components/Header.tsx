@@ -10,9 +10,9 @@ const Header: FunctionComponent = () => {
 
     return (
         <div className='p-3 flex justify-between items-center flex-row'>
-            <Button variant='clear'>
+            {/* <Button variant='clear'>
 
-            </Button>
+            </Button> */}
             <BrandHeader/>
             <div className='flex items-center justify-between w-auto'>
                 <UserNav/>
