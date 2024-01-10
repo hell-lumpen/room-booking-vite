@@ -9,14 +9,12 @@ import './App.css';
 import Header from "@/components/Header.tsx";
 import { Toaster } from "@/components/ui/toaster.tsx";
 import { SchedulePage } from './pages/ShedulePage';
-import { Menu } from 'lucide-react';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from './components/ui/sheet';
-import { Button } from './components/ui/button';
+import { CalendarCheck, CalendarClock, Home, ShieldEllipsis, Warehouse} from 'lucide-react';
 
 export const SidebarNavUnits = [
-    { text: 'Главная', path: '/main', JSXContent: <HomePage /> },
+    { text: 'Главная', icon:<Home size={'1.4rem'}/>, path: '/main', JSXContent: <HomePage /> },
     {
-        text: 'Все бронирования', path: '/booking',
+        text: 'Все бронирования', icon:<CalendarClock size={'1.4rem'} />, path: '/booking',
         JSXContent: <div className="flex items-center justify-center">
             <div className="text-center">
                 <h2 className="text-2xl font-semibold tracking-tight mb-4">
@@ -29,7 +27,7 @@ export const SidebarNavUnits = [
         </div>
     },
     {
-        text: 'Инвентаризация', path: '/inventory',
+        text: 'Инвентаризация', icon:<Warehouse size={'1.4rem'}/>, path: '/inventory',
         JSXContent: <div className="flex items-center justify-center">
             <div className="text-center">
                 <h2 className="text-2xl font-semibold tracking-tight mb-4">
@@ -42,7 +40,7 @@ export const SidebarNavUnits = [
         </div>
     },
     {
-        text: 'Администрирование', path: '/admin',
+        text: 'Администрирование', icon:<ShieldEllipsis size={'1.4rem'}/>, path: '/admin',
         JSXContent: <div className="flex items-center justify-center">
             <div className="text-center">
                 <h2 className="text-2xl font-semibold tracking-tight mb-4">
@@ -55,7 +53,7 @@ export const SidebarNavUnits = [
         </div>
     },
     {
-        text: 'Расписание', path: '/schedule',
+        text: 'Расписание', icon:<CalendarCheck size={'1.4rem'}/>, path: '/schedule',
         JSXContent: <SchedulePage />
     },
 ];
