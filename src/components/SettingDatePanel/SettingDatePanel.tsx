@@ -21,7 +21,6 @@ export const SettingDatePanel: React.FC<{ date: Date, setDate: (date: Date) => v
                 </TabsTrigger>
                 <TabsTrigger value="timeline">
                     <GanttChartSquare/>
-
                 </TabsTrigger>
             </TabsList>
         </div>

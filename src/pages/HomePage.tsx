@@ -7,7 +7,6 @@ import {StarBookingWidget} from "@/components/StartBooking/StarBookingWidget.tsx
 import {SettingDatePanel} from "@/components/SettingDatePanel/SettingDatePanel.tsx";
 import {Tabs, TabsContent} from "@/components/ui/tabs.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {HorizontalTimelineElement} from "@/components/HorizontalTimelineElement/HorizontalTimelineElement.tsx";
 import {
     Sheet,
     SheetClose,
@@ -32,6 +31,7 @@ import {cn} from "@/lib/utils.ts";
 import {initialRoomBookingFormData, OptionParticipant, OptionTag, RoomBookingFormData} from "@/models/bookingTypes.ts";
 import PopupSelector from "@/components/PopupSelector.tsx";
 import {ScrollArea} from "@/components/ui/scroll-area.tsx";
+import {HorizontalTimelineElement} from "@/components/HorizontalTimelineElement/HorizontalTimelineElement.tsx";
 
 
 const HomePage = () => {
@@ -53,7 +53,7 @@ const HomePage = () => {
         // document.documentElement.setAttribute('data-theme', 'dark');
 
         console.log('as', dateForAxios.toISOString())
-        axios.get(`http://localhost:8080/api/bookings?startTime=${dateForAxios.toISOString()}&endTime=${
+        axios.get(`http://10.10.49.69:8080/api/bookings?startTime=${dateForAxios.toISOString()}&endTime=${
                 getNextDate(dateForAxios).toISOString()
             }`,
             {headers: {Authorization: 'Bearer ' + token}})
@@ -171,177 +171,194 @@ const HomePage = () => {
     return (
         <div className={styles['homepage-container']}>
             <div className={styles['booking-card-container']}>
-                <Tabs defaultValue="card">
-                    <SettingDatePanel date={dateForAxios} setDate={setNewDateAxios}/>
-                    <div className='flex justify-around flex-row-reverse p-4'>
-                        <Sheet>
-                            <SheetTrigger className='p-0 border-none'>
-                                <Button variant='default'>Зарезервировать</Button>
-                            </SheetTrigger>
-                            <SheetContent side={adjustedSide} className={sheetSize}>
-                                <SheetHeader>
-                                    <SheetTitle>Создание резервирования</SheetTitle>
-                                    <SheetDescription>
-                                        Здесь вы можете зарезервировать необходимую аудиторию. Для успешного сохранения,
-                                        убедитесь, что вы заполнили все поля в форме.
-                                    </SheetDescription>
-                                </SheetHeader>
-                                <div className="grid gap-4 py-4">
-                                    <div className="items-center gap-4">
-                                        <Label htmlFor="name" className="text-right text-foreground">
-                                            Название
+                <div className='flex justify-around flex-row-reverse p-4'>
+                    <Sheet>
+                        <SheetTrigger className='p-0 border-none'>
+                            <Button variant='default'>Зарезервировать</Button>
+                        </SheetTrigger>
+                        <SheetContent side={adjustedSide} className={sheetSize}>
+                            <SheetHeader>
+                                <SheetTitle>Создание резервирования</SheetTitle>
+                                <SheetDescription>
+                                    Здесь вы можете зарезервировать необходимую аудиторию. Для успешного сохранения,
+                                    убедитесь, что вы заполнили все поля в форме.
+                                </SheetDescription>
+                            </SheetHeader>
+                            <div className="grid gap-4 py-4">
+                                <div className="items-center gap-4">
+                                    <Label htmlFor="name" className="text-right text-foreground">
+                                        Название
+                                    </Label>
+                                    <Input id="title" type="text" placeholder="Введите название."
+                                           className="col-span-3" value={formData.title}
+                                           onChange={handleInputChange}/>
+                                </div>
+                                <div className="items-center gap-4">
+                                    <div className="w-full">
+                                        <Label id='description' className="text-right text-foreground">
+                                            Описание
                                         </Label>
-                                        <Input id="title" type="text" placeholder="Введите название."
-                                               className="col-span-3" value={formData.title}
-                                               onChange={handleInputChange}/>
+                                        <Textarea id="description" placeholder="Напишите описание бронирования."
+                                                  className="col-span-3" value={formData.description}
+                                                  onChange={handleInputChange}/>
                                     </div>
-                                    <div className="items-center gap-4">
-                                        <div className="w-full">
-                                            <Label id='description' className="text-right text-foreground">
-                                                Описание
-                                            </Label>
-                                            <Textarea id="description" placeholder="Напишите описание бронирования."
-                                                      className="col-span-3" value={formData.description}
-                                                      onChange={handleInputChange}/>
+                                </div>
+                                <div className="items-center gap-4">
+                                    <div className="w-full">
+                                        <Label id='description' className="text-right text-foreground">
+                                            Дата бронирования
+                                        </Label>
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                                <Button
+                                                    variant={"outline"}
+                                                    className={cn(
+                                                        "w-[100%] justify-start text-left text-foreground font-normal",
+                                                        !formData.date && "text-sm"
+                                                    )}
+                                                >
+                                                    <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground"/>
+                                                    {formData.date ? format(formData.date, "PPP", {locale: ru}) :
+                                                        <span className='text-muted-foreground'>Выберите дату бронирования</span>}
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-auto p-0">
+                                                <DayPicker mode="single"
+                                                           locale={ru}
+                                                           weekStartsOn={1}
+                                                           fromDate={new Date()}
+                                                           selected={formData.date}
+                                                           onSelect={(value) => {
+                                                               setFormData((prevData) => ({
+                                                                   ...prevData,
+                                                                   date: value,
+                                                               }))
+                                                           }}/>
+                                            </PopoverContent>
+                                        </Popover>
+                                    </div>
+                                </div>
+                                <div className="flex flex-row justify-between gap-4">
+                                    <div className="flex items-center gap-1.5 md:gap-4">
+                                        <Label htmlFor="startTime" className="text-right text-foreground">
+                                            Начало
+                                        </Label>
+                                        <div className='w-[90px]'>
+                                            <Input
+                                                id="startTime"
+                                                type="time"
+                                                className="block text-center before:text-muted-foreground"
+                                                value={formData.startTime}
+                                                onChange={handleInputChange}
+                                            />
                                         </div>
                                     </div>
-                                    <div className="items-center gap-4">
-                                        <div className="w-full">
-                                            <Label id='description' className="text-right text-foreground">
-                                                Дата бронирования
-                                            </Label>
-                                            <Popover>
-                                                <PopoverTrigger asChild>
-                                                    <Button
-                                                        variant={"outline"}
-                                                        className={cn(
-                                                            "w-[100%] justify-start text-left text-foreground font-normal",
-                                                            !formData.date && "text-sm"
-                                                        )}
-                                                    >
-                                                        <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground"/>
-                                                        {formData.date ? format(formData.date, "PPP", {locale: ru}) :
-                                                            <span className='text-muted-foreground'>Выберите дату бронирования</span>}
-                                                    </Button>
-                                                </PopoverTrigger>
-                                                <PopoverContent className="w-auto p-0">
-                                                    <DayPicker mode="single"
-                                                               locale={ru}
-                                                               weekStartsOn={1}
-                                                               fromDate={new Date()}
-                                                               selected={formData.date}
-                                                               onSelect={(value) => {
-                                                                   setFormData((prevData) => ({
-                                                                       ...prevData,
-                                                                       date: value,
-                                                                   }))
-                                                               }}/>
-                                                </PopoverContent>
-                                            </Popover>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-row justify-between gap-4">
-                                        <div className="flex items-center gap-1.5 md:gap-4">
-                                            <Label htmlFor="startTime" className="text-right text-foreground">
-                                                Начало
-                                            </Label>
-                                            <div className='w-[90px]'>
-                                                <Input
-                                                    id="startTime"
-                                                    type="time"
-                                                    className="block text-center before:text-muted-foreground"
-                                                    value={formData.startTime}
-                                                    onChange={handleInputChange}
-                                                />
-                                            </div>
-                                        </div>
 
-                                        <div className="flex items-center gap-1.5 md:gap-4">
-                                            <Label htmlFor="endTime" className="text-right text-foreground">
-                                                Окончание
-                                            </Label>
-                                            <div className='w-[90px]'>
-                                                <Input
-                                                    id="endTime"
-                                                    type="time"
-                                                    className="block text-center"
-                                                    value={formData.endTime}
-                                                    onChange={handleInputChange}
-                                                />
-                                            </div>
+                                    <div className="flex items-center gap-1.5 md:gap-4">
+                                        <Label htmlFor="endTime" className="text-right text-foreground">
+                                            Окончание
+                                        </Label>
+                                        <div className='w-[90px]'>
+                                            <Input
+                                                id="endTime"
+                                                type="time"
+                                                className="block text-center"
+                                                value={formData.endTime}
+                                                onChange={handleInputChange}
+                                            />
                                         </div>
                                     </div>
-                                    <div className="items-center gap-4">
+                                </div>
+                                <div className="items-center gap-4">
+                                    <div className="w-full">
+                                        <Label id='description' className="text-right text-foreground">
+                                            Метки бронирования
+                                        </Label>
                                         <div className="w-full">
-                                            <Label id='description' className="text-right text-foreground">
-                                                Метки бронирования
-                                            </Label>
-                                            <div className="w-full">
-                                                <PopupSelector<OptionTag>
-                                                    title='Выберите метку бронирования'
-                                                    buttonTitle='Добавьте метки'
-                                                    options={tags}
-                                                    fullData={formData}
-                                                    type='tag'
-                                                    onChange={(selectedItems: OptionTag[]) => {
-                                                        console.log('form data', formData);
-                                                        setFormData((prevData) => {
-                                                            prevData.tags = selectedItems;
-                                                            // prevData.tagsId = (selectedItems.map((obj: {
-                                                            //     id: number;
-                                                            // }) => obj.id))
-                                                            return prevData;
-                                                        });
-                                                    }}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="items-center gap-4">
-                                        <div className="w-full">
-                                            <Label id='description' className="text-right text-foreground">
-                                                Участники
-                                            </Label>
-                                            <PopupSelector<OptionParticipant>
-                                                title='Начните вводить имя или номер группы'
-                                                buttonTitle='Добавьте участников'
-                                                options={participants}
+                                            <PopupSelector<OptionTag>
+                                                title='Выберите метку бронирования'
+                                                buttonTitle='Добавьте метки'
+                                                options={tags}
                                                 fullData={formData}
-                                                type='participant'
-                                                onChange={(selectedItems: OptionParticipant[]) => {
+                                                type='tag'
+                                                onChange={(selectedItems: OptionTag[]) => {
                                                     console.log('form data', formData);
-                                                    setFormData(prevData => {
-                                                        prevData.participants = selectedItems;
-                                                        // prevData.participantsId = selectedItems.map(obj => ({
-                                                        //     id: obj.id,
-                                                        //     type: obj.type
-                                                        // }));
+                                                    setFormData((prevData) => {
+                                                        prevData.tags = selectedItems;
+                                                        // prevData.tagsId = (selectedItems.map((obj: {
+                                                        //     id: number;
+                                                        // }) => obj.id))
                                                         return prevData;
                                                     });
                                                 }}
                                             />
                                         </div>
                                     </div>
-
+                                </div>
+                                <div className="items-center gap-4">
+                                    <div className="w-full">
+                                        <Label id='description' className="text-right text-foreground">
+                                            Участники
+                                        </Label>
+                                        <PopupSelector<OptionParticipant>
+                                            title='Начните вводить имя или номер группы'
+                                            buttonTitle='Добавьте участников'
+                                            options={participants}
+                                            fullData={formData}
+                                            type='participant'
+                                            onChange={(selectedItems: OptionParticipant[]) => {
+                                                console.log('form data', formData);
+                                                setFormData(prevData => {
+                                                    prevData.participants = selectedItems;
+                                                    // prevData.participantsId = selectedItems.map(obj => ({
+                                                    //     id: obj.id,
+                                                    //     type: obj.type
+                                                    // }));
+                                                    return prevData;
+                                                });
+                                            }}
+                                        />
+                                    </div>
                                 </div>
 
-                                <SheetFooter className='mb-5'>
-                                    <SheetClose asChild>
-                                        <Button type="submit" onClick={handleSaveChanges}>Создать бронирование</Button>
-                                    </SheetClose>
-                                </SheetFooter>
-                            </SheetContent>
-                        </Sheet>
-                    </div>
-                    <TabsContent value="card">
-                        <BookingList bookingsGropedByRoom={dataForCard}/>
-                    </TabsContent>
-                    <TabsContent value="timeline">
-                        <HorizontalTimelineElement booking={dataForCard} rooms={dataForCard.map((e) => {
-                            return e.name.value;
-                        })}/>
-                    </TabsContent>
+                            </div>
 
+                            <SheetFooter className='mb-5'>
+                                <SheetClose asChild>
+                                    <Button type="submit" onClick={handleSaveChanges}>Создать бронирование</Button>
+                                </SheetClose>
+                            </SheetFooter>
+                        </SheetContent>
+                    </Sheet>
+                </div>
+
+                <Tabs defaultValue="card">
+                    <SettingDatePanel date={dateForAxios} setDate={setNewDateAxios}/>
+                    {dataForCard.length !== 0 ? (
+                        <>
+                            <TabsContent value="card">
+                                <BookingList bookingsGropedByRoom={dataForCard}/>
+                            </TabsContent><TabsContent value="timeline">
+                                <HorizontalTimelineElement booking={dataForCard} rooms={dataForCard.map((e) => {
+                                    return e.name.value;
+                                })}/>
+                            </TabsContent>
+                        </>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center m-5 bg-background">
+                            <div className="p-4 bg-background">
+                                <h2 className="text-2xl font-bold text-center">
+                                    📅 Ой!
+                                </h2>
+                                <p className="mt-2 text-lg text-center">
+                                    На выбранный день бронирований нет. 😕
+                                </p>
+                                <p className="mt-4 text-sm text-center text-foreground">
+                                    Попробуйте выбрать другую дату. 🌟
+                                </p>
+                            </div>
+                        </div>
+                    )}
                 </Tabs>
             </div>
             <div className={styles['homepage-right-menu']}>
@@ -356,7 +373,8 @@ const HomePage = () => {
             </div>
         </div>
 
-    );
+    )
+        ;
 
 }
 
