@@ -13,8 +13,8 @@ export function Sidebar({ navUnits }: SidebarProps) {
                 <div className="space-y-1">
                     {navUnits.map((button, index) => (
                         <Link key={index} to={button.path}>
-                            <Button variant="clear" className="min-w-[150px] w-full bg-background hover:bg-secondary  text-foreground justify-start mb-2
-                            lg:text-lg
+                            <Button variant="clear" className="min-w-[150px] w-full bg-background hover:bg-secondary text-foreground justify-start mb-2
+                            lg:text-lg text-base
                             ">
                                 <div className='flex items-center font-light '>
                                     <div className='mr-3 text-foreground  opacity-[50%]'>

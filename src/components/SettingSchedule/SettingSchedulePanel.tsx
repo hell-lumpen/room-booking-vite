@@ -9,7 +9,7 @@ export const SettingSchedulePanel: React.FC<{ date: Date, setDate: (date: Date) 
     const [groups, setGroups] = useState<{ id: number, name: string }[]>([]);
 
     useEffect(() => {
-        axios.get(`http://10.10.49.69:8080/api/group/all`,
+        axios.get(`http://10.10.49.16:8080/api/group/all`,
             { headers: { Authorization: 'Bearer ' + token } })
             .then(
                 (data) => {

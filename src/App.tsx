@@ -1,8 +1,7 @@
-import { BrowserRouter as Router, Redirect, Route, RouteProps, Switch } from 'react-router-dom';
+import {BrowserRouter as Router, Redirect, Route, RouteProps, Switch} from 'react-router-dom';
 import '@/styles/global.css';
 import HomePage from "@/pages/HomePage.tsx";
 import LoginPage from "@/pages/LoginPage.tsx";
-import { Sidebar } from "@/components/Sidebar/Sidebar.tsx";
 import React, {ReactNode, useEffect} from "react";
 import './App.css';
 // import BrandHeader from "@/components/BrandHeader.tsx";
@@ -12,6 +11,7 @@ import {SchedulePage} from './pages/ShedulePage';
 import {useAuthenticatedUserState} from "@/context/AuthContext/AuthUserContext.ts";
 import {jwtDecode} from "jwt-decode";
 import {AuthenticatedUser} from "@/models/userTypes.ts";
+import {CalendarCheck, CalendarClock, Home, ShieldEllipsis, Warehouse} from 'lucide-react';
 
 
 interface JwtCustomPayload {
@@ -60,14 +60,11 @@ export function restoreAuthUserFromJWT(jwt?: string): AuthenticatedUser | undefi
 
     return {fullName: decodedToken.fullName, role: decodedToken.role}
 }
-import { Toaster } from "@/components/ui/toaster.tsx";
-import { SchedulePage } from './pages/ShedulePage';
-import { CalendarCheck, CalendarClock, Home, ShieldEllipsis, Warehouse} from 'lucide-react';
 
 export const SidebarNavUnits = [
-    { text: 'Главная', icon:<Home size={'1.4rem'}/>, path: '/main', JSXContent: <HomePage /> },
+    {text: 'Главная', icon: <Home size={'1.4rem'}/>, path: '/main', JSXContent: <HomePage/>},
     {
-        text: 'Все бронирования', icon:<CalendarClock size={'1.4rem'} />, path: '/booking',
+        text: 'Все бронирования', icon: <CalendarClock size={'1.4rem'}/>, path: '/booking',
         JSXContent: <div className="flex items-center justify-center">
             <div className="text-center">
                 <h2 className="text-2xl font-semibold tracking-tight mb-4">
@@ -80,7 +77,7 @@ export const SidebarNavUnits = [
         </div>
     },
     {
-        text: 'Инвентаризация', icon:<Warehouse size={'1.4rem'}/>, path: '/inventory',
+        text: 'Инвентаризация', icon: <Warehouse size={'1.4rem'}/>, path: '/inventory',
         JSXContent: <div className="flex items-center justify-center">
             <div className="text-center">
                 <h2 className="text-2xl font-semibold tracking-tight mb-4">
@@ -93,7 +90,7 @@ export const SidebarNavUnits = [
         </div>
     },
     {
-        text: 'Администрирование', icon:<ShieldEllipsis size={'1.4rem'}/>, path: '/admin',
+        text: 'Администрирование', icon: <ShieldEllipsis size={'1.4rem'}/>, path: '/admin',
         JSXContent: <div className="flex items-center justify-center">
             <div className="text-center">
                 <h2 className="text-2xl font-semibold tracking-tight mb-4">
@@ -106,8 +103,8 @@ export const SidebarNavUnits = [
         </div>
     },
     {
-        text: 'Расписание', icon:<CalendarCheck size={'1.4rem'}/>, path: '/schedule',
-        JSXContent: <SchedulePage />
+        text: 'Расписание', icon: <CalendarCheck size={'1.4rem'}/>, path: '/schedule',
+        JSXContent: <SchedulePage/>
     },
 ];
 
@@ -154,11 +151,11 @@ function App() {
     return (
         <Router>
             <div className="bg-background text-foreground">
-                <Toaster />
+                <Toaster/>
                 <Switch>
                     {/* Страница логина */}
                     <Route path="/login">
-                        <LoginPage />
+                        <LoginPage/>
                     </Route>
                     {/* Остальные страницы с Sidebar */}
                     <Route path="/">
@@ -172,7 +169,7 @@ function App() {
                             ))}
                             {/* Дополнительный маршрут для отлавливания несуществующих путей */}
                             <Route path="*">
-                                <Redirect to="/main" />
+                                <Redirect to="/main"/>
                             </Route>
                         </Switch>
                     </Route>

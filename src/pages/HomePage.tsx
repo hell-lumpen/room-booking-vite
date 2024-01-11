@@ -53,7 +53,7 @@ const HomePage = () => {
         // document.documentElement.setAttribute('data-theme', 'dark');
 
         console.log('as', dateForAxios.toISOString())
-        axios.get(`http://10.10.49.69:8080/api/bookings?startTime=${dateForAxios.toISOString()}&endTime=${
+        axios.get(`http://10.10.49.16:8080/api/bookings?startTime=${dateForAxios.toISOString()}&endTime=${
                 getNextDate(dateForAxios).toISOString()
             }`,
             {headers: {Authorization: 'Bearer ' + token}})
@@ -171,6 +171,7 @@ const HomePage = () => {
     return (
         <div className={styles['homepage-container']}>
             <div className={styles['booking-card-container']}>
+                <h1>Резервирование аудиторий</h1>
                 <div className='flex justify-around flex-row-reverse p-4'>
                     <Sheet>
                         <SheetTrigger className='p-0 border-none'>
@@ -345,8 +346,8 @@ const HomePage = () => {
                             </TabsContent>
                         </>
                     ) : (
-                        <div className="flex flex-col items-center justify-center m-5 bg-background">
-                            <div className="p-4 bg-background">
+                        <div className="flex flex-col items-center justify-center m-5">
+                            <div className="p-4">
                                 <h2 className="text-2xl font-bold text-center">
                                     📅 Ой!
                                 </h2>
