@@ -1,0 +1,17 @@
+.booking-tags {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.booking-tag {
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-right: 8px;
+    margin-bottom: 4px;
+    font-size: 12px;
+    font-weight: 300;
+    color: #222;
+    width: max-content;
+}

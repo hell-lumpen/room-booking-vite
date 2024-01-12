@@ -25,7 +25,7 @@ export const SchedulePage = () => {
         }
 
         // return;
-        axios.get(`http://10.10.49.16:8080/api/bookings/group/${Number(groupForSchedule)}?startTime=${dateForSchedule.toISOString()}&endTime=${getNextDate(dateForSchedule).toISOString()
+        axios.get(`http://localhost:8080/api/bookings/group/${Number(groupForSchedule)}?startTime=${dateForSchedule.toISOString()}&endTime=${getNextDate(dateForSchedule).toISOString()
             }`,
             { headers: { Authorization: 'Bearer ' + token } })
             .then((data) => {

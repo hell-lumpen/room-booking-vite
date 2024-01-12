@@ -1,0 +1,11 @@
+.booking-owner {
+    font-size: 14px;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    font-weight: 300;
+}
+
+.booking-owner .icon {
+    font-size: 16px;
+}

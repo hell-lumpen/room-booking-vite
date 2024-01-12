@@ -5,7 +5,7 @@ import {DayPicker} from "react-day-picker";
 import {useState} from "react";
 
 
-const getFormatDate = (date: Date) => {
+export const getFormatDate = (date: Date) => {
     const line_m: string[] = 'января, февраля, марта, апреля, мая, июня, июля, августа, сентября, октября, ноября, декабря'.split(',');
     const line_day = 'Воскресенье, Понедельник, Вторник, Среда, Четверг, Пятница, Суббота'.split(',');
     return (
