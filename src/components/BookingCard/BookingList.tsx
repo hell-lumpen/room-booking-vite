@@ -23,10 +23,10 @@ const BookingList: React.FC<BookingListProps> = ({ bookingsGropedByRoom }) => {
                             booking.room = undefined;
                             return (
                                 <Sheet>
-                                    <SheetTrigger className='w-full text-left border-none'>
+                                    <SheetTrigger className=' text-left w-full h-full'>
                                         <BookingCard key={bookingIndex} {...booking} />
                                     </SheetTrigger>
-                                    <SheetContent side='right'>
+                                    <SheetContent  side='right'>
                                         <InformationBlock data={booking} />
                                     </SheetContent>
 

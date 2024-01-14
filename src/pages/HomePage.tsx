@@ -1,12 +1,12 @@
 import styles from './HomePage.module.css'
 import BookingList from "@/components/BookingCard/BookingList.tsx";
-import {BookingsByRoom} from "@/components/BookingCard/bookingModels.ts";
-import {ChangeEvent, useEffect, useState} from "react";
+import { BookingsByRoom } from "@/components/BookingCard/bookingModels.ts";
+import { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
-import {StarBookingWidget} from "@/components/StartBooking/StarBookingWidget.tsx";
-import {SettingDatePanel} from "@/components/SettingDatePanel/SettingDatePanel.tsx";
-import {Tabs, TabsContent} from "@/components/ui/tabs.tsx";
-import {Button} from "@/components/ui/button.tsx";
+import { StarBookingWidget } from "@/components/StartBooking/StarBookingWidget.tsx";
+import { SettingDatePanel } from "@/components/SettingDatePanel/SettingDatePanel.tsx";
+import { Tabs, TabsContent } from "@/components/ui/tabs.tsx";
+import { Button } from "@/components/ui/button.tsx";
 import {
     Sheet,
     SheetClose,
@@ -18,20 +18,20 @@ import {
     SheetTrigger
 } from "@/components/ui/sheet.tsx";
 import 'react-day-picker/dist/style.css'
-import {Textarea} from "@/components/ui/textarea.tsx";
-import {Label} from "@/components/ui/label.tsx";
-import {Input} from "@/components/ui/input.tsx";
-import {toast} from "@/components/ui/use-toast.ts";
-import {Popover, PopoverContent, PopoverTrigger} from '@/components/ui/popover';
-import {DayPicker} from "react-day-picker";
-import {ru} from "date-fns/locale";
-import {CalendarIcon} from "lucide-react";
-import {format} from "date-fns";
-import {cn} from "@/lib/utils.ts";
-import {initialRoomBookingFormData, OptionParticipant, OptionTag, RoomBookingFormData} from "@/models/bookingTypes.ts";
+import { Textarea } from "@/components/ui/textarea.tsx";
+import { Label } from "@/components/ui/label.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import { toast } from "@/components/ui/use-toast.ts";
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { DayPicker } from "react-day-picker";
+import { ru } from "date-fns/locale";
+import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils.ts";
+import { initialRoomBookingFormData, OptionParticipant, OptionTag, RoomBookingFormData } from "@/models/bookingTypes.ts";
 import PopupSelector from "@/components/PopupSelector.tsx";
-import {ScrollArea} from "@/components/ui/scroll-area.tsx";
-import {HorizontalTimelineElement} from "@/components/HorizontalTimelineElement/HorizontalTimelineElement.tsx";
+import { ScrollArea } from "@/components/ui/scroll-area.tsx";
+import { HorizontalTimelineElement } from "@/components/HorizontalTimelineElement/HorizontalTimelineElement.tsx";
 
 
 const HomePage = () => {
@@ -51,12 +51,10 @@ const HomePage = () => {
 
     useEffect(() => {
         // document.documentElement.setAttribute('data-theme', 'dark');
-
         console.log('as', dateForAxios.toISOString())
-        axios.get(`http://localhost:8080/api/bookings?startTime=${dateForAxios.toISOString()}&endTime=${
-                getNextDate(dateForAxios).toISOString()
+        axios.get(`http://localhost:8080/api/bookings?startTime=${dateForAxios.toISOString()}&endTime=${getNextDate(dateForAxios).toISOString()
             }`,
-            {headers: {Authorization: 'Bearer ' + token}})
+            { headers: { Authorization: 'Bearer ' + token } })
             .then((data) => {
                 setDataForCard(data.data);
             })
@@ -83,89 +81,41 @@ const HomePage = () => {
     }, []);
 
     const tags: OptionTag[] = [
-        {id: 1, label: "Лекция"},
-        {id: 2, label: "Семинар"},
-        {id: 3, label: "Практическое занятие"},
-        {id: 4, label: "Лабораторная работа"},
-        {id: 5, label: "Консультация"},
-        {id: 6, label: "Экзамен"}
+        { id: 1, label: "Лекция" },
+        { id: 2, label: "Семинар" },
+        { id: 3, label: "Практическое занятие" },
+        { id: 4, label: "Лабораторная работа" },
+        { id: 5, label: "Консультация" },
+        { id: 6, label: "Экзамен" }
     ];
 
     const participants: OptionParticipant[] = [
         // Студенты
-        {id: 101, label: "Иван Иванов", type: 1},
-        {id: 102, label: "Мария Петрова", type: 1},
-        {id: 103, label: "Алексей Сидоров", type: 1},
-        {id: 104, label: "Елена Васильева", type: 1},
-        {id: 105, label: "Дмитрий Николаев", type: 1},
-        {id: 106, label: "Ольга Михайлова", type: 1},
-        {id: 107, label: "Никита Горбунов", type: 1},
-        {id: 108, label: "Анна Кузнецова", type: 1},
-        {id: 109, label: "Павел Егоров", type: 1},
-        {id: 110, label: "Ирина Андреева", type: 1},
+        { id: 101, label: "Иван Иванов", type: 1 },
+        { id: 102, label: "Мария Петрова", type: 1 },
+        { id: 103, label: "Алексей Сидоров", type: 1 },
+        { id: 104, label: "Елена Васильева", type: 1 },
+        { id: 105, label: "Дмитрий Николаев", type: 1 },
+        { id: 106, label: "Ольга Михайлова", type: 1 },
+        { id: 107, label: "Никита Горбунов", type: 1 },
+        { id: 108, label: "Анна Кузнецова", type: 1 },
+        { id: 109, label: "Павел Егоров", type: 1 },
+        { id: 110, label: "Ирина Андреева", type: 1 },
 
-        {id: 201, label: "Сергей Павлов", type: 2},
-        {id: 202, label: "Татьяна Романова", type: 2},
-        {id: 203, label: "Владимир Козлов", type: 2},
+        { id: 201, label: "Сергей Павлов", type: 2 },
+        { id: 202, label: "Татьяна Романова", type: 2 },
+        { id: 203, label: "Владимир Козлов", type: 2 },
 
-        {id: 301, label: "Группа Физики-2024", type: 3},
-        {id: 302, label: "Группа Истории-2023", type: 3}
+        { id: 301, label: "Группа Физики-2024", type: 3 },
+        { id: 302, label: "Группа Истории-2023", type: 3 }
     ];
 
     const [formData, setFormData] = useState<RoomBookingFormData>(
         initialRoomBookingFormData
     );
     const [formErrors, setFormErrors] = useState<ValidationErrors>({});
+    const [tryValidate, setTryValidate] = useState<boolean>(false);
 
-    useEffect(() => {
-        setFormErrors(validateForm(formData));
-    }, [formData]);
-
-
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
-        const {id, value} = e.target;
-
-        setFormData((prevData) => {
-            const updatedFormData = {
-                ...prevData,
-                [id]: value,
-            };
-            // setFormErrors(validateForm(updatedFormData));
-            return updatedFormData;
-        });
-    };
-
-    // const handlePopupSelectorChange = (id: string, value: number[]) => {
-    //     setFormData((prevData) => ({
-    //         ...prevData,
-    //         [id]: value,
-    //     }))
-    // }
-
-    // Обработчик сохранения изменений
-    const handleSaveChanges = () => {
-        toast({
-            title: "Резервирование сохранено!",
-            description: (
-                <ScrollArea className="h-max-[300px]">
-                    <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                        <code className="text-white">{JSON.stringify(formData, null, 2)}</code>
-                    </pre>
-                </ScrollArea>
-            ),
-            duration: 5000,
-        })
-    };
-
-    interface ValidationErrors {
-        title?: string;
-        description?: string;
-        date?: string;
-        startTime?: string;
-        endTime?: string;
-        participants?: string;
-        tags?: string;
-    }
 
     const validateForm = (formData: RoomBookingFormData): ValidationErrors => {
         const errors: ValidationErrors = {};
@@ -210,6 +160,69 @@ const HomePage = () => {
         return errors;
     };
 
+    useEffect(() => {
+        setFormErrors(validateForm(formData));
+    }, [formData, setFormData]);
+
+
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
+        const { id, value } = e.target;
+        setFormData((prevData) => {
+            const updatedFormData = {
+                ...prevData,
+                [id]: value,
+            };
+            // setFormErrors(validateForm(updatedFormData));
+            return updatedFormData;
+        });
+    };
+
+    // const handlePopupSelectorChange = (id: string, value: number[]) => {
+    //     setFormData((prevData) => ({
+    //         ...prevData,
+    //         [id]: value,
+    //     }))
+    // }
+
+    // Обработчик сохранения изменений
+    const handleSaveChanges = (event: React.MouseEvent<HTMLButtonElement>) => {
+
+        if (hasErrors(formErrors)) {
+            console.log('some tr')
+            event.preventDefault();
+            setTryValidate(true);
+            setTimeout(() => {
+                console.log('timeout')
+                setTryValidate(false);
+            }, 3000)
+            return;
+        }
+
+        toast({
+            title: "Резервирование сохранено!",
+            description: (
+                <ScrollArea className="h-max-[300px]">
+                    <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                        <code className="text-white">{JSON.stringify(formData, null, 2)}</code>
+                    </pre>
+                </ScrollArea>
+            ),
+            duration: 5000,
+        })
+    };
+
+    interface ValidationErrors {
+        title?: string;
+        description?: string;
+        date?: string;
+        startTime?: string;
+        endTime?: string;
+        participants?: string;
+        tags?: string;
+    }
+
+
+
     const hasErrors = (errors: ValidationErrors): boolean => {
         return Object.values(errors).some(error => error !== undefined && error !== '');
     };
@@ -238,9 +251,9 @@ const HomePage = () => {
                                         Название
                                     </Label>
                                     <Input id="title" type="text" placeholder="Введите название."
-                                           className="col-span-3" value={formData.title}
-                                           onChange={handleInputChange}/>
-                                    {formErrors.title && (
+                                        className="col-span-3" value={formData.title}
+                                        onChange={handleInputChange} />
+                                    {tryValidate && formErrors.title && (
                                         <p className='text-red-600 text-base'>{formErrors.title}</p>
                                     )}
                                 </div>
@@ -250,9 +263,9 @@ const HomePage = () => {
                                             Описание
                                         </Label>
                                         <Textarea id="description" placeholder="Напишите описание бронирования."
-                                                  className="col-span-3" value={formData.description}
-                                                  onChange={handleInputChange}/>
-                                        {formErrors.description && (
+                                            className="col-span-3" value={formData.description}
+                                            onChange={handleInputChange} />
+                                        {tryValidate && formErrors.description && (
                                             <p className='text-red-600 text-base'>{formErrors.description}</p>
                                         )}
                                     </div>
@@ -271,26 +284,26 @@ const HomePage = () => {
                                                         !formData.date && "text-sm"
                                                     )}
                                                 >
-                                                    <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground"/>
-                                                    {formData.date ? format(formData.date, "PPP", {locale: ru}) :
+                                                    <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground" />
+                                                    {formData.date ? format(formData.date, "PPP", { locale: ru }) :
                                                         <span className='text-muted-foreground'>Выберите дату бронирования</span>}
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-auto p-0">
                                                 <DayPicker mode="single"
-                                                           locale={ru}
-                                                           weekStartsOn={1}
-                                                           fromDate={new Date()}
-                                                           selected={formData.date}
-                                                           onSelect={(value) => {
-                                                               setFormData((prevData) => ({
-                                                                   ...prevData,
-                                                                   date: value,
-                                                               }))
-                                                           }}/>
+                                                    locale={ru}
+                                                    weekStartsOn={1}
+                                                    fromDate={new Date()}
+                                                    selected={formData.date}
+                                                    onSelect={(value) => {
+                                                        setFormData((prevData) => ({
+                                                            ...prevData,
+                                                            date: value,
+                                                        }))
+                                                    }} />
                                             </PopoverContent>
                                         </Popover>
-                                        {formErrors.date && (
+                                        {tryValidate && formErrors.date && (
                                             <p className='text-red-600 text-base'>{formErrors.date}</p>
                                         )}
                                     </div>
@@ -326,10 +339,10 @@ const HomePage = () => {
                                         </div>
                                     </div>
                                 </div>
-                                {formErrors.startTime && (
+                                {tryValidate && formErrors.startTime && (
                                     <p className='text-red-600 text-base'>{formErrors.startTime}</p>
                                 )}
-                                {formErrors.endTime && (
+                                {tryValidate && formErrors.endTime && (
                                     <p className='text-red-600 text-base'>{formErrors.endTime}</p>
                                 )}
                                 <div className="items-center gap-4">
@@ -345,16 +358,15 @@ const HomePage = () => {
                                                 fullData={formData}
                                                 type='tag'
                                                 onChange={(selectedItems: OptionTag[]) => {
-                                                    console.log('form data', formData);
-                                                    setFormData((prevData) => {
-                                                        prevData.tags = selectedItems;
-                                                        return prevData;
-                                                    });
+                                                    setFormData((prevData) => ({
+                                                        ...prevData,
+                                                        tags: selectedItems
+                                                    }));
                                                 }}
                                             />
                                         </div>
                                     </div>
-                                    {formErrors.tags && (
+                                    {tryValidate && formErrors.tags && (
                                         <p className='text-red-600 text-base'>{formErrors.tags}</p>
                                     )}
                                 </div>
@@ -370,19 +382,14 @@ const HomePage = () => {
                                             fullData={formData}
                                             type='participant'
                                             onChange={(selectedItems: OptionParticipant[]) => {
-                                                console.log('form data', formData);
-                                                setFormData(prevData => {
-                                                    prevData.participants = selectedItems;
-                                                    // prevData.participantsId = selectedItems.map(obj => ({
-                                                    //     id: obj.id,
-                                                    //     type: obj.type
-                                                    // }));
-                                                    return prevData;
-                                                });
+                                                setFormData(prevData => ({
+                                                    ...prevData,
+                                                    participants: selectedItems
+                                                }));
                                             }}
                                         />
                                     </div>
-                                    {formErrors.participants && (
+                                    {tryValidate && formErrors.participants && (
                                         <p className='text-red-600 text-base'>{formErrors.participants}</p>
                                     )}
                                 </div>
@@ -391,7 +398,7 @@ const HomePage = () => {
 
                             <SheetFooter className='mb-5'>
                                 <SheetClose asChild>
-                                    <Button type="submit" disabled={hasErrors(formErrors)} onClick={handleSaveChanges}>Создать бронирование</Button>
+                                    <Button type="submit" onClick={handleSaveChanges}>Создать бронирование</Button>
                                 </SheetClose>
                             </SheetFooter>
                         </SheetContent>
@@ -399,15 +406,15 @@ const HomePage = () => {
                 </div>
 
                 <Tabs defaultValue="card">
-                    <SettingDatePanel date={dateForAxios} setDate={setNewDateAxios}/>
+                    <SettingDatePanel date={dateForAxios} setDate={setNewDateAxios} />
                     {dataForCard.length !== 0 ? (
                         <>
                             <TabsContent value="card">
-                                <BookingList bookingsGropedByRoom={dataForCard}/>
+                                <BookingList bookingsGropedByRoom={dataForCard} />
                             </TabsContent><TabsContent value="timeline">
                                 <HorizontalTimelineElement booking={dataForCard} rooms={dataForCard.map((e) => {
                                     return e.name.value;
-                                })}/>
+                                })} />
                             </TabsContent>
                         </>
                     ) : (
@@ -431,7 +438,7 @@ const HomePage = () => {
                 <h2 className="mb-2 px-4 text-xl font-semibold tracking-tight">
                     Ближайшие мероприятия
                 </h2>
-                <StarBookingWidget/>
+                <StarBookingWidget />
                 {/*<h2 className="mb-2 px-4 text-xl font-semibold tracking-tight">*/}
                 {/*    Новости*/}
                 {/*</h2>*/}

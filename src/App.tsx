@@ -140,7 +140,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({jsxContent, ...rest}) => {
                         </div>
                     </>
                 ) : (
-                    <Redirect to="/login"/>
+                    <Redirect to="/main"/>
                 )
             }
         />

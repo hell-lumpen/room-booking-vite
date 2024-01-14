@@ -1,7 +1,7 @@
 import * as React from "react";
-import {CheckIcon, PlusCircledIcon} from "@radix-ui/react-icons";
-import {Badge} from "@/components/ui/badge";
-import {Button} from "@/components/ui/button";
+import { CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
     Command,
     CommandEmpty,
@@ -11,12 +11,12 @@ import {
     CommandList,
     CommandSeparator,
 } from "@/components/ui/command";
-import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover";
-import {cn} from "@/lib/utils.ts";
-import {Separator} from "@radix-ui/react-separator";
-import {HoverCard, HoverCardContent, HoverCardTrigger,} from "@/components/ui/hover-card"
-import {Option, OptionParticipant, OptionTag, RoomBookingFormData} from '@/models/bookingTypes.ts'
-import {ScrollArea} from "@/components/ui/scroll-area.tsx";
+import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popover";
+import { cn } from "@/lib/utils.ts";
+import { Separator } from "@radix-ui/react-separator";
+import { HoverCard, HoverCardContent, HoverCardTrigger, } from "@/components/ui/hover-card"
+import { Option, OptionParticipant, OptionTag, RoomBookingFormData } from '@/models/bookingTypes.ts'
+import { ScrollArea } from "@/components/ui/scroll-area.tsx";
 
 interface DataTableFacetedFilterProps<T extends Option> {
     title?: string;
@@ -28,24 +28,23 @@ interface DataTableFacetedFilterProps<T extends Option> {
 }
 
 export function PopupSelector<T extends Option>({
-                                                    title,
-                                                    buttonTitle,
-                                                    options,
-                                                    fullData,
-                                                    type,
-                                                    onChange
-                                                }: DataTableFacetedFilterProps<T>): React.ReactElement {
-
+    title,
+    buttonTitle,
+    options,
+    fullData,
+    type,
+    onChange
+}: DataTableFacetedFilterProps<T>): React.ReactElement {
     let initialState = new Set<OptionTag | OptionParticipant>();
     if (fullData) {
         if (type === 'participant' && fullData.participants)
-            initialState = new Set(fullData.participants as OptionParticipant[]);
-        else if (type === 'tag' && fullData.tags)
-            initialState = new Set(fullData.tags as OptionTag[]);
+            initialState = new Set(fullData.participants);
+        else if (type === 'tag' && fullData.tags) {
+            initialState = new Set(fullData.tags);
+        }
     }
 
     const [selectedValues, setSelectedValues] = React.useState(initialState);
-
 
     const toggleSelection = (option: T) => {
         setSelectedValues(prevSelectedValues => {
@@ -60,13 +59,8 @@ export function PopupSelector<T extends Option>({
 
     };
 
-    const prevSelectedValuesRef = React.useRef(selectedValues);
     React.useEffect(() => {
-
-        if (prevSelectedValuesRef.current !== selectedValues) {
-            onChange && onChange(Array.from(selectedValues) as T[]);
-            prevSelectedValuesRef.current = selectedValues;
-        }
+        onChange && onChange(Array.from(selectedValues) as T[]);
     }, [selectedValues]);
 
     return (
@@ -76,12 +70,12 @@ export function PopupSelector<T extends Option>({
 
                     <PopoverTrigger asChild>
                         <Button variant="outline"
-                                className="p-1 flex flex-wrap h-auto w-full border-solid hover:text-muted-foreground text-muted-foreground">
-                            <PlusCircledIcon className="mr-2 h-4 w-4 text-muted-foreground font-normal"/>
+                            className="p-1 flex flex-wrap h-auto w-full border-solid hover:text-muted-foreground text-muted-foreground">
+                            <PlusCircledIcon className="mr-2 h-4 w-4 text-muted-foreground font-normal" />
                             {buttonTitle}
                             {selectedValues.size > 0 && (
                                 <>
-                                    <Separator orientation="vertical" className="mx-2 h-4"/>
+                                    <Separator orientation="vertical" className="mx-2 h-4" />
 
                                     <div className="space-x-1 flex flex-wrap my-0 mx-1">
                                         {selectedValues.size > 4 ? (
@@ -115,7 +109,7 @@ export function PopupSelector<T extends Option>({
 
                 <PopoverContent className="w-[320px] md:w-[420px] p-0" align="center">
                     <Command>
-                        <CommandInput placeholder={title || 'placeholder'}/>
+                        <CommandInput placeholder={title || 'placeholder'} />
                         <CommandList>
                             <CommandEmpty>
                                 <div role="img" aria-label="thinking">🤔</div>
@@ -124,7 +118,12 @@ export function PopupSelector<T extends Option>({
                             <ScrollArea aria-orientation='vertical' className="h-max-[300px]">
                                 <CommandGroup>
                                     {options.map((option) => {
-                                        const isSelected = selectedValues.has(option);
+                                        let isSelected = selectedValues.has(option);
+                                        selectedValues.forEach((e) => {
+                                            if (e.id === option.id && e.label === option.label) {
+                                                isSelected = true;
+                                            }
+                                        });
                                         return (
                                             <CommandItem
                                                 key={option.id}
@@ -138,7 +137,7 @@ export function PopupSelector<T extends Option>({
                                                             : "opacity-50 [&_svg]:invisible"
                                                     )}
                                                 >
-                                                    <CheckIcon className={cn("h-4 w-4")}/>
+                                                    <CheckIcon className={cn("h-4 w-4")} />
                                                 </div>
                                                 <span>{option.label}</span>
                                             </CommandItem>
@@ -148,7 +147,7 @@ export function PopupSelector<T extends Option>({
                             </ScrollArea>
                             {selectedValues.size > 0 && (
                                 <>
-                                    <CommandSeparator/>
+                                    <CommandSeparator />
                                     <CommandGroup>
                                         <CommandItem
                                             onSelect={() => setSelectedValues(new Set())}

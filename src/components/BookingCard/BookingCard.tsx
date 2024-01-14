@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './BookingCard.module.css';
 import './BookingCardC.css'
 import {Booking} from "./bookingModels";
-import {User} from "lucide-react";
 import '@/styles/global.css'
 import { TagComponent } from '../Tag/TagComponent';
 import { OwnerComponent } from '../OwnerComponent/OwnerComponent';
@@ -16,7 +15,7 @@ const getFormatTime = (str: string): string => {
 
 const BookingCard: React.FC<Booking> = (booking) => {
     return (
-        <div className='booking-card-wrapper1 rounded-lg border shadow-sm'>
+        <div className='booking-card-wrapper1 rounded-lg border shadow-sm' onClick={()=>{console.log('click')}}>
             <div className={styles['time-block']}>
                 <span> {getFormatTime(booking.startTime)} </span>
                 <br/>
