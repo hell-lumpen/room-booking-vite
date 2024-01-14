@@ -1,15 +1,4 @@
 import * as React from "react";
-<<<<<<< HEAD
-import {CheckIcon, PlusCircledIcon} from "@radix-ui/react-icons";
-import {Badge} from "@/components/ui/badge";
-import {Button} from "@/components/ui/button";
-import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList,} from "@/components/ui/command";
-import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover";
-import {cn} from "@/lib/utils.ts";
-import {Separator} from "@radix-ui/react-separator";
-import {HoverCard, HoverCardContent, HoverCardTrigger,} from "@/components/ui/hover-card"
-import {Option, OptionParticipant, OptionTag, RoomBookingFormData} from '@/models/bookingTypes.ts'
-=======
 import { CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -28,7 +17,6 @@ import { Separator } from "@radix-ui/react-separator";
 import { HoverCard, HoverCardContent, HoverCardTrigger, } from "@/components/ui/hover-card"
 import { Option, OptionParticipant, OptionTag, RoomBookingFormData } from '@/models/bookingTypes.ts'
 import { ScrollArea } from "@/components/ui/scroll-area.tsx";
->>>>>>> test_schedule
 
 interface DataTableFacetedFilterProps<T extends Option> {
     title?: string;
@@ -40,26 +28,6 @@ interface DataTableFacetedFilterProps<T extends Option> {
 }
 
 export function PopupSelector<T extends Option>({
-<<<<<<< HEAD
-                                                    title,
-                                                    buttonTitle,
-                                                    options,
-                                                    fullData,
-                                                    type,
-                                                    onChange
-                                                }: DataTableFacetedFilterProps<T>): React.ReactElement {
-
-    let initialState = new Set<OptionTag | OptionParticipant>(undefined);
-    if (fullData) {
-        if (type === 'participant' && fullData.participants)
-            initialState = new Set(fullData.participants as OptionParticipant[]);
-        else if (type === 'tag' && fullData.tags)
-            initialState = new Set(fullData.tags as OptionTag[]);
-    }
-
-    const [selectedValues, setSelectedValues] = React.useState(initialState);
-
-=======
     title,
     buttonTitle,
     options,
@@ -77,7 +45,6 @@ export function PopupSelector<T extends Option>({
     }
 
     const [selectedValues, setSelectedValues] = React.useState(initialState);
->>>>>>> test_schedule
 
     const toggleSelection = (option: T) => {
         setSelectedValues(prevSelectedValues => {
@@ -141,56 +108,13 @@ export function PopupSelector<T extends Option>({
                 </HoverCardTrigger>
 
                 <PopoverContent className="w-[320px] md:w-[420px] p-0" align="center">
-<<<<<<< HEAD
                     <Command className="z-51">
                         <CommandInput placeholder={title || 'placeholder'}/>
-=======
-                    <Command>
-                        <CommandInput placeholder={title || 'placeholder'} />
->>>>>>> test_schedule
                         <CommandList>
                             <CommandEmpty>
                                 <div role="img" aria-label="thinking">🤔</div>
                                 Ничего не найдено. Попробуйте изменить запрос!
                             </CommandEmpty>
-<<<<<<< HEAD
-                            <CommandGroup className='z-100'>
-                                {options.map((option) => {
-                                    const isSelected = selectedValues.has(option);
-                                    return (
-                                        <CommandItem
-                                            key={option.id}
-                                            onSelect={() => toggleSelection(option)}
-                                        >
-                                            <div
-                                                className={cn(
-                                                    "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                                                    isSelected
-                                                        ? "bg-primary text-primary-foreground"
-                                                        : "opacity-50 [&_svg]:invisible"
-                                                )}
-                                            >
-                                                <CheckIcon className={cn("h-4 w-4")}/>
-                                            </div>
-                                            <span>{option.label}</span>
-                                        </CommandItem>
-                                    )
-                                })}
-                            </CommandGroup>
-                            {/*{selectedValues.size > 0 && (*/}
-                            {/*    <>*/}
-                            {/*        <CommandSeparator/>*/}
-                            {/*        <CommandGroup>*/}
-                            {/*            <CommandItem*/}
-                            {/*                onSelect={() => setSelectedValues(new Set())}*/}
-                            {/*                className="h-8 justify-center text-center"*/}
-                            {/*            >*/}
-                            {/*                Очистить выбор*/}
-                            {/*            </CommandItem>*/}
-                            {/*        </CommandGroup>*/}
-                            {/*    </>*/}
-                            {/*)}*/}
-=======
                             <ScrollArea aria-orientation='vertical' className="h-max-[300px]">
                                 <CommandGroup>
                                     {options.map((option) => {
@@ -234,7 +158,6 @@ export function PopupSelector<T extends Option>({
                                     </CommandGroup>
                                 </>
                             )}
->>>>>>> test_schedule
                         </CommandList>
                     </Command>
                 </PopoverContent>
