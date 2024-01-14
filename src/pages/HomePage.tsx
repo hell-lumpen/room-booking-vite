@@ -115,15 +115,24 @@ const HomePage = () => {
     const [formData, setFormData] = useState<RoomBookingFormData>(
         initialRoomBookingFormData
     );
+    const [formErrors, setFormErrors] = useState<ValidationErrors>({});
+
+    useEffect(() => {
+        setFormErrors(validateForm(formData));
+    }, [formData]);
 
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
-        console.log('form data', formData);
         const {id, value} = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [id]: value,
-        }));
+
+        setFormData((prevData) => {
+            const updatedFormData = {
+                ...prevData,
+                [id]: value,
+            };
+            // setFormErrors(validateForm(updatedFormData));
+            return updatedFormData;
+        });
     };
 
     // const handlePopupSelectorChange = (id: string, value: number[]) => {
@@ -148,24 +157,62 @@ const HomePage = () => {
         })
     };
 
-    // const onChangeHandlerTest = (selectedItems: Tag[]) => {
-    //     console.log("Selected items:", selectedItems);
-    //     const items = JSON.parse(JSON.stringify(selectedItems));
-    //     console.log('form data', formData);
-    //     setFormData(prevData => ({
-    //         ...prevData,
-    //         tagsId: items.map((obj: { id: number; }) => obj.id),
-    //     }));
-    // }
-    //
-    // const onChangeHandler = React.useCallback((selectedItems: Tag[]) => {
-    //     console.log("Selected items:", selectedItems);
-    //     const items = JSON.parse(JSON.stringify(selectedItems));
-    //     setFormData(prevData => ({
-    //         ...prevData,
-    //         tagsId: items.map((obj: { id: number; }) => obj.id),
-    //     }));
-    // }, []);
+    interface ValidationErrors {
+        title?: string;
+        description?: string;
+        date?: string;
+        startTime?: string;
+        endTime?: string;
+        participants?: string;
+        tags?: string;
+    }
+
+    const validateForm = (formData: RoomBookingFormData): ValidationErrors => {
+        const errors: ValidationErrors = {};
+
+        // Валидация названия
+        if (!formData.title || formData.title.trim() === '') {
+            errors.title = 'Введите название.';
+        }
+
+        // Валидация описания
+        if (!formData.description || formData.description.trim() === '') {
+            errors.description = 'Введите описание.';
+        }
+
+        // Валидация даты
+        if (!formData.date) {
+            errors.date = 'Выберите дату.';
+        }
+
+        // Валидация времени начала
+        if (!formData.startTime) {
+            errors.startTime = 'Укажите время начала.';
+        }
+
+        // Валидация времени окончания
+        if (!formData.endTime) {
+            errors.endTime = 'Укажите время окончания.';
+        } else if (formData.startTime && formData.endTime <= formData.startTime) {
+            errors.endTime = 'Время окончания должно быть позже времени начала.';
+        }
+
+        // Валидация участников
+        if (!formData.participants || formData.participants.length === 0) {
+            errors.participants = 'Добавьте участников.';
+        }
+
+        // Валидация меток
+        if (!formData.tags || formData.tags.length === 0) {
+            errors.tags = 'Добавьте метки бронирования.';
+        }
+
+        return errors;
+    };
+
+    const hasErrors = (errors: ValidationErrors): boolean => {
+        return Object.values(errors).some(error => error !== undefined && error !== '');
+    };
 
     // =====================================
     return (
@@ -193,6 +240,9 @@ const HomePage = () => {
                                     <Input id="title" type="text" placeholder="Введите название."
                                            className="col-span-3" value={formData.title}
                                            onChange={handleInputChange}/>
+                                    {formErrors.title && (
+                                        <p className='text-red-600 text-base'>{formErrors.title}</p>
+                                    )}
                                 </div>
                                 <div className="items-center gap-4">
                                     <div className="w-full">
@@ -202,6 +252,9 @@ const HomePage = () => {
                                         <Textarea id="description" placeholder="Напишите описание бронирования."
                                                   className="col-span-3" value={formData.description}
                                                   onChange={handleInputChange}/>
+                                        {formErrors.description && (
+                                            <p className='text-red-600 text-base'>{formErrors.description}</p>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="items-center gap-4">
@@ -237,6 +290,9 @@ const HomePage = () => {
                                                            }}/>
                                             </PopoverContent>
                                         </Popover>
+                                        {formErrors.date && (
+                                            <p className='text-red-600 text-base'>{formErrors.date}</p>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="flex flex-row justify-between gap-4">
@@ -270,6 +326,12 @@ const HomePage = () => {
                                         </div>
                                     </div>
                                 </div>
+                                {formErrors.startTime && (
+                                    <p className='text-red-600 text-base'>{formErrors.startTime}</p>
+                                )}
+                                {formErrors.endTime && (
+                                    <p className='text-red-600 text-base'>{formErrors.endTime}</p>
+                                )}
                                 <div className="items-center gap-4">
                                     <div className="w-full">
                                         <Label id='description' className="text-right text-foreground">
@@ -286,15 +348,15 @@ const HomePage = () => {
                                                     console.log('form data', formData);
                                                     setFormData((prevData) => {
                                                         prevData.tags = selectedItems;
-                                                        // prevData.tagsId = (selectedItems.map((obj: {
-                                                        //     id: number;
-                                                        // }) => obj.id))
                                                         return prevData;
                                                     });
                                                 }}
                                             />
                                         </div>
                                     </div>
+                                    {formErrors.tags && (
+                                        <p className='text-red-600 text-base'>{formErrors.tags}</p>
+                                    )}
                                 </div>
                                 <div className="items-center gap-4">
                                     <div className="w-full">
@@ -320,13 +382,16 @@ const HomePage = () => {
                                             }}
                                         />
                                     </div>
+                                    {formErrors.participants && (
+                                        <p className='text-red-600 text-base'>{formErrors.participants}</p>
+                                    )}
                                 </div>
 
                             </div>
 
                             <SheetFooter className='mb-5'>
                                 <SheetClose asChild>
-                                    <Button type="submit" onClick={handleSaveChanges}>Создать бронирование</Button>
+                                    <Button type="submit" disabled={hasErrors(formErrors)} onClick={handleSaveChanges}>Создать бронирование</Button>
                                 </SheetClose>
                             </SheetFooter>
                         </SheetContent>
