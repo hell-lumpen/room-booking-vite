@@ -13,6 +13,7 @@ module.exports = {
       padding: "2rem",
       screens: {
         "2xl": "1400px",
+        'hover-hover': {'raw': '(hover: hover)'},
       },
     },
     extend: {
@@ -73,6 +74,9 @@ module.exports = {
       corePlugins: {
         // ...
         space: true,
+      },
+      future: {
+        hoverOnlyWhenSupported: true,
       },
     },
   },
