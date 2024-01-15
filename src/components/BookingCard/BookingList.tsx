@@ -3,7 +3,7 @@ import { BookingsByRoom } from "./bookingModels";
 import BookingCard from "./BookingCard";
 import styles from "./BookingList.module.css";
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
-import { InformationBlock } from '../InformationBlock/InformationBlock';
+import { BookingDetails } from '../InformationBlock/BookingDetails.tsx';
 
 
 interface BookingListProps {
@@ -27,9 +27,8 @@ const BookingList: React.FC<BookingListProps> = ({ bookingsGropedByRoom }) => {
                                         <BookingCard key={bookingIndex} {...booking} />
                                     </SheetTrigger>
                                     <SheetContent side='right'>
-                                        <InformationBlock data={booking} />
+                                        <BookingDetails data={booking} />
                                     </SheetContent>
-
                                 </Sheet>
                             );
                         })}

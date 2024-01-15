@@ -1,7 +1,7 @@
 import styles from './HomePage.module.css'
 import BookingList from "@/components/BookingCard/BookingList.tsx";
 import {BookingsByRoom} from "@/components/BookingCard/bookingModels.ts";
-import {ChangeEvent, useEffect, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import axios from "axios";
 import {StarBookingWidget} from "@/components/StartBooking/StarBookingWidget.tsx";
 import {SettingDatePanel} from "@/components/SettingDatePanel/SettingDatePanel.tsx";
@@ -32,6 +32,103 @@ import {initialRoomBookingFormData, OptionParticipant, OptionTag, RoomBookingFor
 import PopupSelector from "@/components/PopupSelector.tsx";
 import {ScrollArea} from "@/components/ui/scroll-area.tsx";
 import {HorizontalTimelineElement} from "@/components/HorizontalTimelineElement/HorizontalTimelineElement.tsx";
+
+// import { useParams, useNavigate } from 'react-router-dom';
+
+// Определение типов для данных формы
+interface ReservationFormData {
+    title: string;
+    description: string;
+    // ... другие поля ...
+}
+
+// Определение типа для параметров URL
+interface RouteParams {
+    mode: 'create' | 'edit' | 'view';
+    id?: string; // предполагается, что id необходим для режимов edit и view
+}
+
+export const CreateReservationForm = () => {
+    const { mode, id } = useParams<RouteParams>();
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState<ReservationFormData>({
+        title: '',
+        description: '',
+        // ... инициализация других полей ...
+    });
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [isViewMode, setIsViewMode] = useState(false);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (mode === 'edit' || mode === 'view') {
+                try {
+                    const response = await axios.get<ReservationFormData>(`/api/reservations/${id}`);
+                    setFormData(response.data);
+                    setIsEditMode(mode === 'edit');
+                    setIsViewMode(mode === 'view');
+                } catch (error) {
+                    console.error('Ошибка при загрузке данных:', error);
+                    // Обработка ошибок загрузки данных
+                }
+            }
+        };
+
+        fetchData();
+    }, [mode, id]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (isEditMode) {
+            try {
+                await axios.put(`/api/reservations/${id}`, formData);
+                // Обработка успешного сохранения
+            } catch (error) {
+                console.error('Ошибка при сохранении данных:', error);
+                // Обработка ошибок сохранения
+            }
+        } else {
+            try {
+                await axios.post('/api/reservations', formData);
+                // Обработка успешного создания
+            } catch (error) {
+                console.error('Ошибка при создании записи:', error);
+                // Обработка ошибок создания
+            }
+        }
+        navigate('/some-path'); // Перенаправление после отправки формы
+    };
+
+    return (
+        <form onSubmit={handleSubmit}>
+            {/* Поля формы */}
+            <div>
+                <label>Название</label>
+                <input
+                    type="text"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleChange}
+                    readOnly={isViewMode}
+                />
+            </div>
+            {/* Другие поля формы */}
+            {!isViewMode && (
+                <button type="submit">
+                    {isEditMode ? 'Сохранить изменения' : 'Создать бронирование'}
+                </button>
+            )}
+        </form>
+    );
+};
 
 
 const HomePage = () => {
@@ -370,13 +467,8 @@ const HomePage = () => {
                                             fullData={formData}
                                             type='participant'
                                             onChange={(selectedItems: OptionParticipant[]) => {
-                                                console.log('form data', formData);
                                                 setFormData(prevData => {
                                                     prevData.participants = selectedItems;
-                                                    // prevData.participantsId = selectedItems.map(obj => ({
-                                                    //     id: obj.id,
-                                                    //     type: obj.type
-                                                    // }));
                                                     return prevData;
                                                 });
                                             }}
@@ -386,12 +478,11 @@ const HomePage = () => {
                                         <p className='text-red-600 text-base'>{formErrors.participants}</p>
                                     )}
                                 </div>
-
                             </div>
-
                             <SheetFooter className='mb-5'>
                                 <SheetClose asChild>
-                                    <Button type="submit" disabled={hasErrors(formErrors)} onClick={handleSaveChanges}>Создать бронирование</Button>
+                                    <Button type="submit" disabled={hasErrors(formErrors)} onClick={handleSaveChanges}>Создать
+                                        бронирование</Button>
                                 </SheetClose>
                             </SheetFooter>
                         </SheetContent>
@@ -404,7 +495,8 @@ const HomePage = () => {
                         <>
                             <TabsContent value="card">
                                 <BookingList bookingsGropedByRoom={dataForCard}/>
-                            </TabsContent><TabsContent value="timeline">
+                            </TabsContent>
+                            <TabsContent value="timeline">
                                 <HorizontalTimelineElement booking={dataForCard} rooms={dataForCard.map((e) => {
                                     return e.name.value;
                                 })}/>

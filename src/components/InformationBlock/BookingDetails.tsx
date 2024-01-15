@@ -19,7 +19,7 @@ const getFormatTime = (str: string): string => {
 }
 
 
-export const InformationBlock: React.FC<{ data: Booking }> = (props) => {
+export const BookingDetails: React.FC<{ data: Booking }> = (props) => {
 
 
     return (
