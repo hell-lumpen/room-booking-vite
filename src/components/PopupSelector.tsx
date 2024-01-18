@@ -22,7 +22,7 @@ interface DataTableFacetedFilterProps<T extends Option> {
     title?: string;
     buttonTitle?: string;
     options: T[];
-    fullData?: RoomBookingFormData;
+    fullData?: T[];
     type?: 'tag' | 'participant'
     onChange?: (selectedItems: T[]) => void;
 }
@@ -37,11 +37,12 @@ export function PopupSelector<T extends Option>({
 }: DataTableFacetedFilterProps<T>): React.ReactElement {
     let initialState = new Set<OptionTag | OptionParticipant>();
     if (fullData) {
-        if (type === 'participant' && fullData.participants)
-            initialState = new Set(fullData.participants);
-        else if (type === 'tag' && fullData.tags) {
-            initialState = new Set(fullData.tags);
+        if (type === 'participant')
+            initialState = new Set(fullData);
+        else if (type === 'tag') {
+            initialState = new Set(fullData);
         }
+
     }
 
     const [selectedValues, setSelectedValues] = React.useState(initialState);
@@ -49,8 +50,16 @@ export function PopupSelector<T extends Option>({
     const toggleSelection = (option: T) => {
         setSelectedValues(prevSelectedValues => {
             const newSelectedValues = new Set(prevSelectedValues);
-            if (newSelectedValues.has(option)) {
-                newSelectedValues.delete(option);
+            let isHas = false;
+            let ele;
+            newSelectedValues.forEach((e) => {
+                if (e.id == option.id && e.label == option.label) {
+                    isHas = true
+                    ele = e;
+                }
+            })
+            if (isHas && ele) {
+                newSelectedValues.delete(ele);
             } else {
                 newSelectedValues.add(option);
             }
@@ -109,7 +118,7 @@ export function PopupSelector<T extends Option>({
 
                 <PopoverContent className="w-[320px] md:w-[420px] p-0" align="center">
                     <Command className="z-51">
-                        <CommandInput placeholder={title || 'placeholder'}/>
+                        <CommandInput placeholder={title || 'placeholder'} />
                         <CommandList>
                             <CommandEmpty>
                                 <div role="img" aria-label="thinking">🤔</div>

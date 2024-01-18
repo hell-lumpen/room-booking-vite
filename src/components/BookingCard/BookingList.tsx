@@ -26,9 +26,9 @@ const BookingList: React.FC<BookingListProps> = ({ bookingsGropedByRoom }) => {
                                     <SheetTrigger className=' text-left w-full h-full'>
                                         <BookingCard key={bookingIndex} {...booking} />
                                     </SheetTrigger>
-                                    <SheetContent  side='right'>
-                                        <InformationBlock data={booking} />
-                                    </SheetContent>
+                                    
+                                    <InformationBlock data={booking} mode='view' />
+                                    
 
                                 </Sheet>
                             );

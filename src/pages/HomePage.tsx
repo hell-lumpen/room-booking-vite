@@ -32,6 +32,7 @@ import { initialRoomBookingFormData, OptionParticipant, OptionTag, RoomBookingFo
 import PopupSelector from "@/components/PopupSelector.tsx";
 import { ScrollArea } from "@/components/ui/scroll-area.tsx";
 import { HorizontalTimelineElement } from "@/components/HorizontalTimelineElement/HorizontalTimelineElement.tsx";
+import { InformationBlock } from '@/components/InformationBlock/InformationBlock';
 
 
 const HomePage = () => {
@@ -237,7 +238,9 @@ const HomePage = () => {
                         <SheetTrigger className='p-0 border-none'>
                             <Button variant='default'>Зарезервировать</Button>
                         </SheetTrigger>
-                        <SheetContent side={adjustedSide} className={sheetSize}>
+                        <InformationBlock mode='create'/>
+
+                        {/* <SheetContent side={adjustedSide} className={sheetSize}>
                             <SheetHeader>
                                 <SheetTitle>Создание резервирования</SheetTitle>
                                 <SheetDescription>
@@ -401,7 +404,7 @@ const HomePage = () => {
                                     <Button type="submit" onClick={handleSaveChanges}>Создать бронирование</Button>
                                 </SheetClose>
                             </SheetFooter>
-                        </SheetContent>
+                        </SheetContent> */}
                     </Sheet>
                 </div>
 

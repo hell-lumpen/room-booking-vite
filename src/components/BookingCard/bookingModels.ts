@@ -30,11 +30,11 @@ export interface BookingsByRoom {
 }
 
 export interface Booking {
+    title: string;
+    descriptions?: string;
     startTime: string;
     endTime: string;
-    title: string;
     room?: {id:number, value:string};
-    descriptions?: string;
     owner: User;
     participants?: (User | Group)[];
     tag?: Tag;
