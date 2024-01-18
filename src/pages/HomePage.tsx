@@ -1,38 +1,19 @@
 import styles from './HomePage.module.css'
 import BookingList from "@/components/BookingCard/BookingList.tsx";
-import { BookingsByRoom } from "@/components/BookingCard/bookingModels.ts";
-import { ChangeEvent, useEffect, useState } from "react";
+import {BookingsByRoom} from "@/components/BookingCard/bookingModels.ts";
+import {ChangeEvent, useEffect, useState} from "react";
 import axios from "axios";
-import { StarBookingWidget } from "@/components/StartBooking/StarBookingWidget.tsx";
-import { SettingDatePanel } from "@/components/SettingDatePanel/SettingDatePanel.tsx";
-import { Tabs, TabsContent } from "@/components/ui/tabs.tsx";
-import { Button } from "@/components/ui/button.tsx";
-import {
-    Sheet,
-    SheetClose,
-    SheetContent,
-    SheetDescription,
-    SheetFooter,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger
-} from "@/components/ui/sheet.tsx";
+import {StarBookingWidget} from "@/components/StartBooking/StarBookingWidget.tsx";
+import {SettingDatePanel} from "@/components/SettingDatePanel/SettingDatePanel.tsx";
+import {Tabs, TabsContent} from "@/components/ui/tabs.tsx";
+import {Button} from "@/components/ui/button.tsx";
+import {Sheet, SheetTrigger} from "@/components/ui/sheet.tsx";
 import 'react-day-picker/dist/style.css'
-import { Textarea } from "@/components/ui/textarea.tsx";
-import { Label } from "@/components/ui/label.tsx";
-import { Input } from "@/components/ui/input.tsx";
-import { toast } from "@/components/ui/use-toast.ts";
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { DayPicker } from "react-day-picker";
-import { ru } from "date-fns/locale";
-import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils.ts";
-import { initialRoomBookingFormData, OptionParticipant, OptionTag, RoomBookingFormData } from "@/models/bookingTypes.ts";
-import PopupSelector from "@/components/PopupSelector.tsx";
-import { ScrollArea } from "@/components/ui/scroll-area.tsx";
-import { HorizontalTimelineElement } from "@/components/HorizontalTimelineElement/HorizontalTimelineElement.tsx";
-import { InformationBlock } from '@/components/InformationBlock/InformationBlock';
+import {toast} from "@/components/ui/use-toast.ts";
+import {initialRoomBookingFormData, RoomBookingFormData} from "@/models/bookingTypes.ts";
+import {ScrollArea} from "@/components/ui/scroll-area.tsx";
+import {HorizontalTimelineElement} from "@/components/HorizontalTimelineElement/HorizontalTimelineElement.tsx";
+import {InformationBlock} from '@/components/InformationBlock/InformationBlock';
 
 
 const HomePage = () => {
@@ -55,7 +36,7 @@ const HomePage = () => {
         console.log('as', dateForAxios.toISOString())
         axios.get(`http://localhost:8080/api/bookings?startTime=${dateForAxios.toISOString()}&endTime=${getNextDate(dateForAxios).toISOString()
             }`,
-            { headers: { Authorization: 'Bearer ' + token } })
+            {headers: {Authorization: 'Bearer ' + token}})
             .then((data) => {
                 setDataForCard(data.data);
             })
@@ -80,36 +61,6 @@ const HomePage = () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-
-    const tags: OptionTag[] = [
-        { id: 1, label: "Лекция" },
-        { id: 2, label: "Семинар" },
-        { id: 3, label: "Практическое занятие" },
-        { id: 4, label: "Лабораторная работа" },
-        { id: 5, label: "Консультация" },
-        { id: 6, label: "Экзамен" }
-    ];
-
-    const participants: OptionParticipant[] = [
-        // Студенты
-        { id: 101, label: "Иван Иванов", type: 1 },
-        { id: 102, label: "Мария Петрова", type: 1 },
-        { id: 103, label: "Алексей Сидоров", type: 1 },
-        { id: 104, label: "Елена Васильева", type: 1 },
-        { id: 105, label: "Дмитрий Николаев", type: 1 },
-        { id: 106, label: "Ольга Михайлова", type: 1 },
-        { id: 107, label: "Никита Горбунов", type: 1 },
-        { id: 108, label: "Анна Кузнецова", type: 1 },
-        { id: 109, label: "Павел Егоров", type: 1 },
-        { id: 110, label: "Ирина Андреева", type: 1 },
-
-        { id: 201, label: "Сергей Павлов", type: 2 },
-        { id: 202, label: "Татьяна Романова", type: 2 },
-        { id: 203, label: "Владимир Козлов", type: 2 },
-
-        { id: 301, label: "Группа Физики-2024", type: 3 },
-        { id: 302, label: "Группа Истории-2023", type: 3 }
-    ];
 
     const [formData, setFormData] = useState<RoomBookingFormData>(
         initialRoomBookingFormData
@@ -167,7 +118,7 @@ const HomePage = () => {
 
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
-        const { id, value } = e.target;
+        const {id, value} = e.target;
         setFormData((prevData) => {
             const updatedFormData = {
                 ...prevData,
@@ -221,7 +172,6 @@ const HomePage = () => {
         participants?: string;
         tags?: string;
     }
-
 
 
     const hasErrors = (errors: ValidationErrors): boolean => {
@@ -409,16 +359,16 @@ const HomePage = () => {
                 </div>
 
                 <Tabs defaultValue="card">
-                    <SettingDatePanel date={dateForAxios} setDate={setNewDateAxios} />
+                    <SettingDatePanel date={dateForAxios} setDate={setNewDateAxios}/>
                     {dataForCard.length !== 0 ? (
                         <>
                             <TabsContent value="card">
-                                <BookingList bookingsGropedByRoom={dataForCard} />
+                                <BookingList bookingsGropedByRoom={dataForCard}/>
                             </TabsContent><TabsContent value="timeline">
-                                <HorizontalTimelineElement booking={dataForCard} rooms={dataForCard.map((e) => {
-                                    return e.name.value;
-                                })} />
-                            </TabsContent>
+                            <HorizontalTimelineElement booking={dataForCard} rooms={dataForCard.map((e) => {
+                                return e.name.value;
+                            })}/>
+                        </TabsContent>
                         </>
                     ) : (
                         <div className="flex flex-col items-center justify-center m-5">
@@ -441,7 +391,7 @@ const HomePage = () => {
                 <h2 className="mb-2 px-4 text-xl font-semibold tracking-tight">
                     Ближайшие мероприятия
                 </h2>
-                <StarBookingWidget />
+                <StarBookingWidget/>
                 {/*<h2 className="mb-2 px-4 text-xl font-semibold tracking-tight">*/}
                 {/*    Новости*/}
                 {/*</h2>*/}
