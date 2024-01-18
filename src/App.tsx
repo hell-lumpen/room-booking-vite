@@ -8,7 +8,7 @@ import './App.css';
 import Header from "@/components/Header.tsx";
 import {Toaster} from "@/components/ui/toaster.tsx";
 import {SchedulePage} from './pages/ShedulePage';
-import {useAuthenticatedUserState} from "@/context/AuthContext/AuthUserContext.ts";
+import {useAuth} from "@/context/AuthContext/AuthUserContext.ts";
 import {jwtDecode} from "jwt-decode";
 import {AuthenticatedUser} from "@/models/userTypes.ts";
 import {CalendarCheck, CalendarClock, Home, ShieldEllipsis, Warehouse} from 'lucide-react';
@@ -114,9 +114,10 @@ interface PrivateRouteProps extends RouteProps {
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({jsxContent, ...rest}) => {
 
-    const [authenticatedUser, setAuthenticatedUser] = useAuthenticatedUserState();
+    const [authenticatedUser, setAuthenticatedUser] = useAuth();
 
     useEffect(() => {
+        // todo: вместо этого достать токен из
         setAuthenticatedUser(restoreAuthUserFromJWT('eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU5JU1RSQVRPUiIsImZ1bGxOYW1lIjoi0J3QtdC90LDRhdC-0LIg0JXQstCz0LXQvdC40Lkg0JLQsNC70LXQvdGC0LjQvdC-0LLQuNGHIiwic3ViIjoidXNlcm5hbWUiLCJpYXQiOjE3MDQyOTM5NjUsImV4cCI6MTcxMjkzMzk2NX0.cyhtonQk6F8DHiHdjTCjTnD3pQyUnvdJtHJa3TwQa3I'));
     }, [])
 

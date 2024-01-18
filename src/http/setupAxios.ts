@@ -1,0 +1,16 @@
+import axios from 'axios'
+import TokenService from "@/services/UtilServices.ts";
+
+const API_BASE_URL = 'http://localhost:8080/api'
+
+const API = axios.create({
+    withCredentials: false,
+    baseURL: API_BASE_URL
+})
+
+API.interceptors.request.use((config) => {
+    config.headers.Authorization = `Bearer ${TokenService.getToken()}`;
+    return config;
+})
+
+export default API;

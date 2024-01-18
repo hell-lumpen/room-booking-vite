@@ -6,22 +6,24 @@ import {Button} from "@/components/ui/button"
 import {Input} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
 import {Link, useHistory} from "react-router-dom";
+import AuthService from "@/services/AuthService.ts";
+import {useState} from "react";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function UserAuthForm({className, ...props}: UserAuthFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
+
+    const [login, setLogin] = useState()
+    const [password, setPassword] = useState()
     const history = useHistory();
 
     async function onSubmit(event: React.SyntheticEvent) {
         event.preventDefault()
         setIsLoading(true)
 
-        setTimeout(() => {
-            setIsLoading(false)
-            handleClick()
-        }, 500)
+        AuthService.login()
     }
 
     function handleClick() {
@@ -39,9 +41,9 @@ export function UserAuthForm({className, ...props}: UserAuthFormProps) {
                         <Input
                             id="email"
                             placeholder="IvanovAB@mai.ru"
-                            type="email"
+                            // type="email"
                             autoCapitalize="none"
-                            autoComplete="email"
+                            autoComplete="login"
                             autoCorrect="off"
                             disabled={isLoading}
                         />
