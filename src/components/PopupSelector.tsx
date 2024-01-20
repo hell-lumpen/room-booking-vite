@@ -23,7 +23,7 @@ interface DataTableFacetedFilterProps<T extends Option> {
     buttonTitle?: string;
     options: T[];
     fullData?: T[];
-    type?: 'tag' | 'participant'
+    type?: 'tag' | 'participant' | 'room'
     onChange?: (selectedItems: T[]) => void;
 }
 
@@ -35,11 +35,13 @@ export function PopupSelector<T extends Option>({
     type,
     onChange
 }: DataTableFacetedFilterProps<T>): React.ReactElement {
-    let initialState = new Set<OptionTag | OptionParticipant>();
+    let initialState = new Set<OptionTag | OptionParticipant | Option>();
     if (fullData) {
         if (type === 'participant')
             initialState = new Set(fullData);
         else if (type === 'tag') {
+            initialState = new Set(fullData);
+        } else if (type === 'room') {
             initialState = new Set(fullData);
         }
 
@@ -61,6 +63,9 @@ export function PopupSelector<T extends Option>({
             if (isHas && ele) {
                 newSelectedValues.delete(ele);
             } else {
+                if (type === 'room')
+                    newSelectedValues.clear();
+
                 newSelectedValues.add(option);
             }
             return newSelectedValues;
@@ -74,9 +79,8 @@ export function PopupSelector<T extends Option>({
 
     return (
         <HoverCard>
-            <Popover>
+            <Popover modal={true}>
                 <HoverCardTrigger>
-
                     <PopoverTrigger asChild>
                         <Button variant="outline"
                             className="p-1 flex flex-wrap h-auto w-full border-solid hover:text-muted-foreground text-muted-foreground">
@@ -85,7 +89,6 @@ export function PopupSelector<T extends Option>({
                             {selectedValues.size > 0 && (
                                 <>
                                     <Separator orientation="vertical" className="mx-2 h-4" />
-
                                     <div className="space-x-1 flex flex-wrap my-0 mx-1">
                                         {selectedValues.size > 4 ? (
                                             <Badge

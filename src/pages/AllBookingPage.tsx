@@ -3,6 +3,7 @@ import BookingList from "@/components/BookingCard/BookingList.tsx";
 import { BookingsByRoom } from "@/components/BookingCard/bookingModels.ts";
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
+import { StarBookingWidget } from "@/components/StartBooking/StarBookingWidget.tsx";
 import { SettingDatePanel } from "@/components/SettingDatePanel/SettingDatePanel.tsx";
 import { Tabs, TabsContent } from "@/components/ui/tabs.tsx";
 import { Button } from "@/components/ui/button.tsx";
@@ -13,7 +14,6 @@ import {
 import 'react-day-picker/dist/style.css'
 import { HorizontalTimelineElement } from "@/components/HorizontalTimelineElement/HorizontalTimelineElement.tsx";
 import { InformationBlock } from '@/components/InformationBlock/InformationBlock';
-import { StarBookingWidget } from '@/components/StartBooking/StarBookingWidget';
 
 
 export const DataForMoreInfo = createContext<
@@ -25,7 +25,7 @@ export const DataForMoreInfo = createContext<
     }
 >({ allRoom: [], allParticipants: [], allGroup: [], allTags: [] });
 
-const HomePage = () => {
+export const AllBookingPage = () => {
     const getNextDate = (date: Date): Date => {
         return new Date(date.getTime() + 1000 * 60 * 60 * 24);
     }
@@ -172,5 +172,3 @@ const HomePage = () => {
         ;
 
 }
-
-export default HomePage;

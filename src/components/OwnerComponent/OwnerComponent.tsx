@@ -49,7 +49,7 @@ export const OwnerComponent: React.FC<{
         value: string;
     }
 }> = (booking) => {
-
+    console.log('book', booking);
     return (
         <div className={styles['booking-owner']}>
             {/*<span className={`material-icons ${styles['icon']}`}>person</span>*/}

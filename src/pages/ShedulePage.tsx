@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Booking } from "../components/BookingCard/bookingModels";
 import { SettingSchedulePanel } from "../components/SettingSchedule/SettingSchedulePanel";
 import axios from 'axios';
-import BookingList from "@/components/BookingCard/BookingList";
 
 export const SchedulePage = () => {
     const getNextDate = (date: Date): Date => {
@@ -29,6 +28,7 @@ export const SchedulePage = () => {
             }`,
             { headers: { Authorization: 'Bearer ' + token } })
             .then((data) => {
+                console.log('data', data.data)
                 setCardData(data.data);
             })
 
@@ -59,7 +59,7 @@ export const SchedulePage = () => {
                                 }
                             ).map(
                                 (data: Booking) => (
-                                    <BookingCard {...data} />
+                                    <BookingCard booking={data} />
                                 )
                             )}
                         </div>

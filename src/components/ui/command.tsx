@@ -64,7 +64,7 @@ const CommandList = React.forwardRef<
     <ScrollArea aria-orientation='vertical'>
         <CommandPrimitive.List
             ref={ref}
-            className={cn("max-h-60 overflow", className)}
+            className={cn("max-h-60", className)}
             {...props}
         />
     </ScrollArea>
@@ -92,7 +92,7 @@ const CommandGroup = React.forwardRef<
     <CommandPrimitive.Group
         ref={ref}
         className={cn(
-            "overflow-hidden p-1 text-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground",
+            "overflow-auto p-1 text-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground",
             className
         )}
         {...props}

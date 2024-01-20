@@ -1,5 +1,5 @@
 import { CalendarIcon } from "lucide-react";
-import { Booking, Group, Tag, User } from "../BookingCard/bookingModels";
+import { Booking, Tag, User } from "../BookingCard/bookingModels";
 import { TagComponent } from "../Tag/TagComponent";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -9,11 +9,15 @@ import { Textarea } from "../ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "../ui/sheet";
 import { DayPicker } from "react-day-picker";
-import { OptionParticipant, OptionTag } from "@/models/bookingTypes";
+import { OptionParticipant, OptionTag, Option } from "@/models/bookingTypes";
 import PopupSelector from "../PopupSelector";
+import axios from "axios";
+import { toast } from "../ui/use-toast";
+import { DataForMoreInfo } from "@/pages/HomePage";
+import { Badge } from "../ui/badge";
 
 
 interface RoomBookingFormData {
@@ -22,21 +26,12 @@ interface RoomBookingFormData {
     date: Date | undefined,
     startTime: string | undefined,
     endTime: string | undefined,
-    roomId: number | undefined,
+    roomId: { id: number, label: string } | undefined,
     ownerId: number | undefined,
     participants?: OptionParticipant[],
     tags: OptionTag[] | undefined
 }
 
-
-const getFormatDate = (date: Date) => {
-    const line_m: string[] = 'января, февраля, марта, апреля, мая, июня, июля, августа, сентября, октября, ноября, декабря'.split(',');
-    return (
-        <div>
-            {date.getDate()} {line_m[date.getMonth()]}
-        </div>
-    );
-}
 
 const getDate = (date: string) => {
     const result = new Date(date);
@@ -49,19 +44,9 @@ const getFormatTime = (str: string | undefined) => {
     if (!str)
         return str;
 
-
     const date = new Date(str);
     return (date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0'));
 }
-
-// ?.map((e)=>{
-//     const o:OptionParticipant = {
-//         id:e.id,
-//         label:e.value,
-//         type:0
-//     };
-//     return o;
-// })
 
 const getFormatTag = (tag?: Tag, tags?: Tag[]): OptionTag[] => {
     const t: OptionTag[] = [];
@@ -73,34 +58,37 @@ const getFormatTag = (tag?: Tag, tags?: Tag[]): OptionTag[] => {
             t.push({ id: tag.id, label: tag.fullName });
         })
     }
-
     return t;
 }
 
-const getFormatParticipant = (part?: (User | Group)[]): OptionParticipant[] => {
+const getFormatParticipant = (part?: (User)[]): OptionParticipant[] => {
     const res: OptionParticipant[] = [];
     if (part)
         part.map((p) => {
-            res.push({ id: p.id, label: p.value, type: 0 });
+            res.push({ id: p.id, label: p.fullName, type: 0 });
         })
     return res;
 }
 
-
 const getFormData = (data?: Booking): RoomBookingFormData => {
-    if (data)
-        return {
+    if (data) {
+        let room = undefined;
+        if (data.room) {
+            room = { id: data.room.id, label: data.room.value };
+        }
 
+        return {
             title: data.title,
-            description: data.descriptions,
+            description: data.description,
             date: getDate(data.startTime),
             startTime: getFormatTime(data.startTime),
             endTime: getFormatTime(data.endTime),
-            roomId: data.room?.id,
+            roomId: room,
             ownerId: data.owner.id,
-            participants: getFormatParticipant(data.participants),
+            participants: getFormatParticipant(data.staff),
             tags: getFormatTag(data.tag, data.tags),
         };
+    }
     else
         return {
             title: '',
@@ -115,38 +103,9 @@ const getFormData = (data?: Booking): RoomBookingFormData => {
         }
 }
 
-const tags: OptionTag[] = [
-    { id: 1, label: "Лекция" },
-    { id: 0, label: "Семинар" },
-    { id: 2, label: "Практическое занятие" },
-    { id: 3, label: "Лабораторная работа" },
-    { id: 4, label: "Консультация" },
-    { id: 5, label: "Экзамен" }
-];
-
-const participants: OptionParticipant[] = [
-    // Студенты
-    { id: 101, label: "Иван Иванов", type: 1 },
-    { id: 102, label: "Мария Петрова", type: 1 },
-    { id: 103, label: "Алексей Сидоров", type: 1 },
-    { id: 104, label: "Елена Васильева", type: 1 },
-    { id: 105, label: "Дмитрий Николаев", type: 1 },
-    { id: 106, label: "Ольга Михайлова", type: 1 },
-    { id: 107, label: "Никита Горбунов", type: 1 },
-    { id: 108, label: "Анна Кузнецова", type: 1 },
-    { id: 109, label: "Павел Егоров", type: 1 },
-    { id: 110, label: "Ирина Андреева", type: 1 },
-
-    { id: 201, label: "Сергей Павлов", type: 2 },
-    { id: 202, label: "Татьяна Романова", type: 2 },
-    { id: 203, label: "Владимир Козлов", type: 2 },
-
-    { id: 301, label: "Группа Физики-2024", type: 3 },
-    { id: 302, label: "Группа Истории-2023", type: 3 }
-];
 
 
-const tryValidate = (
+const checkOnError = (
     type: string,
     value?: string | OptionTag[] | OptionParticipant[],
     value2?: string
@@ -182,16 +141,16 @@ const validateAnswer = {
     'time': 'Укажите точное время начала/конца бронирования.',
     'tags': 'Добавьте метки бронирования.',
     'participant': 'Добавьте участников.',
-
 };
 
 export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Booking }> = (props) => {
-
-
+    const moreInfo = useContext(DataForMoreInfo);
     const [sheetSize, setSheetSize] = useState<string>('');
+    const [adjustedSide, setAdjustedSide] = useState<"bottom" | "right" | "top" | "left" | null | undefined>(undefined);
     useEffect(() => {
         const handleResize = () => {
             const isSmallScreen = window.innerWidth <= 800;
+            setAdjustedSide(isSmallScreen ? 'bottom' : 'right');
             setSheetSize(isSmallScreen ? 'h-[75vh] overflow-y-scroll' : 'min-w-[500px] overflow-y-scroll')
         };
 
@@ -205,11 +164,13 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
         };
     }, []);
 
-
     const [isTrySave, setTrySave] = useState(false);
-
     const [isView, setIsView] = useState(props.mode == 'view');
     const [formData, setFormData] = useState<RoomBookingFormData>(getFormData(props.data));
+    useEffect(() => {
+        setFormData(getFormData(props.data));
+        console.log('update')
+    }, []);
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
         const { id, value } = e.target;
@@ -223,12 +184,98 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
         });
     };
 
+    const token = "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU5JU1RSQVRPUiIsImZ1bGxOYW1lIjoi0J3QtdC90LDRhdC-0LIg0JXQstCz0LXQvdC40Lkg0JLQsNC70LXQvdGC0LjQvdC-0LLQuNGHIiwic3ViIjoidXNlcm5hbWUiLCJpYXQiOjE3MDQyOTM5NjUsImV4cCI6MTcxMjkzMzk2NX0.cyhtonQk6F8DHiHdjTCjTnD3pQyUnvdJtHJa3TwQa3I";
+    //сохранение новой версии карточки
+    const trySaveEditCard = (e: React.MouseEvent<HTMLElement>) => {
+        //проверка на валидацию
+        if (
+            checkOnError('title', formData.title) ||
+            // checkOnError('description', formData.description) ||
+            checkOnError('time', formData.startTime, formData.endTime) ||
+            !formData.date ||
+            !formData.roomId ||
+            checkOnError('tags', formData.tags) ||
+            checkOnError('participants', formData.participants)
+        ) {
+            e.preventDefault();
+            return;
+        }
+
+
+        const startTime = new Date(formData.date);
+        startTime?.setHours(Number(formData.startTime?.substring(0, 2)) + 3);
+        startTime?.setMinutes(Number(formData.startTime?.substring(3, 5)));
+        const endTime = new Date(formData.date);
+        endTime?.setHours(Number(formData.endTime?.substring(0, 2)) + 3);
+        endTime?.setMinutes(Number(formData.endTime?.substring(3, 5)));
+
+        const cardDataForAxios = {
+            id: props.data?.id,
+            'roomId': formData.roomId.id,
+            'title': formData.title,
+            'description': formData.description,
+            'startTime': startTime?.toISOString(),
+            'endTime': endTime?.toISOString(),
+            'tagsId': formData.tags?.map((e) => (e.id)),
+            'staffId': formData.participants?.map((e) => (e.id)),
+            'groupsId': []
+        }
+
+        if (props.mode === 'create') {
+            axios.post(`http://localhost:8080/api/bookings`,
+                cardDataForAxios,
+                {
+                    headers: {
+                        Authorization: 'Bearer ' + token
+                    }
+                }).then((response) => {
+                    console.log('Booking successful:', response.data);
+                    toast({
+                        title: "Резервирование сохранено!",
+                        duration: 5000,
+                    })
+                })
+                .catch((error) => {
+                    console.error('Error during booking:', error);
+                    toast({
+                        title: "Ошибка резервирования!",
+                        duration: 5000,
+                    })
+                });
+        } else {
+            axios.put(`http://localhost:8080/api/bookings`,
+                cardDataForAxios,
+                {
+                    headers: { Authorization: 'Bearer ' + token }
+                }).then((response) => {
+                    console.log('Booking successful:', response.data);
+                    toast({
+                        title: "Резервирование сохранено!",
+                        duration: 5000,
+                    })
+                })
+                .catch((error) => {
+                    console.error('Error during booking:', error);
+                    toast({
+                        title: "Ошибка резервирования!",
+                        variant: 'destructive',
+                        description: "Возможно проблема со временем((",
+                        duration: 5000,
+                    })
+                });
+        }
+    }
+
     return (
-        <SheetContent className={sheetSize} side='right'>
+        <SheetContent className={sheetSize} side={adjustedSide}>
             <SheetHeader>
                 {
                     props.mode == 'view' ?
-                        <SheetTitle>Информация о бронировании</SheetTitle> :
+                        isView ?
+                            <SheetTitle>Информация о бронировании</SheetTitle>
+                            :
+                            <SheetTitle>Редактирование бронирования</SheetTitle>
+                        :
                         <>
                             <SheetTitle>Создание резервирования</SheetTitle>
                             <SheetDescription>
@@ -237,19 +284,19 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                             </SheetDescription>
                         </>
                 }
-
             </SheetHeader>
-
             <div className="grid gap-4 py-4 ">
                 <div className="items-center gap-4">
                     <Label htmlFor="name" className="text-right text-foreground">
                         Название
                     </Label>
                     <Input id="title" type="text" placeholder="Введите название."
+                        disabled={isView}
+
                         className="col-span-3" value={formData.title}
                         onChange={handleInputChange}
                     />
-                    {isTrySave && tryValidate('title', formData.title) &&
+                    {isTrySave && checkOnError('title', formData.title) &&
                         <p className='text-red-600 text-base'>{validateAnswer.title}</p>}
                 </div>
                 {(formData.description || !isView) &&
@@ -259,15 +306,58 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                                 Описание
                             </Label>
                             <Textarea id="description" placeholder="Напишите описание бронирования."
+                                disabled={isView}
+
                                 className="col-span-3" value={formData.description}
                                 onChange={handleInputChange}
                             />
 
-                            {isTrySave && tryValidate('description', formData.description) &&
-                                <p className='text-red-600 text-base'>{validateAnswer.description}</p>}
+                            {/* {isTrySave && checkOnError('description', formData.description) &&
+                                <p className='text-red-600 text-base'>{validateAnswer.description}</p>} */}
                         </div>
                     </div>
                 }
+
+                <div className="items-center gap-4">
+                    <div className="w-full">
+                        <Label id='room' className="text-right text-foreground">
+                            Комната
+                        </Label>
+                        {isView ?
+                            <div>
+                                {formData.roomId ?
+                                    <TagComponent tag={
+                                        {
+                                            id: formData.roomId.id,
+                                            fullName: formData.roomId.label,
+                                            color: '#5DDCED'
+                                        }
+                                    } />
+                                    : <>...</>}
+                            </div>
+                            :
+                            <PopupSelector<Option>
+                                title='Введите номер комнаты'
+                                buttonTitle='Укажите комнату'
+                                options={moreInfo.allRoom.map((e) => ({
+                                    id: e.id,
+                                    label: e.name
+                                }))}
+                                fullData={formData.roomId ? [formData.roomId] as Option[] : formData.roomId}
+                                type='room'
+                                onChange={(selectedItems: Option[]) => {
+                                    setFormData(prevData => ({
+                                        ...prevData,
+                                        roomId: selectedItems[0]
+                                    }));
+                                }}
+                            />
+                        }
+                    </div>
+                    {/* {isTrySave && checkOnError('room', formData.roomId) &&
+                        <p className='text-red-600 text-base'>{validateAnswer.roomId}</p>} */}
+                </div>
+
                 <div className="items-center gap-4">
                     <div className="w-full">
                         <Label id='description' className="text-right text-foreground">
@@ -302,7 +392,7 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                                         }} />
                                 </PopoverContent>}
                         </Popover>
-                        {isTrySave && tryValidate('title', formData.title) &&
+                        {isTrySave && checkOnError('title', formData.title) &&
                             <p className='text-red-600 text-base'>{validateAnswer.date}</p>}
                     </div>
                 </div>
@@ -338,7 +428,7 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                         </div>
                     </div>
                 </div>
-                {isTrySave && tryValidate('time', formData.startTime, formData.endTime) &&
+                {isTrySave && checkOnError('time', formData.startTime, formData.endTime) &&
                     <p className='text-red-600 text-base'>{validateAnswer.time}</p>}
 
                 <div className="items-center gap-4">
@@ -357,7 +447,10 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                                     <PopupSelector<OptionTag>
                                         title='Выберите метку бронирования'
                                         buttonTitle='Добавьте метки'
-                                        options={tags}
+                                        options={moreInfo.allTags.map((e) => ({
+                                            id: e.id,
+                                            label: e.fullName
+                                        }))}
                                         fullData={formData.tags}
                                         type='tag'
                                         onChange={(selectedItems: OptionTag[]) => {
@@ -369,7 +462,7 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                                     />
                                 </div>}
                     </div>
-                    {isTrySave && tryValidate('tags', formData.tags) &&
+                    {isTrySave && checkOnError('tags', formData.tags) &&
                         <p className='text-red-600 text-base'>{validateAnswer.tags}</p>}
 
                 </div>
@@ -379,14 +472,28 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                             Участники
                         </Label>
                         {isView ?
-                            <div>
-                                {formData.participants ? formData.participants.map((e) => (<>{e.label}</>)) : <>Никого(</>}
+                            <div className="flex flex-row flex-wrap">
+                                {formData.participants && formData.participants?.length ?
+                                    formData.participants.map((e) => (
+                                        <Badge
+                                            key={e.id}
+                                            variant="secondary"
+                                            className="rounded-sm px-1 ml-1 mb-1 font-normal max-w-xs w-max"
+                                        >{e.label}</Badge>
+
+                                    ))
+
+                                    : <>Никого(</>}
                             </div>
                             :
                             <PopupSelector<OptionParticipant>
                                 title='Начните вводить имя или номер группы'
                                 buttonTitle='Добавьте участников'
-                                options={participants}
+                                options={moreInfo.allParticipants.map((e) => ({
+                                    id: e.id,
+                                    label: e.fullName,
+                                    type: 0
+                                }))}
                                 fullData={formData.participants}
                                 type='participant'
                                 onChange={(selectedItems: OptionParticipant[]) => {
@@ -398,14 +505,20 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                             />
                         }
                     </div>
-                    {isTrySave && tryValidate('participants', formData.participants) &&
+                    {isTrySave && checkOnError('participants', formData.participants) &&
                         <p className='text-red-600 text-base'>{validateAnswer.participant}</p>}
-                </div>{
+                </div>
+                {
                     props.mode == 'create' ?
                         <SheetFooter className='mb-5'>
                             <SheetClose asChild>
                                 <Button type="submit"
-                                // onClick={handleSaveChanges}
+                                    onClick={
+                                        (e: React.MouseEvent<HTMLElement>) => {
+                                            setTrySave(true)
+                                            trySaveEditCard(e)
+                                        }
+                                    }
                                 >Создать бронирование</Button>
                             </SheetClose>
                         </SheetFooter>
@@ -417,17 +530,22 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                                     setIsView(false)
                                 }}>Редактировать</Button>
                                 :
-                                <div className="flex justify-between w-[80%] items-center">
-                                    <Button
+                                <div className="flex justify-between w-[80%] items-center ml-auto mr-auto">
+
+                                    <SheetClose asChild><Button
                                         onClick={
-                                            () => {
+                                            (e: React.MouseEvent<HTMLElement>) => {
                                                 setTrySave(true);
+                                                trySaveEditCard(e)
+
                                             }
                                         }
                                     >Сохранить</Button>
+                                    </SheetClose>
                                     <Button onClick={() => {
                                         setFormData(getFormData(props.data))
                                         setIsView(true)
+                                        setTrySave(false);
                                     }}>Отмена</Button>
                                 </div>
                         }

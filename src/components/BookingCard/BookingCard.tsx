@@ -13,7 +13,7 @@ const getFormatTime = (str: string): string => {
 
 
 
-const BookingCard: React.FC<Booking> = (booking) => {
+const BookingCard: React.FC<{booking: Booking, hideRoom?:boolean}> = ({booking, hideRoom=false}) => {
     return (
         <div className='booking-card-wrapper1 rounded-lg border shadow-sm' onClick={()=>{console.log('click')}}>
             <div className={styles['time-block']}>
@@ -28,7 +28,7 @@ const BookingCard: React.FC<Booking> = (booking) => {
                     <span>{booking.title}</span>
                     {/* <span className={styles['booking-audience']}>{booking.audience && booking.audience}</span> */}
                 </div>
-                {booking.room&&
+                {!hideRoom&&booking.room&&
                 <div className={styles['booking-audience']}>
                     Аудитория: {booking.room.value}
                 </div>
@@ -56,7 +56,7 @@ const BookingCard: React.FC<Booking> = (booking) => {
 
                             return (
                                 <div key={index} className={styles['booking-tag']} style={{backgroundColor}}>
-                                    {('name' in participant) ? participant.value : participant.value}
+                                    {('fullName' in participant) ? participant.fullName : participant.value}
                                 </div>
                             );
                         })}

@@ -30,12 +30,14 @@ export interface BookingsByRoom {
 }
 
 export interface Booking {
+    id?:number;
     title: string;
-    descriptions?: string;
+    description?: string;
     startTime: string;
     endTime: string;
     room?: {id:number, value:string};
     owner: User;
+    staff?:User[];
     participants?: (User | Group)[];
     tag?: Tag;
     tags?: Tag[];
@@ -43,7 +45,7 @@ export interface Booking {
 
 export interface User {
     id: number;
-    value: string;
+    fullName: string;
 }
 
 export interface Room {

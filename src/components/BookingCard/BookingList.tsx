@@ -1,8 +1,8 @@
 import React from 'react';
-import { BookingsByRoom } from "./bookingModels";
+import { Booking, BookingsByRoom } from "./bookingModels";
 import BookingCard from "./BookingCard";
 import styles from "./BookingList.module.css";
-import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
+import { Sheet, SheetTrigger } from '../ui/sheet';
 import { InformationBlock } from '../InformationBlock/InformationBlock';
 
 
@@ -20,11 +20,10 @@ const BookingList: React.FC<BookingListProps> = ({ bookingsGropedByRoom }) => {
                     </h2>
                     <div className={styles['bookings-room-data']}>
                         {room.bookings.map((booking, bookingIndex) => {
-                            booking.room = undefined;
                             return (
                                 <Sheet>
-                                    <SheetTrigger className=' text-left w-full h-full'>
-                                        <BookingCard key={bookingIndex} {...booking} />
+                                    <SheetTrigger onClick={()=>{}} className=' text-left w-full h-full'>
+                                        <BookingCard key={bookingIndex} booking={booking} hideRoom={true} />
                                     </SheetTrigger>
                                     
                                     <InformationBlock data={booking} mode='view' />
