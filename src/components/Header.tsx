@@ -13,7 +13,7 @@ const Header: FunctionComponent = () => {
             {/* <Button variant='clear'>
 
             </Button> */}
-            <BrandHeader/>
+            <BrandHeader />
             <div className='flex items-center justify-between w-auto'>
                 <UserNav/>
                 <Button

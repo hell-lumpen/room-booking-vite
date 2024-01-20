@@ -9,7 +9,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {useAuthenticatedUserState} from "@/context/AuthContext/AuthUserContext.ts";
+import {useAuth} from "@/context/AuthContext/AuthUserContext.ts";
 import {Separator} from "@/components/ui/separator.tsx";
 import {LogOut, User} from "lucide-react";
 
@@ -23,7 +23,7 @@ function getShortUserName(input: string | undefined): string {
 }
 
 export function UserNav() {
-    const [user, ] = useAuthenticatedUserState();
+    const [user, ] = useAuth();
 
     return (
         <DropdownMenu>
