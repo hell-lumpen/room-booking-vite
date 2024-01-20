@@ -169,7 +169,6 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
     const [formData, setFormData] = useState<RoomBookingFormData>(getFormData(props.data));
     useEffect(() => {
         setFormData(getFormData(props.data));
-        console.log('update')
     }, []);
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
@@ -267,7 +266,7 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
     }
 
     return (
-        <SheetContent className={sheetSize} side={adjustedSide}>
+        <SheetContent className={sheetSize} side={adjustedSide} >
             <SheetHeader>
                 {
                     props.mode == 'view' ?

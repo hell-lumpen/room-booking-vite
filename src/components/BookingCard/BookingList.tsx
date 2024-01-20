@@ -22,13 +22,11 @@ const BookingList: React.FC<BookingListProps> = ({ bookingsGropedByRoom }) => {
                         {room.bookings.map((booking, bookingIndex) => {
                             return (
                                 <Sheet>
-                                    <SheetTrigger onClick={()=>{}} className=' text-left w-full h-full'>
+                                    <SheetTrigger className='text-left w-full h-full border-none'>
                                         <BookingCard key={bookingIndex} booking={booking} hideRoom={true} />
                                     </SheetTrigger>
                                     
                                     <InformationBlock data={booking} mode='view' />
-                                    
-
                                 </Sheet>
                             );
                         })}
