@@ -56,7 +56,8 @@ const BookingCard: React.FC<{booking: Booking, hideRoom?:boolean}> = ({booking, 
 
                             return (
                                 <div key={index} className={styles['booking-tag']} style={{backgroundColor}}>
-                                    {('fullName' in participant) ? participant.fullName : participant.value}
+                                    { participant.value}
+                                    {/* {('value' in participant) ? participant.value : participant.value} */}
                                 </div>
                             );
                         })}

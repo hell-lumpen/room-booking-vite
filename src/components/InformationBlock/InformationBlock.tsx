@@ -144,6 +144,9 @@ const validateAnswer = {
 };
 
 export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Booking }> = (props) => {
+    console.log(props.data);
+
+
     const moreInfo = useContext(DataForMoreInfo);
     const [sheetSize, setSheetSize] = useState<string>('');
     const [adjustedSide, setAdjustedSide] = useState<"bottom" | "right" | "top" | "left" | null | undefined>(undefined);
@@ -169,7 +172,7 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
     const [formData, setFormData] = useState<RoomBookingFormData>(getFormData(props.data));
     useEffect(() => {
         setFormData(getFormData(props.data));
-    }, []);
+    }, [props.data]);
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
         const { id, value } = e.target;
@@ -291,7 +294,6 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                     </Label>
                     <Input id="title" type="text" placeholder="Введите название."
                         disabled={isView}
-
                         className="col-span-3" value={formData.title}
                         onChange={handleInputChange}
                     />
@@ -355,6 +357,17 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                     </div>
                     {/* {isTrySave && checkOnError('room', formData.roomId) &&
                         <p className='text-red-600 text-base'>{validateAnswer.roomId}</p>} */}
+                </div>
+
+                <div className="items-center gap-4">
+                    <Label htmlFor="name" className="text-right text-foreground">
+                        Организатор
+                    </Label>
+                    <Input id="owner" type="text" placeholder="Введите название."
+                        disabled={true}
+                        className="col-span-3" value={props.data?.owner.value}
+                        // onChange={handleInputChange}
+                    />
                 </div>
 
                 <div className="items-center gap-4">

@@ -53,25 +53,6 @@ export const AllBookingPage = () => {
 
     }, [dateForAxios]);
 
-    // const [adjustedSide, setAdjustedSide] = useState<"bottom" | "right" | "top" | "left" | null | undefined>(undefined);
-    // const [sheetSize, setSheetSize] = useState<string>('');
-    // useEffect(() => {
-    //     const handleResize = () => {
-    //         const isSmallScreen = window.innerWidth <= 800;
-    //         setAdjustedSide(isSmallScreen ? 'bottom' : 'right');
-    //         setSheetSize(isSmallScreen ? 'h-[75vh] overflow-y-scroll' : 'min-w-[500px] overflow-y-scroll')
-    //     };
-
-    //     // Вызовите handleResize при монтировании и при изменении размера окна
-    //     handleResize();
-    //     window.addEventListener('resize', handleResize);
-
-    //     // Очистите слушателя событий при размонтировании компонента
-    //     return () => {
-    //         window.removeEventListener('resize', handleResize);
-    //     };
-    // }, []);
-
     const [allRoom, setAllRoom] = useState<{ id: number, name: string }[]>([]);
     const [allParticipants, setAllParticipants] = useState<{ id: number, fullName: string }[]>([]);
     const [allGroup, setAllGroup] = useState<{ id: number, name: string }[]>([]);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Booking, BookingsByRoom } from "./bookingModels";
+import {BookingsByRoom } from "./bookingModels";
 import BookingCard from "./BookingCard";
 import styles from "./BookingList.module.css";
 import { Sheet, SheetTrigger } from '../ui/sheet';
