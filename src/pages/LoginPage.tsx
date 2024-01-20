@@ -1,16 +1,14 @@
-import { UserAuthForm } from "@/components/AuthForm/AuthForm.tsx";
-import React from "react";
+import {LoginForm} from "@/components/AuthForm/AuthForm.tsx";
+import {FC} from "react";
 import styles from "./LoginPage.module.css";
 import loginImage from '@/assets/images/login-page-backgrounf-image.png'
 
-interface AuthenticationPageProps {}
-
-const AuthenticationPage: React.FC<AuthenticationPageProps> = () => {
+const LoginPage: FC = () => {
     return (
         <div className={styles['container']}>
             <div className={styles['image-container']}>
                 <div className={styles['image-overlay']}></div>
-                <img src={loginImage} alt='Изображение для страницы входа' />
+                <img src={loginImage} alt='Изображение для страницы входа'/>
             </div>
             <div className={styles['login-form-container']}>
                 <div className={styles['form-container']}>
@@ -26,11 +24,11 @@ const AuthenticationPage: React.FC<AuthenticationPageProps> = () => {
                             Приложение для бронирования аудиторий IT-центра МАИ и кафедры 806
                         </p>
                     </div>
-                    <UserAuthForm />
+                    <LoginForm/>
                 </div>
             </div>
         </div>
     );
 };
 
-export default AuthenticationPage;
+export default LoginPage;

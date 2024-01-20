@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Booking } from "../components/BookingCard/bookingModels";
 import { SettingSchedulePanel } from "../components/SettingSchedule/SettingSchedulePanel";
 import axios from 'axios';
+import API from "@/http/setupAxios.ts";
 
 export const SchedulePage = () => {
     const getNextDate = (date: Date): Date => {
@@ -24,9 +25,7 @@ export const SchedulePage = () => {
         }
 
         // return;
-        axios.get(`http://localhost:8080/api/bookings/group/${Number(groupForSchedule)}?startTime=${dateForSchedule.toISOString()}&endTime=${getNextDate(dateForSchedule).toISOString()
-            }`,
-            { headers: { Authorization: 'Bearer ' + token } })
+        API.get(`/bookings/group/${Number(groupForSchedule)}?startTime=${dateForSchedule.toISOString()}&endTime=${getNextDate(dateForSchedule).toISOString()}`)
             .then((data) => {
                 console.log('data', data.data)
                 setCardData(data.data);

@@ -27,8 +27,7 @@ const BrandHeader = () => {
                         <SheetHeader>
                             <SheetTitle>
                                 <h1 className="text-4xl font-extrabold tracking-tight text-primary text-center">
-                                    [APP NAME]
-                                    {/*Smart Campus*/}
+                                    Smart Campus
                                 </h1>
                             </SheetTitle>
                         </SheetHeader>
@@ -42,18 +41,18 @@ const BrandHeader = () => {
             <div onClick={handleClick}
                  className="flex lg:flex-row items-center max-w-screen p-2 pb-0 md:max-w-full cursor-pointer">
                 <div className="hidden lg:block w-auto h-full mr-2">
-                    <h1 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-primary">
-                        [APP LOGO]
-                    </h1>
-                    {/*<BrandLogo color={"hsl(var(--primary))"} imageHeight={60} className='max-w-full h-auto'/>*/}
+                    {/*<h1 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-primary">*/}
+                    {/*    [APP LOGO]*/}
+                    {/*</h1>*/}
+                    <BrandLogo color={"hsl(var(--primary))"} imageHeight={60} className='max-w-full h-auto'/>
                 </div>
                 <div className="flex flex-col ml-2">
-                    {/*<h1 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-primary">*/}
-                    {/*    Smart Campus*/}
-                    {/*</h1>*/}
                     <h1 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-primary">
-                        [APP NAME]
+                        Smart Campus
                     </h1>
+                    {/*<h1 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-primary">*/}
+                    {/*    [APP NAME]*/}
+                    {/*</h1>*/}
                 </div>
             </div>
         </div>

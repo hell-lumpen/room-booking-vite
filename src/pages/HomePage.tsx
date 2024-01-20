@@ -3,16 +3,14 @@ import BookingList from "@/components/BookingCard/BookingList.tsx";
 import 'react-day-picker/dist/style.css'
 import {BookingsByRoom} from "@/components/BookingCard/bookingModels.ts";
 import {createContext, useEffect, useState} from "react";
-import axios from "axios";
 import {StarBookingWidget} from "@/components/StartBooking/StarBookingWidget.tsx";
 import {SettingDatePanel} from "@/components/SettingDatePanel/SettingDatePanel.tsx";
 import {Tabs, TabsContent} from "@/components/ui/tabs.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Sheet, SheetTrigger} from "@/components/ui/sheet.tsx";
-import 'react-day-picker/dist/style.css'
 import {HorizontalTimelineElement} from "@/components/HorizontalTimelineElement/HorizontalTimelineElement.tsx";
 import {InformationBlock} from '@/components/InformationBlock/InformationBlock';
-
+import API from "@/http/setupAxios.ts";
 
 
 export const DataForMoreInfo = createContext<
@@ -22,7 +20,7 @@ export const DataForMoreInfo = createContext<
         allGroup: { id: number, name: string }[]
         allTags: { id: number, fullName: string, shortName: string, color: string }[]
     }
->({ allRoom: [], allParticipants: [], allGroup: [], allTags: [] });
+>({allRoom: [], allParticipants: [], allGroup: [], allTags: []});
 
 const HomePage = () => {
     const getNextDate = (date: Date): Date => {
@@ -30,9 +28,7 @@ const HomePage = () => {
     }
 
     const [dateForAxios, setDateAxios] = useState(new Date((new Date()).setHours(3, 0, 0)))
-
     const [dataForCard, setDataForCard] = useState<BookingsByRoom[]>([]);
-    const token = "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU5JU1RSQVRPUiIsImZ1bGxOYW1lIjoi0J3QtdC90LDRhdC-0LIg0JXQstCz0LXQvdC40Lkg0JLQsNC70LXQvdGC0LjQvdC-0LLQuNGHIiwic3ViIjoidXNlcm5hbWUiLCJpYXQiOjE3MDQyOTM5NjUsImV4cCI6MTcxMjkzMzk2NX0.cyhtonQk6F8DHiHdjTCjTnD3pQyUnvdJtHJa3TwQa3I";
 
     const setNewDateAxios = (newDate: Date) => {
         setDateAxios(newDate);
@@ -42,9 +38,7 @@ const HomePage = () => {
     useEffect(() => {
         // document.documentElement.setAttribute('data-theme', 'dark');
         console.log('as', dateForAxios.toISOString())
-        axios.get(`http://localhost:8080/api/bookings?startTime=${dateForAxios.toISOString()}&endTime=${getNextDate(dateForAxios).toISOString()
-            }`,
-            {headers: {Authorization: 'Bearer ' + token}})
+        API.get(`/bookings?startTime=${dateForAxios.toISOString()}&endTime=${getNextDate(dateForAxios).toISOString()}`)
             .then((data) => {
                 console.log('d', data.data);
                 setDataForCard(data.data);
@@ -79,26 +73,22 @@ const HomePage = () => {
     //Получение комнат, участников и тегов
     useEffect(() => {
 
-        axios.get(`http://localhost:8080/api/room/all`,
-            { headers: { Authorization: 'Bearer ' + token } })
+        API.get(`/room/all`)
             .then((data) => {
                 setAllRoom(data.data);
             });
 
-        axios.get(`http://localhost:8080/api/user/all`,
-            { headers: { Authorization: 'Bearer ' + token } })
+        API.get(`/user/all`)
             .then((data) => {
                 setAllParticipants(data.data);
             });
 
-        axios.get(`http://localhost:8080/api/group/all`,
-            { headers: { Authorization: 'Bearer ' + token } })
+        API.get(`/group/all`)
             .then((data) => {
                 setAllGroup(data.data);
             });
 
-        axios.get(`http://localhost:8080/api/tag/get/all`,
-            { headers: { Authorization: 'Bearer ' + token } })
+        API.get(`/tag/get/all`)
             .then((data) => {
                 setAllTags(data.data);
             });
@@ -121,21 +111,21 @@ const HomePage = () => {
                             <SheetTrigger className='p-0 border-none'>
                                 <Button variant='default'>Зарезервировать</Button>
                             </SheetTrigger>
-                            <InformationBlock mode='create' />
+                            <InformationBlock mode='create'/>
                         </Sheet>
                     </div>
 
                     <Tabs defaultValue="card">
-                        <SettingDatePanel date={dateForAxios} setDate={setNewDateAxios} />
+                        <SettingDatePanel date={dateForAxios} setDate={setNewDateAxios}/>
                         {dataForCard.length !== 0 ? (
                             <>
                                 <TabsContent value="card">
-                                    <BookingList bookingsGropedByRoom={dataForCard} />
+                                    <BookingList bookingsGropedByRoom={dataForCard}/>
                                 </TabsContent><TabsContent value="timeline">
-                                    <HorizontalTimelineElement booking={dataForCard} rooms={dataForCard.map((e) => {
-                                        return e.name.value;
-                                    })} />
-                                </TabsContent>
+                                <HorizontalTimelineElement booking={dataForCard} rooms={dataForCard.map((e) => {
+                                    return e.name.value;
+                                })}/>
+                            </TabsContent>
                             </>
                         ) : (
                             <div className="flex flex-col items-center justify-center m-5">
@@ -160,10 +150,6 @@ const HomePage = () => {
                     Ближайшие мероприятия
                 </h2>
                 <StarBookingWidget/>
-                {/*<h2 className="mb-2 px-4 text-xl font-semibold tracking-tight">*/}
-                {/*    Новости*/}
-                {/*</h2>*/}
-                {/*<NewsBlock/>*/}
             </div>
         </div>
 

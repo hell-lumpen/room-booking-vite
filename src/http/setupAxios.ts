@@ -1,9 +1,9 @@
-import axios from 'axios'
+import axios, {AxiosInstance} from 'axios'
 import TokenService from "@/services/UtilServices.ts";
 
-const API_BASE_URL = 'http://localhost:8080/api'
+export const API_BASE_URL = 'http://10.10.50.205:8080/api'
 
-const API = axios.create({
+const API:AxiosInstance = axios.create({
     withCredentials: false,
     baseURL: API_BASE_URL
 })

@@ -1,41 +1,47 @@
 import * as React from "react"
+import {useState} from "react"
 
 import {cn} from "@/lib/utils"
 import {Icons} from "@/components/icons"
 import {Button} from "@/components/ui/button"
 import {Input} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
-import {Link, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import AuthService from "@/services/AuthService.ts";
-import {useState} from "react";
+import {AxiosError} from "axios";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
-export function UserAuthForm({className, ...props}: UserAuthFormProps) {
+export function LoginForm({className, ...props}: UserAuthFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [toMainPage, setMainPage] = React.useState<boolean>(false);
 
-    const [login, setLogin] = useState()
-    const [password, setPassword] = useState()
+    const [login, setLogin] = useState<string>('')
+    const [password, setPassword] = useState<string>('')
+
+    const [error, setError] = useState<string>()
     const history = useHistory();
 
-    React.useEffect(()=>{
-        if (toMainPage)
-        {
+    React.useEffect(() => {
+        if (toMainPage) {
+            console.log('push')
             history.push('/main')
         }
-    },[toMainPage, history]);
+    }, [toMainPage]);
 
     async function onSubmit(event: React.SyntheticEvent) {
         event.preventDefault()
         setIsLoading(true)
-
-        AuthService.login()
-    }
-
-    function handleClick() {
-        history.push('/main')
+        try {
+            await AuthService.login(login, password)
+            setMainPage(true)
+            // history.push('/main')
+        } catch (e: AxiosError) {
+            setError(e.response.data.exception_description)
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     return (
@@ -54,6 +60,11 @@ export function UserAuthForm({className, ...props}: UserAuthFormProps) {
                             autoComplete="login"
                             autoCorrect="off"
                             disabled={isLoading}
+                            value={login}
+                            onChange={e => {
+                                setError(undefined);
+                                setLogin(e.target.value);
+                            }}
                         />
                     </div>
                     <div className="grid gap-1">
@@ -68,8 +79,16 @@ export function UserAuthForm({className, ...props}: UserAuthFormProps) {
                             autoComplete="password"
                             autoCorrect="off"
                             disabled={isLoading}
+                            value={password}
+                            onChange={e => {
+                                setError(undefined)
+                                setPassword(e.target.value)
+                            }}
                         />
                     </div>
+                    {error && (<p className='text-red-600 text-sm p-2'>
+                        {error}
+                    </p>)}
                     <Button disabled={isLoading}>
                         {isLoading && (
                             <Icons.spinner className="mr-2 h-4 w-4 animate-spin"/>

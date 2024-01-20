@@ -1,23 +1,23 @@
-import { CalendarIcon } from "lucide-react";
-import { Booking, Tag, User } from "../BookingCard/bookingModels";
-import { TagComponent } from "../Tag/TagComponent";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
-import { Textarea } from "../ui/textarea";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { format } from "date-fns";
-import { ru } from "date-fns/locale";
-import { ChangeEvent, useContext, useEffect, useState } from "react";
-import { SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "../ui/sheet";
-import { DayPicker } from "react-day-picker";
-import { OptionParticipant, OptionTag, Option } from "@/models/bookingTypes";
+import {CalendarIcon} from "lucide-react";
+import {Booking, Tag, User} from "../BookingCard/bookingModels";
+import {TagComponent} from "../Tag/TagComponent";
+import {Input} from "../ui/input";
+import {Label} from "../ui/label";
+import {Button} from "../ui/button";
+import {cn} from "@/lib/utils";
+import {Textarea} from "../ui/textarea";
+import {Popover, PopoverContent, PopoverTrigger} from "../ui/popover";
+import {format} from "date-fns";
+import {ru} from "date-fns/locale";
+import {ChangeEvent, useContext, useEffect, useState} from "react";
+import {SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle} from "../ui/sheet";
+import {DayPicker} from "react-day-picker";
+import {Option, OptionParticipant, OptionTag} from "@/models/bookingTypes";
 import PopupSelector from "../PopupSelector";
-import axios from "axios";
-import { toast } from "../ui/use-toast";
-import { DataForMoreInfo } from "@/pages/HomePage";
-import { Badge } from "../ui/badge";
+import {toast} from "../ui/use-toast";
+import {DataForMoreInfo} from "@/pages/HomePage";
+import {Badge} from "../ui/badge";
+import API from "@/http/setupAxios.ts";
 
 
 interface RoomBookingFormData {
@@ -51,11 +51,11 @@ const getFormatTime = (str: string | undefined) => {
 const getFormatTag = (tag?: Tag, tags?: Tag[]): OptionTag[] => {
     const t: OptionTag[] = [];
     if (tag) {
-        t.push({ id: tag.id, label: tag.fullName });
+        t.push({id: tag.id, label: tag.fullName});
     }
     if (tags) {
         tags.map((tag) => {
-            t.push({ id: tag.id, label: tag.fullName });
+            t.push({id: tag.id, label: tag.fullName});
         })
     }
     return t;
@@ -65,7 +65,7 @@ const getFormatParticipant = (part?: (User)[]): OptionParticipant[] => {
     const res: OptionParticipant[] = [];
     if (part)
         part.map((p) => {
-            res.push({ id: p.id, label: p.fullName, type: 0 });
+            res.push({id: p.id, label: p.fullName, type: 0});
         })
     return res;
 }
@@ -74,7 +74,7 @@ const getFormData = (data?: Booking): RoomBookingFormData => {
     if (data) {
         let room = undefined;
         if (data.room) {
-            room = { id: data.room.id, label: data.room.value };
+            room = {id: data.room.id, label: data.room.value};
         }
 
         return {
@@ -88,8 +88,7 @@ const getFormData = (data?: Booking): RoomBookingFormData => {
             participants: getFormatParticipant(data.staff),
             tags: getFormatTag(data.tag, data.tags),
         };
-    }
-    else
+    } else
         return {
             title: '',
             description: '',
@@ -102,7 +101,6 @@ const getFormData = (data?: Booking): RoomBookingFormData => {
             tags: undefined
         }
 }
-
 
 
 const checkOnError = (
@@ -175,7 +173,7 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
     }, [props.data]);
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
-        const { id, value } = e.target;
+        const {id, value} = e.target;
         if (isView) return;
         setFormData((prevData) => {
             const updatedFormData = {
@@ -224,13 +222,8 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
         }
 
         if (props.mode === 'create') {
-            axios.post(`http://localhost:8080/api/bookings`,
-                cardDataForAxios,
-                {
-                    headers: {
-                        Authorization: 'Bearer ' + token
-                    }
-                }).then((response) => {
+            API.post(`/bookings`, cardDataForAxios)
+                .then((response) => {
                     console.log('Booking successful:', response.data);
                     toast({
                         title: "Резервирование сохранено!",
@@ -245,11 +238,8 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                     })
                 });
         } else {
-            axios.put(`http://localhost:8080/api/bookings`,
-                cardDataForAxios,
-                {
-                    headers: { Authorization: 'Bearer ' + token }
-                }).then((response) => {
+            API.put(`/bookings`, cardDataForAxios)
+                .then((response) => {
                     console.log('Booking successful:', response.data);
                     toast({
                         title: "Резервирование сохранено!",
@@ -269,7 +259,7 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
     }
 
     return (
-        <SheetContent className={sheetSize} side={adjustedSide} >
+        <SheetContent className={sheetSize} side={adjustedSide}>
             <SheetHeader>
                 {
                     props.mode == 'view' ?
@@ -293,29 +283,29 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                         Название
                     </Label>
                     <Input id="title" type="text" placeholder="Введите название."
-                        disabled={isView}
-                        className="col-span-3" value={formData.title}
-                        onChange={handleInputChange}
+                           disabled={isView}
+                           className="col-span-3" value={formData.title}
+                           onChange={handleInputChange}
                     />
                     {isTrySave && checkOnError('title', formData.title) &&
                         <p className='text-red-600 text-base'>{validateAnswer.title}</p>}
                 </div>
                 {(formData.description || !isView) &&
                     <div className="items-center gap-4">
-                        <div className="w-full">
-                            <Label id='description' className="text-right text-foreground">
-                                Описание
-                            </Label>
-                            <Textarea id="description" placeholder="Напишите описание бронирования."
-                                disabled={isView}
+                      <div className="w-full">
+                        <Label id='description' className="text-right text-foreground">
+                          Описание
+                        </Label>
+                        <Textarea id="description" placeholder="Напишите описание бронирования."
+                                  disabled={isView}
 
-                                className="col-span-3" value={formData.description}
-                                onChange={handleInputChange}
-                            />
+                                  className="col-span-3" value={formData.description}
+                                  onChange={handleInputChange}
+                        />
 
-                            {/* {isTrySave && checkOnError('description', formData.description) &&
+                          {/* {isTrySave && checkOnError('description', formData.description) &&
                                 <p className='text-red-600 text-base'>{validateAnswer.description}</p>} */}
-                        </div>
+                      </div>
                     </div>
                 }
 
@@ -333,7 +323,7 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                                             fullName: formData.roomId.label,
                                             color: '#5DDCED'
                                         }
-                                    } />
+                                    }/>
                                     : <>...</>}
                             </div>
                             :
@@ -358,18 +348,18 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                     {/* {isTrySave && checkOnError('room', formData.roomId) &&
                         <p className='text-red-600 text-base'>{validateAnswer.roomId}</p>} */}
                 </div>
-
-                <div className="items-center gap-4">
-                    <Label htmlFor="name" className="text-right text-foreground">
+                {isView &&
+                    <div className="items-center gap-4">
+                      <Label htmlFor="name" className="text-right text-foreground">
                         Организатор
-                    </Label>
-                    <Input id="owner" type="text" placeholder="Введите название."
-                        disabled={true}
-                        className="col-span-3" value={props.data?.owner.value}
-                        // onChange={handleInputChange}
-                    />
-                </div>
-
+                      </Label>
+                      <Input id="owner" type="text" placeholder="Введите название."
+                             disabled={true}
+                             className="col-span-3" value={props.data?.owner.value}
+                          // onChange={handleInputChange}
+                      />
+                    </div>
+                }
                 <div className="items-center gap-4">
                     <div className="w-full">
                         <Label id='description' className="text-right text-foreground">
@@ -384,24 +374,24 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                                         // !props.data && "text-sm"
                                     )}
                                 >
-                                    <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground" />
-                                    {formData.date ? format(formData.date, "PPP", { locale: ru }) :
+                                    <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground"/>
+                                    {formData.date ? format(formData.date, "PPP", {locale: ru}) :
                                         <span className='text-muted-foreground'>Выберите дату бронирования</span>}
                                 </Button>
                             </PopoverTrigger>
                             {!isView &&
                                 <PopoverContent className="w-auto p-0">
-                                    <DayPicker mode="single"
-                                        locale={ru}
-                                        weekStartsOn={1}
-                                        fromDate={new Date()}
-                                        selected={formData.date}
-                                        onSelect={(value) => {
-                                            setFormData((prevData) => ({
-                                                ...prevData,
-                                                date: value,
-                                            }))
-                                        }} />
+                                  <DayPicker mode="single"
+                                             locale={ru}
+                                             weekStartsOn={1}
+                                             fromDate={new Date()}
+                                             selected={formData.date}
+                                             onSelect={(value) => {
+                                                 setFormData((prevData) => ({
+                                                     ...prevData,
+                                                     date: value,
+                                                 }))
+                                             }}/>
                                 </PopoverContent>}
                         </Popover>
                         {isTrySave && checkOnError('title', formData.title) &&
@@ -452,7 +442,7 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                             isView ?
                                 props.data &&
                                 <div>
-                                    <TagComponent tag={props.data.tag} tags={props.data.tags} />
+                                  <TagComponent tag={props.data.tag} tags={props.data.tags}/>
                                 </div>
                                 :
                                 <div className="w-full">
@@ -525,12 +515,12 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                         <SheetFooter className='mb-5'>
                             <SheetClose asChild>
                                 <Button type="submit"
-                                    onClick={
-                                        (e: React.MouseEvent<HTMLElement>) => {
-                                            setTrySave(true)
-                                            trySaveEditCard(e)
+                                        onClick={
+                                            (e: React.MouseEvent<HTMLElement>) => {
+                                                setTrySave(true)
+                                                trySaveEditCard(e)
+                                            }
                                         }
-                                    }
                                 >Создать бронирование</Button>
                             </SheetClose>
                         </SheetFooter>
