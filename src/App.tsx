@@ -103,6 +103,7 @@ const PrivateRoute: FC<PrivateRouteProps> = ({jsxContent, ...rest}) => {
 
     useEffect(() => {
         const token = TokenService.getToken()
+        console.log('tok', token);
         token && setAuthenticatedUser(restoreAuthUserFromJWT(token));
     }, [])
 
@@ -110,7 +111,11 @@ const PrivateRoute: FC<PrivateRouteProps> = ({jsxContent, ...rest}) => {
         <Route
             {...rest}
             render={() =>
-                authenticatedUser ? (
+                {
+                    const token = TokenService.getToken()
+                    console.log('tok0', token);
+                    console.log('redirect')
+                    return(authenticatedUser ? (
                     <>
                         <Header/>
                         <div className="app-container">
@@ -127,13 +132,19 @@ const PrivateRoute: FC<PrivateRouteProps> = ({jsxContent, ...rest}) => {
                     </>
                 ) : (
                     <Redirect to="/login"/>
-                )
+                ))}
             }
         />
     );
 };
 
 function App() {
+
+    useEffect(() => {
+        const token = TokenService.getToken()
+        console.log('tok00', token);
+    }, [])
+
     return (
         <Router>
             <div className="bg-background text-foreground">
