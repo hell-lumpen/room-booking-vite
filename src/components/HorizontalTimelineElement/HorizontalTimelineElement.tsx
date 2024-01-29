@@ -218,11 +218,13 @@ export const HorizontalTimelineElement: React.FC<{ booking: BookingsByRoom[], ro
                                                 }],
                                             }
                                             return (
+                                                
                                                 <HorizontalTimelineDataElement
                                                     x={coord.x}
                                                     width={coord.w}
                                                     data={d}
                                                 />
+                                                
                                             );
                                         })
                                     );

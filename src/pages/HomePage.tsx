@@ -1,16 +1,17 @@
 import styles from './HomePage.module.css'
 import BookingList from "@/components/BookingCard/BookingList.tsx";
 import 'react-day-picker/dist/style.css'
-import {BookingsByRoom} from "@/components/BookingCard/bookingModels.ts";
-import {createContext, useEffect, useState} from "react";
-import {StarBookingWidget} from "@/components/StartBooking/StarBookingWidget.tsx";
-import {SettingDatePanel} from "@/components/SettingDatePanel/SettingDatePanel.tsx";
-import {Tabs, TabsContent} from "@/components/ui/tabs.tsx";
-import {Button} from "@/components/ui/button.tsx";
-import {Sheet, SheetTrigger} from "@/components/ui/sheet.tsx";
-import {HorizontalTimelineElement} from "@/components/HorizontalTimelineElement/HorizontalTimelineElement.tsx";
-import {InformationBlock} from '@/components/InformationBlock/InformationBlock';
+import { BookingsByRoom } from "@/components/BookingCard/bookingModels.ts";
+import { createContext, useEffect, useState } from "react";
+import { StarBookingWidget } from "@/components/StartBooking/StarBookingWidget.tsx";
+import { SettingDatePanel } from "@/components/SettingDatePanel/SettingDatePanel.tsx";
+import { Tabs, TabsContent } from "@/components/ui/tabs.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet.tsx";
+import { HorizontalTimelineElement } from "@/components/HorizontalTimelineElement/HorizontalTimelineElement.tsx";
+import { InformationBlock } from '@/components/InformationBlock/InformationBlock';
 import API from "@/http/setupAxios.ts";
+import { HorTimeLine } from '@/components/HorizontalTimelineElement/HorTimeLine';
 
 
 export const DataForMoreInfo = createContext<
@@ -20,7 +21,7 @@ export const DataForMoreInfo = createContext<
         allGroup: { id: number, name: string }[]
         allTags: { id: number, fullName: string, shortName: string, color: string }[]
     }
->({allRoom: [], allParticipants: [], allGroup: [], allTags: []});
+>({ allRoom: [], allParticipants: [], allGroup: [], allTags: [] });
 
 const HomePage = () => {
     const getNextDate = (date: Date): Date => {
@@ -106,26 +107,36 @@ const HomePage = () => {
             }}>
                 <div className={styles['booking-card-container']}>
                     <h1>Резервирование аудиторий</h1>
+                    {/* <HorTimeLine booking={dataForCard} rooms={dataForCard.map((e) => {
+                        return e.name.value;
+                    })} /> */}
+
                     <div className='flex justify-around flex-row-reverse p-4'>
                         <Sheet>
                             <SheetTrigger className='p-0 border-none'>
                                 <Button variant='default'>Зарезервировать</Button>
                             </SheetTrigger>
-                            <InformationBlock mode='create'/>
+                            <InformationBlock mode='create' />
                         </Sheet>
                     </div>
-
                     <Tabs defaultValue="card">
-                        <SettingDatePanel date={dateForAxios} setDate={setNewDateAxios}/>
+                        <SettingDatePanel date={dateForAxios} setDate={setNewDateAxios} />
                         {dataForCard.length !== 0 ? (
                             <>
+
                                 <TabsContent value="card">
-                                    <BookingList bookingsGropedByRoom={dataForCard}/>
-                                </TabsContent><TabsContent value="timeline">
-                                <HorizontalTimelineElement booking={dataForCard} rooms={dataForCard.map((e) => {
-                                    return e.name.value;
-                                })}/>
-                            </TabsContent>
+
+                                    <BookingList bookingsGropedByRoom={dataForCard} />
+                                </TabsContent>
+                                <TabsContent value="timeline">
+
+                                    <HorTimeLine booking={dataForCard} rooms={dataForCard.map((e) => {
+                                        return e.name.value;
+                                    })} />
+                                    <HorizontalTimelineElement booking={dataForCard} rooms={dataForCard.map((e) => {
+                                        return e.name.value;
+                                    })} />
+                                </TabsContent>
                             </>
                         ) : (
                             <div className="flex flex-col items-center justify-center m-5">
@@ -149,7 +160,7 @@ const HomePage = () => {
                 <h2 className="mb-2 px-4 text-xl font-semibold tracking-tight">
                     Ближайшие мероприятия
                 </h2>
-                <StarBookingWidget/>
+                <StarBookingWidget />
             </div>
         </div>
 

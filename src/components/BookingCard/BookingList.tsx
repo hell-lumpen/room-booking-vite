@@ -22,7 +22,7 @@ const BookingList: React.FC<BookingListProps> = ({ bookingsGropedByRoom }) => {
                         {room.bookings.map((booking, bookingIndex) => {
                             return (
                                 <Sheet>
-                                    <SheetTrigger className='text-left w-full h-full border-none'>
+                                    <SheetTrigger className='text-left w-full h-full border-none' >
                                         <BookingCard key={bookingIndex} booking={booking} hideRoom={true} />
                                     </SheetTrigger>
                                     

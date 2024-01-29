@@ -1,0 +1,59 @@
+:root {
+    --row_len: 10;
+    --col_len: 10;
+  }
+
+.asd{
+    /* background: green; */
+    background-color: rgba(var(--background));
+    color: rgba(var(--foreground));
+    height: inherit;
+    /* line-height: auto; */
+    /* padding: 15px 0; */
+    /* text-align: center; */
+    border: 1px solid #767877;
+    font-weight: 500;
+    font-size: 14px;
+    min-height: 25px;
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tt{
+    background-color: rgba(var(--background));
+    color: rgba(var(--foreground));
+    height: max-content;
+    border-bottom: 1px solid #767877;
+    position: sticky;
+    top: 0;
+    z-index: 4;
+    height: auto;
+}
+
+
+.gr{
+    grid-template-columns: minmax(1fr, auto);
+    grid-template-rows: minmax(1fr, auto);
+    background: green;
+
+}
+
+
+.horTimelineRoomTitle {
+    background-color: rgba(var(--background));
+    color: rgba(var(--foreground));
+    height: max-content;
+    padding: 19px 0;
+    text-align: center;
+    border-right: 1px solid #767877;
+    font-weight: 500;
+    font-size: 14px;
+    min-height: 25px;
+    position: sticky;
+    left: 0;
+    z-index: 1;
+}
