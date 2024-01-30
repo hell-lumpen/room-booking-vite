@@ -23,7 +23,7 @@ export default class AuthService {
         TokenService.setToken(token);
     }
 
-    // static async logout() : Promise<void> {
-    //     return API.post('/auth/logout')
-    // }
+    static async logout(): Promise<void> {
+        TokenService.deleteToken();
+    }
 }

@@ -46,8 +46,12 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
             console.log('tok', token);
             token && setAuthenticatedUser(restoreAuthUserFromJWT(token));
             // history.push('/main')
-        } catch (e: AxiosError) {
-            setError(e.response.data.exception_description)
+        } catch (e: any) {
+            if (e instanceof AxiosError || e) {
+                setError(e.response.data.exception_description)
+            } else {
+                setError(e)
+            }
         } finally {
             setIsLoading(false);
         }

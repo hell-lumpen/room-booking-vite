@@ -8,4 +8,8 @@ export default class TokenService {
     static setToken(token: string) {
         localStorage.setItem(LC_TOKEN_KEY, token)
     }
+
+    static deleteToken() {
+        localStorage.removeItem(LC_TOKEN_KEY);
+    }
 }

@@ -10,7 +10,6 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {useAuth} from "@/context/AuthContext/AuthUserContext.ts";
-import {Separator} from "@/components/ui/separator.tsx";
 import {LogOut, User} from "lucide-react";
 
 function getShortUserName(input: string | undefined): string {
@@ -23,7 +22,7 @@ function getShortUserName(input: string | undefined): string {
 }
 
 export function UserNav() {
-    const [user, ] = useAuth();
+    const [user,] = useAuth();
 
     return (
         <DropdownMenu>
