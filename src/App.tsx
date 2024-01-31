@@ -158,6 +158,7 @@ interface PrivateRouteProps extends RouteProps {
 }
 
 const PrivateRoute: FC<PrivateRouteProps> = ({jsxContent, authState, ...rest}) => {
+    console.log('a', authState)
     return (
         <Route
             {...rest}
@@ -201,27 +202,27 @@ function App() {
     const [allTags, setAllTags] = useState<{ id: number, fullName: string, shortName: string, color: string }[]>([]);
 
     //Получение комнат, участников и тегов
-    useEffect(() => {
-        API.get(`/room/all`)
-            .then((data) => {
-                setAllRoom(data.data);
-            });
+    // useEffect(() => {
+    //     API.get(`/room/all`)
+    //         .then((data) => {
+    //             setAllRoom(data.data);
+    //         });
 
-        API.get(`/user/all`)
-            .then((data) => {
-                setAllParticipants(data.data);
-            });
+    //     API.get(`/user/all`)
+    //         .then((data) => {
+    //             setAllParticipants(data.data);
+    //         });
 
-        API.get(`/group/all`)
-            .then((data) => {
-                setAllGroup(data.data);
-            });
+    //     API.get(`/group/all`)
+    //         .then((data) => {
+    //             setAllGroup(data.data);
+    //         });
 
-        API.get(`/tag/get/all`)
-            .then((data) => {
-                setAllTags(data.data);
-            });
-    }, []);
+    //     API.get(`/tag/get/all`)
+    //         .then((data) => {
+    //             setAllTags(data.data);
+    //         });
+    // }, []);
 
 
     useEffect(() => {
@@ -261,6 +262,7 @@ function App() {
                                         key={index}
                                         path={navUnit.path}
                                         jsxContent={navUnit.JSXContent}
+                                        authState={authState}
                                     />
                                 ))}
                                 {/* Дополнительный маршрут для отлавливания несуществующих путей */}
