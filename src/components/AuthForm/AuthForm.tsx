@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useState } from "react"
+import {useEffect, useState} from "react"
 
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
@@ -29,7 +29,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
     const [authenticatedUser, setAuthenticatedUser] = useAuth();
 
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (toMainPage) {
             console.log('push')
             history.push('/main')
