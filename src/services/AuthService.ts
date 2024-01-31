@@ -3,7 +3,6 @@ import {AuthResponse} from "@/models/response/AuthResponse.ts";
 import {AuthenticatedUser} from "@/models/userTypes.ts";
 import TokenService from "@/services/UtilServices.ts";
 import {API_BASE_URL} from "@/http/setupAxios.ts";
-import {useHistory} from "react-router-dom";
 
 
 export default class AuthService {

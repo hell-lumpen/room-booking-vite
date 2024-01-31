@@ -1,22 +1,22 @@
 import * as React from "react"
 import {useEffect, useState} from "react"
 
-import { cn } from "@/lib/utils"
-import { Icons } from "@/components/icons"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useHistory } from "react-router-dom";
+import {cn} from "@/lib/utils"
+import {Icons} from "@/components/icons"
+import {Button} from "@/components/ui/button"
+import {Input} from "@/components/ui/input"
+import {Label} from "@/components/ui/label"
+import {useHistory} from "react-router-dom";
 import AuthService from "@/services/AuthService.ts";
-import { AxiosError } from "axios";
-import { useAuth } from "@/context/AuthContext/AuthUserContext"
+import {AxiosError} from "axios";
+import {useAuth} from "@/context/AuthContext/AuthUserContext"
 import TokenService from "@/services/UtilServices"
-import { restoreAuthUserFromJWT } from "@/App"
+import {restoreAuthUserFromJWT} from "@/App"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
-export function LoginForm({ className, ...props }: UserAuthFormProps) {
+export function LoginForm({className, ...props}: UserAuthFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [toMainPage, setMainPage] = React.useState<boolean>(false);
 
@@ -26,7 +26,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
     const [error, setError] = useState<string>()
     const history = useHistory();
 
-    const [authenticatedUser, setAuthenticatedUser] = useAuth();
+    const [, setAuthenticatedUser] = useAuth();
 
 
     useEffect(() => {
@@ -104,7 +104,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
                     </p>)}
                     <Button disabled={isLoading}>
                         {isLoading && (
-                            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                            <Icons.spinner className="mr-2 h-4 w-4 animate-spin"/>
                         )}
                         Вход
                     </Button>

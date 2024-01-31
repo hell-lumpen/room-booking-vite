@@ -2,7 +2,7 @@ import {BrowserRouter as Router, Redirect, Route, RouteProps, Switch} from 'reac
 import '@/styles/global.css';
 import HomePage from "@/pages/HomePage.tsx";
 import LoginPage from "@/pages/LoginPage.tsx";
-import {FC, ReactNode, useEffect, useState} from "react";
+import {createContext, FC, ReactNode, useEffect, useState} from "react";
 import './App.css';
 import Header from "@/components/Header.tsx";
 import {Toaster} from "@/components/ui/toaster.tsx";
@@ -11,8 +11,7 @@ import {jwtDecode} from "jwt-decode";
 import {AuthenticatedUser} from "@/models/userTypes.ts";
 import {CalendarCheck, CalendarClock, Home, ShieldEllipsis, Warehouse} from 'lucide-react';
 import TokenService from "@/services/UtilServices.ts";
-import {asyncRestoreAuthUserFromJWT} from "@/AsyncRestoreAuthUserFromJWT.tsx";
-import {useAuth} from "@/context/AuthContext/AuthUserContext.ts";
+import API from "@/http/setupAxios.ts";
 
 
 interface JwtCustomPayload {
@@ -48,7 +47,7 @@ export function restoreAuthUserFromJWT(jwt?: string): AuthenticatedUser | undefi
 }
 
 export function asyncRestoreAuthUserFromJWT(jwt?: string): Promise<AuthenticatedUser | undefined> {
-    return new Promise((resolve, ) => {
+    return new Promise((resolve,) => {
         function decode(jwt: string): JwtCustomPayload {
             return jwtDecode<JwtCustomPayload>(jwt);
         }
@@ -183,9 +182,46 @@ const PrivateRoute: FC<PrivateRouteProps> = ({jsxContent, authState, ...rest}) =
     );
 };
 
+export const DataForMoreInfo = createContext<
+    {
+        allRoom: { id: number, name: string }[],
+        allParticipants: { id: number, fullName: string }[]
+        allGroup: { id: number, name: string }[]
+        allTags: { id: number, fullName: string, shortName: string, color: string }[]
+    }
+>({ allRoom: [], allParticipants: [], allGroup: [], allTags: [] });
+
+
 function App() {
     const [isLoading, setIsLoading] = useState(true);
     const [authState, setAuthState] = useState<AuthenticatedUser | undefined>(undefined);
+
+    const [allRoom, setAllRoom] = useState<{ id: number, name: string }[]>([]);
+    const [allParticipants, setAllParticipants] = useState<{ id: number, fullName: string }[]>([]);
+    const [allGroup, setAllGroup] = useState<{ id: number, name: string }[]>([]);
+    const [allTags, setAllTags] = useState<{ id: number, fullName: string, shortName: string, color: string }[]>([]);
+
+    useEffect(() => {
+        API.get(`/room/all`)
+            .then((data) => {
+                setAllRoom(data.data);
+            });
+
+        API.get(`/user/all`)
+            .then((data) => {
+                setAllParticipants(data.data);
+            });
+
+        API.get(`/group/all`)
+            .then((data) => {
+                setAllGroup(data.data);
+            });
+
+        API.get(`/tag/get/all`)
+            .then((data) => {
+                setAllTags(data.data);
+            });
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -212,6 +248,12 @@ function App() {
 
                     {/* Остальные страницы с Sidebar */}
                     <Route path="/">
+                        <DataForMoreInfo.Provider value={{
+                            allRoom: allRoom,
+                            allParticipants: allParticipants,
+                            allGroup: allGroup,
+                            allTags: allTags
+                        }}>
                         <Switch>
                             {SidebarNavUnits.map((navUnit, index) => (
                                 <PrivateRoute
@@ -226,6 +268,7 @@ function App() {
                                 <Redirect to="/main"/>
                             </Route>
                         </Switch>
+                        </DataForMoreInfo.Provider>
                     </Route>
                 </Switch>
             </div>
