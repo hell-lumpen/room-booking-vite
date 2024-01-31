@@ -1,7 +1,7 @@
 import axios, {AxiosInstance} from 'axios'
 import TokenService from "@/services/UtilServices.ts";
 
-export const API_BASE_URL = 'http://10.10.50.70:8080/api'
+export const API_BASE_URL = 'http://localhost:8080/api'
 
 const API:AxiosInstance = axios.create({
     withCredentials: false,

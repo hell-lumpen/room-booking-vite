@@ -7,25 +7,6 @@ import '@/styles/global.css'
 import style from './HorTimeLine.module.css'
 
 
-const rooms: string[] = [
-    'Лекторий IT-5',
-    'Лаборатория IT-6',
-    'Видеостудия IT-7',
-    'Лаборатория IT-8',
-    'Лаборатория IT-9',
-    'Переговорная IT-10',
-    'Шахматный клуб IT-11',
-    'ИТ-центр (IT-12)',
-    'ИТ-центр (IT-13)',
-    'Компьютерный класс IT-15',
-    'Учебная аудитория IT-16',
-    'Компьютерный класс IT-17',
-    'IT-18',
-    'IT-19',
-
-];
-
-
 const getTimes = (): { time: string, pos: number }[] => {
     const result: { time: string, pos: number }[] = [];
     let dat = new Date();
@@ -55,7 +36,7 @@ const getCells = (n: number) => {
                         gridRowEnd: _i + 1,
                         zIndex: 6
                     }}
-                    onClick={(e) => { console.log('click', _i + ' ' + i) }}
+                    onClick={() => { console.log('click', _i + ' ' + i) }}
                 ></div>
             );
         }
@@ -75,10 +56,12 @@ export const HorTimeLine: React.FC<{ booking: BookingsByRoom[], rooms: string[] 
     } as React.CSSProperties;
     //w-[100%]  max-w-[700px] max-h-[700px] overflow-hidden
     return (
-        <div className='h-[700px] w-[60vw] overflow-scroll'
+        <div className='h-[700px] lg:max-w-[45vw] max-w-[60vw] overflow-scroll mm'
             style={{
                 'border': '2px solid #767877',
                 'borderRadius': '10px',
+                'marginLeft' : 'auto',
+                'marginRight' : 'auto',
             }}
         >
             <div style={{
@@ -94,7 +77,8 @@ export const HorTimeLine: React.FC<{ booking: BookingsByRoom[], rooms: string[] 
                     "gridRowStart": 1,
                     "gridRowEnd": 2,
                     'borderRight': '1px solid #757575',
-                    'zIndex':5,
+                    'borderBottom': '1px solid #757575',
+                    'zIndex':10,
                     'position':'sticky',
                     'left':0,
                     'top':0,
@@ -159,8 +143,8 @@ export const HorTimeLine: React.FC<{ booking: BookingsByRoom[], rooms: string[] 
                             const col_i_s = (s_time.getHours() - 8) * 60 + s_time.getMinutes()
                             const col_i_e = (e_time.getHours() - 8) * 60 + e_time.getMinutes()
                             const style1 = {
-                                "gridColumnStart": col_i_s * 2 + 2 + 1,
-                                "gridColumnEnd": col_i_e * 2 + 2 + 1,
+                                "gridColumnStart": col_i_s * 2 + 2 + 2,
+                                "gridColumnEnd": col_i_e * 2 + 2 + 2,
                                 "gridRowStart": index + 2,
                                 "gridRowEnd": index + 3,
                                 'backgroundColor': el?.tags && el.tags[0].color + '55',

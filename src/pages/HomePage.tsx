@@ -2,26 +2,17 @@ import styles from './HomePage.module.css'
 import BookingList from "@/components/BookingCard/BookingList.tsx";
 import 'react-day-picker/dist/style.css'
 import { BookingsByRoom } from "@/components/BookingCard/bookingModels.ts";
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { StarBookingWidget } from "@/components/StartBooking/StarBookingWidget.tsx";
 import { SettingDatePanel } from "@/components/SettingDatePanel/SettingDatePanel.tsx";
 import { Tabs, TabsContent } from "@/components/ui/tabs.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet.tsx";
-import { HorizontalTimelineElement } from "@/components/HorizontalTimelineElement/HorizontalTimelineElement.tsx";
 import { InformationBlock } from '@/components/InformationBlock/InformationBlock';
 import API from "@/http/setupAxios.ts";
 import { HorTimeLine } from '@/components/HorizontalTimelineElement/HorTimeLine';
 
 
-export const DataForMoreInfo = createContext<
-    {
-        allRoom: { id: number, name: string }[],
-        allParticipants: { id: number, fullName: string }[]
-        allGroup: { id: number, name: string }[]
-        allTags: { id: number, fullName: string, shortName: string, color: string }[]
-    }
->({ allRoom: [], allParticipants: [], allGroup: [], allTags: [] });
 
 const HomePage = () => {
     const getNextDate = (date: Date): Date => {
@@ -66,45 +57,9 @@ const HomePage = () => {
     //     };
     // }, []);
 
-    const [allRoom, setAllRoom] = useState<{ id: number, name: string }[]>([]);
-    const [allParticipants, setAllParticipants] = useState<{ id: number, fullName: string }[]>([]);
-    const [allGroup, setAllGroup] = useState<{ id: number, name: string }[]>([]);
-    const [allTags, setAllTags] = useState<{ id: number, fullName: string, shortName: string, color: string }[]>([]);
-
-    //Получение комнат, участников и тегов
-    useEffect(() => {
-
-        API.get(`/room/all`)
-            .then((data) => {
-                setAllRoom(data.data);
-            });
-
-        API.get(`/user/all`)
-            .then((data) => {
-                setAllParticipants(data.data);
-            });
-
-        API.get(`/group/all`)
-            .then((data) => {
-                setAllGroup(data.data);
-            });
-
-        API.get(`/tag/get/all`)
-            .then((data) => {
-                setAllTags(data.data);
-            });
-    }, []);
-
-
     // =====================================
     return (
         <div className={styles['homepage-container']}>
-            <DataForMoreInfo.Provider value={{
-                allRoom: allRoom,
-                allParticipants: allParticipants,
-                allGroup: allGroup,
-                allTags: allTags
-            }}>
                 <div className={styles['booking-card-container']}>
                     <h1>Резервирование аудиторий</h1>
                     {/* <HorTimeLine booking={dataForCard} rooms={dataForCard.map((e) => {
@@ -133,9 +88,9 @@ const HomePage = () => {
                                     <HorTimeLine booking={dataForCard} rooms={dataForCard.map((e) => {
                                         return e.name.value;
                                     })} />
-                                    <HorizontalTimelineElement booking={dataForCard} rooms={dataForCard.map((e) => {
+                                    {/* <HorizontalTimelineElement booking={dataForCard} rooms={dataForCard.map((e) => {
                                         return e.name.value;
-                                    })} />
+                                    })} /> */}
                                 </TabsContent>
                             </>
                         ) : (
@@ -155,7 +110,6 @@ const HomePage = () => {
                         )}
                     </Tabs>
                 </div>
-            </DataForMoreInfo.Provider>
             <div className={styles['homepage-right-menu']}>
                 <h2 className="mb-2 px-4 text-xl font-semibold tracking-tight">
                     Ближайшие мероприятия

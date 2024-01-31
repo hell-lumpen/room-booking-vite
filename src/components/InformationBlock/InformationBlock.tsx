@@ -15,9 +15,9 @@ import {DayPicker} from "react-day-picker";
 import {Option, OptionParticipant, OptionTag} from "@/models/bookingTypes";
 import PopupSelector from "../PopupSelector";
 import {toast} from "../ui/use-toast";
-import {DataForMoreInfo} from "@/pages/HomePage";
 import {Badge} from "../ui/badge";
 import API from "@/http/setupAxios.ts";
+import { DataForMoreInfo } from "@/App";
 
 
 interface RoomBookingFormData {

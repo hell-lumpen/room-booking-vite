@@ -1,17 +1,15 @@
+import { DataForMoreInfo } from "@/App";
 import {CustomSelect} from "../CustomSelect/CustomSelect";
 import {SettingDate} from "../SettingDate/SettingDate";
 import styles from "./SettingSchedulePanel.module.css";
 import {FC, useContext, useState} from 'react';
-import {DataForMoreInfo} from "@/pages/HomePage.tsx";
 
 export const SettingSchedulePanel: FC<{
     date: Date,
     setDate: (date: Date) => void,
     setGroup: (group: string) => void
 }> = (props) => {
-    const [groups, setGroups] = useState<{ id: number, name: string }[]>([]);
-
-    setGroups(useContext(DataForMoreInfo).allGroup)
+    const [groups] = useState<{ id: number, name: string }[]>(useContext(DataForMoreInfo).allGroup);
 
     return (
         <div className={styles['settingSchedule']}>
