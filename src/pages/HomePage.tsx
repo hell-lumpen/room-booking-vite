@@ -37,41 +37,17 @@ const HomePage = () => {
 
 
     useEffect(() => {
-        // document.documentElement.setAttribute('data-theme', 'dark');
-        console.log('as', dateForAxios.toISOString())
         API.get(`/bookings?startTime=${dateForAxios.toISOString()}&endTime=${getNextDate(dateForAxios).toISOString()}`)
             .then((data) => {
-                console.log('d', data.data);
                 setDataForCard(data.data);
             })
-
     }, [dateForAxios]);
-
-    // const [adjustedSide, setAdjustedSide] = useState<"bottom" | "right" | "top" | "left" | null | undefined>(undefined);
-    // const [sheetSize, setSheetSize] = useState<string>('');
-    // useEffect(() => {
-    //     const handleResize = () => {
-    //         const isSmallScreen = window.innerWidth <= 800;
-    //         setAdjustedSide(isSmallScreen ? 'bottom' : 'right');
-    //         setSheetSize(isSmallScreen ? 'h-[75vh] overflow-y-scroll' : 'min-w-[500px] overflow-y-scroll')
-    //     };
-
-    //     // Вызовите handleResize при монтировании и при изменении размера окна
-    //     handleResize();
-    //     window.addEventListener('resize', handleResize);
-
-    //     // Очистите слушателя событий при размонтировании компонента
-    //     return () => {
-    //         window.removeEventListener('resize', handleResize);
-    //     };
-    // }, []);
 
     const [allRoom, setAllRoom] = useState<{ id: number, name: string }[]>([]);
     const [allParticipants, setAllParticipants] = useState<{ id: number, fullName: string }[]>([]);
     const [allGroup, setAllGroup] = useState<{ id: number, name: string }[]>([]);
     const [allTags, setAllTags] = useState<{ id: number, fullName: string, shortName: string, color: string }[]>([]);
 
-    //Получение комнат, участников и тегов
     useEffect(() => {
 
         API.get(`/room/all`)
@@ -95,8 +71,6 @@ const HomePage = () => {
             });
     }, []);
 
-
-    // =====================================
     return (
         <div className={styles['homepage-container']}>
             <DataForMoreInfo.Provider value={{
@@ -107,9 +81,6 @@ const HomePage = () => {
             }}>
                 <div className={styles['booking-card-container']}>
                     <h1>Резервирование аудиторий</h1>
-                    {/* <HorTimeLine booking={dataForCard} rooms={dataForCard.map((e) => {
-                        return e.name.value;
-                    })} /> */}
 
                     <div className='flex justify-around flex-row-reverse p-4'>
                         <Sheet>
@@ -123,9 +94,7 @@ const HomePage = () => {
                         <SettingDatePanel date={dateForAxios} setDate={setNewDateAxios} />
                         {dataForCard.length !== 0 ? (
                             <>
-
                                 <TabsContent value="card">
-
                                     <BookingList bookingsGropedByRoom={dataForCard} />
                                 </TabsContent>
                                 <TabsContent value="timeline">

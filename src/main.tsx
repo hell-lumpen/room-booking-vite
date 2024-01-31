@@ -6,8 +6,6 @@ import {AuthenticatedUserProvider} from "@/context/AuthContext/AuthUserProvider.
 document.documentElement.setAttribute('data-theme', 'dark')
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <AuthenticatedUserProvider>
-        <>
-            <App/>
-        </>
+        <App/>
     </AuthenticatedUserProvider>
 );

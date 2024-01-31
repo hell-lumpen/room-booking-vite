@@ -2,12 +2,11 @@ import {BrowserRouter as Router, Redirect, Route, RouteProps, Switch} from 'reac
 import '@/styles/global.css';
 import HomePage from "@/pages/HomePage.tsx";
 import LoginPage from "@/pages/LoginPage.tsx";
-import {FC, ReactNode, useEffect} from "react";
+import {FC, ReactNode, useEffect, useState} from "react";
 import './App.css';
 import Header from "@/components/Header.tsx";
 import {Toaster} from "@/components/ui/toaster.tsx";
 import {SchedulePage} from './pages/ShedulePage';
-import {useAuth} from "@/context/AuthContext/AuthUserContext.ts";
 import {jwtDecode} from "jwt-decode";
 import {AuthenticatedUser} from "@/models/userTypes.ts";
 import {CalendarCheck, CalendarClock, Home, ShieldEllipsis, Warehouse} from 'lucide-react';
@@ -45,6 +44,31 @@ export function restoreAuthUserFromJWT(jwt?: string): AuthenticatedUser | undefi
 
     return {fullName: decodedToken.fullName, role: decodedToken.role}
 }
+
+export function asyncRestoreAuthUserFromJWT(jwt?: string): Promise<AuthenticatedUser | undefined> {
+    return new Promise((resolve, ) => {
+        function decode(jwt: string): JwtCustomPayload {
+            return jwtDecode<JwtCustomPayload>(jwt);
+        }
+
+        let decodedToken: JwtCustomPayload | null = null;
+
+        if (jwt === undefined) {
+            const jwt = TokenService.getToken()
+            if (!jwt) {
+                console.error('token not found in local storage');
+                resolve(undefined);
+            } else {
+                decodedToken = decode(jwt);
+                resolve({fullName: decodedToken.fullName, role: decodedToken.role});
+            }
+        } else {
+            decodedToken = decode(jwt);
+            resolve({fullName: decodedToken.fullName, role: decodedToken.role});
+        }
+    });
+}
+
 
 function MocComponent() {
     return <div className="flex items-center justify-center">
@@ -93,36 +117,54 @@ export const SidebarNavUnits = [
     },
 ];
 
+const LoadingScreen = () => {
+    return (
+        <div
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100vh',
+            }}
+        >
+            <div
+                style={{
+                    border: '4px solid rgba(0, 0, 0, 0.1)',
+                    borderTop: '4px solid #333',
+                    borderRadius: '50%',
+                    width: '50px',
+                    height: '50px',
+                    animation: 'spin 1s linear infinite',
+                }}
+            ></div>
+            <p
+                style={{
+                    marginTop: '20px',
+                    fontSize: '18px',
+                    color: '#333',
+                }}
+            >
+                Идет загрузка...
+            </p>
+        </div>
+    );
+};
+
 interface PrivateRouteProps extends RouteProps {
     jsxContent: ReactNode;
+    authState?: AuthenticatedUser
 }
 
-const PrivateRoute: FC<PrivateRouteProps> = ({jsxContent, ...rest}) => {
-
-    const [authenticatedUser, setAuthenticatedUser] = useAuth();
-
-    useEffect(() => {
-        const token = TokenService.getToken()
-        console.log('tok', token);
-        token && setAuthenticatedUser(restoreAuthUserFromJWT(token));
-    }, [])
-
+const PrivateRoute: FC<PrivateRouteProps> = ({jsxContent, authState, ...rest}) => {
     return (
         <Route
             {...rest}
-            render={() =>
-                {
-                    const token = TokenService.getToken()
-                    console.log('tok0', token);
-                    console.log('redirect')
-                    return(authenticatedUser ? (
+            render={() => {
+                return (authState ? (
                     <>
                         <Header/>
                         <div className="app-container">
-                            {/* <div className="sidebar-container">
-                                <Sidebar navUnits={SidebarNavUnits} />
-                            </div> */}
-
                             <div className="content-container">
                                 <div className="h-full px-4 py-6 lg:px-8">
                                     {jsxContent}
@@ -132,18 +174,30 @@ const PrivateRoute: FC<PrivateRouteProps> = ({jsxContent, ...rest}) => {
                     </>
                 ) : (
                     <Redirect to="/login"/>
-                ))}
+                ))
+            }
             }
         />
     );
 };
 
 function App() {
+    const [isLoading, setIsLoading] = useState(true);
+    const [authState, setAuthState] = useState<AuthenticatedUser | undefined>(undefined);
 
     useEffect(() => {
-        const token = TokenService.getToken()
-        console.log('tok00', token);
-    }, [])
+        const fetchData = async () => {
+            const user = await asyncRestoreAuthUserFromJWT(); // Асинхронно восстанавливаем пользователя из JWT
+            setAuthState(user);
+            setIsLoading(false); // Устанавливаем isLoading в false после завершения восстановления пользователя
+        };
+
+        fetchData();
+    }, []);
+
+    if (isLoading) {
+        return <LoadingScreen/>; // Показываем индикатор загрузки, пока данные пользователя загружаются
+    }
 
     return (
         <Router>
@@ -162,6 +216,7 @@ function App() {
                                     key={index}
                                     path={navUnit.path}
                                     jsxContent={navUnit.JSXContent}
+                                    authState={authState}
                                 />
                             ))}
                             {/* Дополнительный маршрут для отлавливания несуществующих путей */}
