@@ -28,14 +28,10 @@ const HomePage = () => {
 
 
     useEffect(() => {
-        // document.documentElement.setAttribute('data-theme', 'dark');
-        console.log('as', dateForAxios.toISOString())
         API.get(`/bookings?startTime=${dateForAxios.toISOString()}&endTime=${getNextDate(dateForAxios).toISOString()}`)
             .then((data) => {
-                console.log('d', data.data);
                 setDataForCard(data.data);
             })
-
     }, [dateForAxios]);
 
     // const [adjustedSide, setAdjustedSide] = useState<"bottom" | "right" | "top" | "left" | null | undefined>(undefined);
@@ -62,9 +58,6 @@ const HomePage = () => {
         <div className={styles['homepage-container']}>
                 <div className={styles['booking-card-container']}>
                     <h1>Резервирование аудиторий</h1>
-                    {/* <HorTimeLine booking={dataForCard} rooms={dataForCard.map((e) => {
-                        return e.name.value;
-                    })} /> */}
 
                     <div className='flex justify-around flex-row-reverse p-4'>
                         <Sheet>
@@ -78,9 +71,7 @@ const HomePage = () => {
                         <SettingDatePanel date={dateForAxios} setDate={setNewDateAxios} />
                         {dataForCard.length !== 0 ? (
                             <>
-
                                 <TabsContent value="card">
-
                                     <BookingList bookingsGropedByRoom={dataForCard} />
                                 </TabsContent>
                                 <TabsContent value="timeline">
