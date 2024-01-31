@@ -60,13 +60,13 @@ export const HorTimeLine: React.FC<{ booking: BookingsByRoom[], rooms: string[] 
             style={{
                 'border': '2px solid #767877',
                 'borderRadius': '10px',
-                'marginLeft' : 'auto',
-                'marginRight' : 'auto',
+                'marginLeft': 'auto',
+                'marginRight': 'auto',
             }}
         >
             <div style={{
                 //h-[700px] w-[55vw] overflow-scroll  
-                gridTemplateColumns: '100px repeat(1800, minmax(1px, 5px))',
+                gridTemplateColumns: '100px repeat(1800, minmax(0, 3px))',
                 // gridAutoColumns: 'minmax(100px, 20px)'
             }} className="grid w-[max-content]" >
                 <div style={styleTime} className='tt' />
@@ -76,15 +76,15 @@ export const HorTimeLine: React.FC<{ booking: BookingsByRoom[], rooms: string[] 
                     "gridColumnEnd": 2,
                     "gridRowStart": 1,
                     "gridRowEnd": 2,
-                    'borderRight': '1px solid #757575',
+                    // 'borderRight': '1px solid #757575',
                     'borderBottom': '1px solid #757575',
-                    'zIndex':10,
-                    'position':'sticky',
-                    'left':0,
-                    'top':0,
+                    'zIndex': 4,
+                    'position': 'sticky',
+                    'left': 0,
+                    'top': 0,
                     'backgroundColor': 'rgba(var(--background))',
                     // 'width': 'max-content'
-                }}/>
+                }} />
 
                 {false && getCells(props.rooms.length).map((e) => (e))}
 
@@ -94,15 +94,19 @@ export const HorTimeLine: React.FC<{ booking: BookingsByRoom[], rooms: string[] 
                         "gridColumnEnd": time.pos * 2 + 4,
                         "gridRowStart": 1,
                         "gridRowEnd": 2,
-                        "textAlign": 'center'
+                        "textAlign": 'center',
+                        // 'background': 'red',
+                        'minWidth':'max-content',
+                        // 'maxWidth':'max-content',
+                        // 'width':'max-content',
                     } as React.CSSProperties;
-                    return (<div key={'time_' + index} id={'time_' + index}
-                        style={style0} className='z-[5] sticky top-0'
-                    >
-                        <span className="">
-                            {time.time}
-                        </span>
-                    </div>);
+                    return (
+                        <div key={'time_' + index} id={'time_' + index}
+                            style={style0} className='z-[5] sticky top-0'>
+                            <span className="relative left-[-49%] ">
+                                {time.time}
+                            </span>
+                        </div>);
                 })}
 
                 {true && props.rooms.map((room, index) => {
@@ -143,14 +147,15 @@ export const HorTimeLine: React.FC<{ booking: BookingsByRoom[], rooms: string[] 
                             const col_i_s = (s_time.getHours() - 8) * 60 + s_time.getMinutes()
                             const col_i_e = (e_time.getHours() - 8) * 60 + e_time.getMinutes()
                             const style1 = {
-                                "gridColumnStart": col_i_s * 2 + 2 + 2,
-                                "gridColumnEnd": col_i_e * 2 + 2 + 2,
+                                "gridColumnStart":   col_i_s * 2 + 2 + 0,
+                                "gridColumnEnd":     col_i_e * 2 + 2 + 0,
                                 "gridRowStart": index + 2,
                                 "gridRowEnd": index + 3,
                                 'backgroundColor': el?.tags && el.tags[0].color + '55',
                                 'border': '1px solid #757575',
-                                'borderRadius': '5px'
-                                // 'width': 'max-content'
+                                'borderRadius': '5px',
+                                // 'background':'red',
+                                // 'width': 'max-content'  
                             } as React.CSSProperties;
                             return (
                                 <div key={'room_' + index} id={'room_' + index}
