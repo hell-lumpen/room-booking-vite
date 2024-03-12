@@ -11,6 +11,7 @@ import { Sheet, SheetTrigger } from "@/components/ui/sheet.tsx";
 import { InformationBlock } from '@/components/InformationBlock/InformationBlock';
 import API from "@/http/setupAxios.ts";
 import { HorTimeLine } from '@/components/HorizontalTimelineElement/HorTimeLine';
+import { Checkbox } from '@/components/ui/checkbox';
 
 
 
@@ -58,7 +59,6 @@ const HomePage = () => {
         <div className={styles['homepage-container']}>
                 <div className={styles['booking-card-container']}>
                     <h1>Резервирование аудиторий</h1>
-
                     <div className='flex justify-around flex-row-reverse p-4'>
                         <Sheet>
                             <SheetTrigger className='p-0 border-none'>

@@ -1,23 +1,28 @@
-import {CalendarIcon} from "lucide-react";
-import {Booking, Tag, User} from "../BookingCard/bookingModels";
-import {TagComponent} from "../Tag/TagComponent";
-import {Input} from "../ui/input";
-import {Label} from "../ui/label";
-import {Button} from "../ui/button";
-import {cn} from "@/lib/utils";
-import {Textarea} from "../ui/textarea";
-import {Popover, PopoverContent, PopoverTrigger} from "../ui/popover";
-import {format} from "date-fns";
-import {ru} from "date-fns/locale";
-import {ChangeEvent, useContext, useEffect, useState} from "react";
-import {SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle} from "../ui/sheet";
-import {DayPicker} from "react-day-picker";
-import {Option, OptionParticipant, OptionTag} from "@/models/bookingTypes";
+import { CalendarIcon } from "lucide-react";
+import { Booking, Tag, User } from "../BookingCard/bookingModels";
+import { TagComponent } from "../Tag/TagComponent";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
+import { Textarea } from "../ui/textarea";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { format } from "date-fns";
+import { ru } from "date-fns/locale";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
+import { SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "../ui/sheet";
+import { DayPicker } from "react-day-picker";
+import { Option, OptionParticipant, OptionTag } from "@/models/bookingTypes";
 import PopupSelector from "../PopupSelector";
-import {toast} from "../ui/use-toast";
-import {Badge} from "../ui/badge";
+import { toast } from "../ui/use-toast";
+import { Badge } from "../ui/badge";
 import API from "@/http/setupAxios.ts";
 import { DataForMoreInfo } from "@/App";
+import { Checkbox } from "../ui/checkbox";
+import { Select } from "../ui/select";
+import { SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@radix-ui/react-select";
+import './InformationBlock.css';
+
 
 
 interface RoomBookingFormData {
@@ -29,7 +34,11 @@ interface RoomBookingFormData {
     roomId: { id: number, label: string } | undefined,
     ownerId: number | undefined,
     participants?: OptionParticipant[],
-    tags: OptionTag[] | undefined
+    tags: OptionTag[] | undefined,
+    recurringUnit: 'WEEK' | 'DAY' | undefined,
+    recurringCount: number | undefined,
+    recurringInterval: number | undefined,
+    recurringEndDate: Date | undefined
 }
 
 
@@ -51,11 +60,11 @@ const getFormatTime = (str: string | undefined) => {
 const getFormatTag = (tag?: Tag, tags?: Tag[]): OptionTag[] => {
     const t: OptionTag[] = [];
     if (tag) {
-        t.push({id: tag.id, label: tag.fullName});
+        t.push({ id: tag.id, label: tag.fullName });
     }
     if (tags) {
         tags.map((tag) => {
-            t.push({id: tag.id, label: tag.fullName});
+            t.push({ id: tag.id, label: tag.fullName });
         })
     }
     return t;
@@ -65,7 +74,7 @@ const getFormatParticipant = (part?: (User)[]): OptionParticipant[] => {
     const res: OptionParticipant[] = [];
     if (part)
         part.map((p) => {
-            res.push({id: p.id, label: p.fullName, type: 0});
+            res.push({ id: p.id, label: p.fullName, type: 0 });
         })
     return res;
 }
@@ -74,7 +83,7 @@ const getFormData = (data?: Booking): RoomBookingFormData => {
     if (data) {
         let room = undefined;
         if (data.room) {
-            room = {id: data.room.id, label: data.room.value};
+            room = { id: data.room.id, label: data.room.value };
         }
 
         return {
@@ -146,6 +155,8 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
 
 
     const moreInfo = useContext(DataForMoreInfo);
+    const [isRecurringShow, setRecurringShow] = useState<boolean>(false);
+    const [recurringParams, setRecurringParams] = useState<{ date: boolean, replay: boolean }>({ date: true, replay: true });
     const [sheetSize, setSheetSize] = useState<string>('');
     const [adjustedSide, setAdjustedSide] = useState<"bottom" | "right" | "top" | "left" | null | undefined>(undefined);
     useEffect(() => {
@@ -173,7 +184,7 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
     }, [props.data]);
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
-        const {id, value} = e.target;
+        const { id, value } = e.target;
         if (isView) return;
         setFormData((prevData) => {
             const updatedFormData = {
@@ -283,29 +294,29 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                         Название
                     </Label>
                     <Input id="title" type="text" placeholder="Введите название."
-                           disabled={isView}
-                           className="col-span-3" value={formData.title}
-                           onChange={handleInputChange}
+                        disabled={isView}
+                        className="col-span-3" value={formData.title}
+                        onChange={handleInputChange}
                     />
                     {isTrySave && checkOnError('title', formData.title) &&
                         <p className='text-red-600 text-base'>{validateAnswer.title}</p>}
                 </div>
                 {(formData.description || !isView) &&
                     <div className="items-center gap-4">
-                      <div className="w-full">
-                        <Label id='description' className="text-right text-foreground">
-                          Описание
-                        </Label>
-                        <Textarea id="description" placeholder="Напишите описание бронирования."
-                                  disabled={isView}
+                        <div className="w-full">
+                            <Label id='description' className="text-right text-foreground">
+                                Описание
+                            </Label>
+                            <Textarea id="description" placeholder="Напишите описание бронирования."
+                                disabled={isView}
 
-                                  className="col-span-3" value={formData.description}
-                                  onChange={handleInputChange}
-                        />
+                                className="col-span-3" value={formData.description}
+                                onChange={handleInputChange}
+                            />
 
-                          {/* {isTrySave && checkOnError('description', formData.description) &&
+                            {/* {isTrySave && checkOnError('description', formData.description) &&
                                 <p className='text-red-600 text-base'>{validateAnswer.description}</p>} */}
-                      </div>
+                        </div>
                     </div>
                 }
 
@@ -323,7 +334,7 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                                             fullName: formData.roomId.label,
                                             color: '#5DDCED'
                                         }
-                                    }/>
+                                    } />
                                     : <>...</>}
                             </div>
                             :
@@ -350,14 +361,14 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                 </div>
                 {isView &&
                     <div className="items-center gap-4">
-                      <Label htmlFor="name" className="text-right text-foreground">
-                        Организатор
-                      </Label>
-                      <Input id="owner" type="text" placeholder="Введите название."
-                             disabled={true}
-                             className="col-span-3" value={props.data?.owner.value}
-                          // onChange={handleInputChange}
-                      />
+                        <Label htmlFor="name" className="text-right text-foreground">
+                            Организатор
+                        </Label>
+                        <Input id="owner" type="text" placeholder="Введите название."
+                            disabled={true}
+                            className="col-span-3" value={props.data?.owner.value}
+                        // onChange={handleInputChange}
+                        />
                     </div>
                 }
                 <div className="items-center gap-4">
@@ -374,24 +385,24 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                                         // !props.data && "text-sm"
                                     )}
                                 >
-                                    <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground"/>
-                                    {formData.date ? format(formData.date, "PPP", {locale: ru}) :
+                                    <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground" />
+                                    {formData.date ? format(formData.date, "PPP", { locale: ru }) :
                                         <span className='text-muted-foreground'>Выберите дату бронирования</span>}
                                 </Button>
                             </PopoverTrigger>
                             {!isView &&
                                 <PopoverContent className="w-auto p-0">
-                                  <DayPicker mode="single"
-                                             locale={ru}
-                                             weekStartsOn={1}
-                                             fromDate={new Date()}
-                                             selected={formData.date}
-                                             onSelect={(value) => {
-                                                 setFormData((prevData) => ({
-                                                     ...prevData,
-                                                     date: value,
-                                                 }))
-                                             }}/>
+                                    <DayPicker mode="single"
+                                        locale={ru}
+                                        weekStartsOn={1}
+                                        fromDate={new Date()}
+                                        selected={formData.date}
+                                        onSelect={(value) => {
+                                            setFormData((prevData) => ({
+                                                ...prevData,
+                                                date: value,
+                                            }))
+                                        }} />
                                 </PopoverContent>}
                         </Popover>
                         {isTrySave && checkOnError('title', formData.title) &&
@@ -442,7 +453,7 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                             isView ?
                                 props.data &&
                                 <div>
-                                  <TagComponent tag={props.data.tag} tags={props.data.tags}/>
+                                    <TagComponent tag={props.data.tag} tags={props.data.tags} />
                                 </div>
                                 :
                                 <div className="w-full">
@@ -510,17 +521,129 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                     {isTrySave && checkOnError('participants', formData.participants) &&
                         <p className='text-red-600 text-base'>{validateAnswer.participant}</p>}
                 </div>
+
+                {
+
+                    props.mode == 'create'
+                        ?
+                        <div className=" text-foreground">
+                            <div className="flex items-center">
+                                <input type="checkbox" className="recurring_check"
+                                    onClick={
+                                        e => {
+                                            setRecurringShow(e.target.checked)
+                                        }
+                                    }
+                                />
+                                <div
+                                    className="recurring_check_ps"
+                                />
+                                <Label style={{ marginLeft: '5px' }}>Переодичность</Label>
+                            </div>
+                            {isRecurringShow ?
+                                <>
+                                    <div className="mt-[10px] flex flex-row  items-center">
+                                        Повторять с интервалом
+                                        <input type="number" className="ml-[10px] bg-background border border-input rounded-md w-[58px] h-[1.6rem] pl-2" 
+                                        onChange={(e)=>{
+                                            const num:number = Number(e.target.value);
+
+                                            setFormData((prevData) => ({
+                                                ...prevData,
+                                                recurringInterval: num
+                                            }));
+                                        }}/>
+                                        <select name="select" className="ml-[15px] bg-background border border-input rounded-md w-[5.7rem] h-[1.6rem]">
+                                            <option value="value1">дня</option>
+                                            <option value="value2" selected>недели</option>
+                                        </select>
+
+                                    </div>
+                                    <div className="flex flex-row  items-center mt-[10px]">
+                                        <input type="radio" name="contact" className="reccuring_radio"
+                                            onClick={() => {
+                                                setRecurringParams({ date: false, replay: true });
+                                            }}
+                                        />
+                                        <div className="reccuring_radio_circle" />
+                                        <div className="reccuring_radio_ps" />
+                                        <Label className={
+                                            recurringParams.date ? "ml-[15px] mr-[15px] opacity-50" : "ml-[15px] mr-[15px] "
+                                        }>
+                                            Конечная дата
+                                        </Label>
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                                <Button
+                                                    variant={"outline"}
+                                                    disabled={recurringParams.date}
+                                                    className={cn(
+                                                        "w-[50%] text-center text-foreground font-normal",
+                                                        // !props.data && "text-sm"
+                                                    )}
+                                                >
+                                                    <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground" />
+                                                    {formData.date ? format(formData.date, "PPP", { locale: ru }) :
+                                                        <span className='text-muted-foreground'>Выберите дату бронирования</span>}
+                                                </Button>
+                                            </PopoverTrigger>
+                                            {!isView &&
+                                                <PopoverContent className="w-auto p-0">
+                                                    <DayPicker mode="single"
+                                                        locale={ru}
+                                                        weekStartsOn={1}
+                                                        fromDate={new Date()}
+                                                        selected={formData.date}
+                                                        onSelect={(value) => {
+                                                            setFormData((prevData) => ({
+                                                                ...prevData,
+                                                                date: value,
+                                                            }))
+                                                        }} />
+                                                </PopoverContent>}
+                                        </Popover>
+
+
+                                    </div>
+                                    <div className="flex flex-row  items-center mt-[10px]">
+                                        <input type="radio" name="contact" className="reccuring_radio" id="reccuring_radio"
+                                            onClick={() => {
+                                                setRecurringParams({ date: true, replay: false });
+                                            }}
+                                        />
+
+                                        <div className="reccuring_radio_circle" />
+                                        <div className="reccuring_radio_ps" />
+                                        <Label className={
+                                            recurringParams.replay ? "ml-[15px] mr-[15px] opacity-50" : "ml-[15px] mr-[15px] "
+                                        }>
+                                            Количество повторов
+                                        </Label>
+                                        <input type="number" disabled={recurringParams.replay}
+                                            className="bg-background border border-input w-[58px] rounded-md h-[1.6rem] pl-2 disabled:opacity-50" />
+                                    </div>
+                                </>
+                                : <></>
+                            }
+
+                        </div>
+                        :
+                        <></>
+
+
+                }
+
                 {
                     props.mode == 'create' ?
                         <SheetFooter className='mb-5'>
                             <SheetClose asChild>
                                 <Button type="submit"
-                                        onClick={
-                                            (e: React.MouseEvent<HTMLElement>) => {
-                                                setTrySave(true)
-                                                trySaveEditCard(e)
-                                            }
+                                    onClick={
+                                        (e: React.MouseEvent<HTMLElement>) => {
+                                            setTrySave(true)
+                                            trySaveEditCard(e)
                                         }
+                                    }
                                 >Создать бронирование</Button>
                             </SheetClose>
                         </SheetFooter>
@@ -556,7 +679,7 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                 }
 
             </div>
-        </SheetContent>
+        </SheetContent >
 
 
         //     <div className="items-center gap-4">
