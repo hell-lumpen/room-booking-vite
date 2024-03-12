@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import {useAuth} from "@/context/AuthContext/AuthUserContext.ts";
 import {LogOut, User} from "lucide-react";
+import AuthService from "@/services/AuthService.ts";
+import {useHistory} from "react-router-dom";
 
 function getShortUserName(input: string | undefined): string {
     if (!input) return 'UN'
@@ -23,6 +25,7 @@ function getShortUserName(input: string | undefined): string {
 
 export function UserNav() {
     const [user,] = useAuth();
+    const history = useHistory();
 
     return (
         <DropdownMenu>
@@ -51,7 +54,10 @@ export function UserNav() {
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator/>
-                <DropdownMenuItem className='flex items-center hover:bg-secondary'>
+                <DropdownMenuItem className='flex items-center hover:bg-secondary' onClick={() => {
+                    AuthService.logout()
+                    history.push('/login')
+                }}>
                     <div className='mr-3 text-foreground opacity-[50%]'>
                         <LogOut size='1.4rem'/>
                     </div>
