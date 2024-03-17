@@ -52,16 +52,16 @@
 
 .reccuring_radio:active + .reccuring_radio_circle{
 
-    background: #27272a;
+    background: hsla(var(--input));
     transform: scale(0.35, 0.35);
 }
 
 .reccuring_radio:checked + .reccuring_radio_circle{
 
-    background: white;
+    background: hsla(var(--card-foreground));
     transform: scale(0.5, 0.5);
 }
 
 .reccuring_radio:checked ~ .reccuring_radio_ps{
-    border-color: white;
+    border-color: hsla(var(--card-foreground));
 }

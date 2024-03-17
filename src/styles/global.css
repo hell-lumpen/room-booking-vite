@@ -2,8 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
 @layer base {
     :root {
+        --ra : 255, 255, 255, 1;
         --background: 255, 255, 255, 1;
         --foreground: 7, 7, 8, 1;
         --card: 0 0% 100%;

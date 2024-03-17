@@ -151,7 +151,7 @@ const validateAnswer = {
 };
 
 export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Booking }> = (props) => {
-    console.log(props.data);
+    // console.log(props.data);
 
 
     const moreInfo = useContext(DataForMoreInfo);
@@ -216,12 +216,18 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
         const startTime = new Date(formData.date);
         startTime?.setHours(Number(formData.startTime?.substring(0, 2)) + 3);
         startTime?.setMinutes(Number(formData.startTime?.substring(3, 5)));
+        startTime?.setSeconds(0);
+        startTime?.setMilliseconds(0);
+
         const endTime = new Date(formData.date);
         endTime?.setHours(Number(formData.endTime?.substring(0, 2)) + 3);
         endTime?.setMinutes(Number(formData.endTime?.substring(3, 5)));
+        endTime?.setSeconds(0);
+        endTime?.setMilliseconds(0);
+
 
         const cardDataForAxios = {
-            id: props.data?.id,
+            'id': props.data?.id,
             'roomId': formData.roomId.id,
             'title': formData.title,
             'description': formData.description,
@@ -229,8 +235,15 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
             'endTime': endTime?.toISOString(),
             'tagsId': formData.tags?.map((e) => (e.id)),
             'staffId': formData.participants?.map((e) => (e.id)),
-            'groupsId': []
+            'groupsId': [],
+            'recurringInterval': formData.recurringInterval,
+            'recurringUnit': formData.recurringUnit,
+            'recurringCount': formData.recurringCount,
+            'recurringEndDate': formData.recurringEndDate,
+
         }
+
+        console.log('data', cardDataForAxios)
 
         if (props.mode === 'create') {
             API.post(`/bookings`, cardDataForAxios)
@@ -553,20 +566,23 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                                                 recurringInterval: num
                                             }));
                                         }}/>
-                                        <select name="select" className="ml-[15px] bg-background border border-input rounded-md w-[5.7rem] h-[1.6rem]">
-                                            <option value="value1">дня</option>
-                                            <option value="value2" selected>недели</option>
+                                        <select
+                                        id='recurringUnit'
+                                        onChange={(e)=>{handleInputChange(e)}}
+                                        name="select" className="ml-[15px] bg- border border-input rounded-md w-[5.7rem] h-[1.6rem]">
+                                            <option value="DAY">дня</option>
+                                            <option value="WEEK" selected>недели</option>
                                         </select>
 
                                     </div>
                                     <div className="flex flex-row  items-center mt-[10px]">
-                                        <input type="radio" name="contact" className="reccuring_radio"
+                                        <input type="radio" name="contact" className="reccuring_radio rra"
                                             onClick={() => {
                                                 setRecurringParams({ date: false, replay: true });
                                             }}
                                         />
                                         <div className="reccuring_radio_circle" />
-                                        <div className="reccuring_radio_ps" />
+                                        <div className="reccuring_radio_ps " />
                                         <Label className={
                                             recurringParams.date ? "ml-[15px] mr-[15px] opacity-50" : "ml-[15px] mr-[15px] "
                                         }>
@@ -583,8 +599,8 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                                                     )}
                                                 >
                                                     <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground" />
-                                                    {formData.date ? format(formData.date, "PPP", { locale: ru }) :
-                                                        <span className='text-muted-foreground'>Выберите дату бронирования</span>}
+                                                    {formData.recurringEndDate ? format(formData.recurringEndDate, "PPP", { locale: ru }) :
+                                                        <span className='text-muted-foreground'>Выберите конечную дату</span>}
                                                 </Button>
                                             </PopoverTrigger>
                                             {!isView &&
@@ -593,11 +609,11 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                                                         locale={ru}
                                                         weekStartsOn={1}
                                                         fromDate={new Date()}
-                                                        selected={formData.date}
+                                                        selected={formData.recurringEndDate}
                                                         onSelect={(value) => {
                                                             setFormData((prevData) => ({
                                                                 ...prevData,
-                                                                date: value,
+                                                                recurringEndDate: value,
                                                             }))
                                                         }} />
                                                 </PopoverContent>}
@@ -619,7 +635,14 @@ export const InformationBlock: React.FC<{ mode: 'view' | 'create', data?: Bookin
                                         }>
                                             Количество повторов
                                         </Label>
-                                        <input type="number" disabled={recurringParams.replay}
+                                        <input id='recurringCount' type="number" disabled={recurringParams.replay}
+                                            onChange={(e)=>{
+                                                setFormData((prevData) => ({
+                                                    ...prevData,
+                                                    'recurringEndDate': undefined,
+                                                }))
+                                                handleInputChange(e)
+                                            }}
                                             className="bg-background border border-input w-[58px] rounded-md h-[1.6rem] pl-2 disabled:opacity-50" />
                                     </div>
                                 </>
