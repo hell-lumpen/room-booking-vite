@@ -14,7 +14,7 @@ import TokenService from "@/services/UtilServices.ts";
 import API from "@/http/setupAxios.ts";
 
 
-interface JwtCustomPayload {
+export interface JwtCustomPayload {
     exp: number;
     fullName: string;
     iat: number;
