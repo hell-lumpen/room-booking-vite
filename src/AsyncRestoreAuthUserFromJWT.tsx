@@ -3,6 +3,10 @@ import {jwtDecode} from "jwt-decode";
 import TokenService from "@/services/UtilServices.ts";
 import { JwtCustomPayload } from "./App";
 
+export const delay = (ms: number | undefined) => new Promise(
+    resolve => setTimeout(resolve, ms)
+);
+
 export const asyncRestoreAuthUserFromJWT = (jwt?: string): Promise<AuthenticatedUser | undefined> => new Promise((resolve,) => {
     function decode(jwt: string): JwtCustomPayload {
         return jwtDecode<JwtCustomPayload>(jwt);
